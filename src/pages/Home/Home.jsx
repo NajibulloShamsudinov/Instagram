@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 
-const Home = () => {
+function Home () {
   return (
     <div onClick={() => (modalMore = false)} className="mx-[auto] p-[20px]">
       <div className="wrapper-text flex justify-between">
@@ -51,6 +51,6 @@ const Home = () => {
       <p>POST 40</p>
     </div>
   );
-
+  }
 
 export default Home;
