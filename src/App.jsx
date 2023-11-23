@@ -5,7 +5,6 @@ import Explore from "./pages/Explore/Explore";
 import Reels from "./pages/Reels/Reels";
 import Message from "./pages/Message/Message";
 import Notifications from "./pages/Notifications/Notifications";
-import Create from "./pages/Create/Create";
 import Profile from "./pages/Profile/Profile";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Layout } from "./Layout/Layout";
@@ -40,10 +39,6 @@ export const App = () => {
         {
           path: "notifications",
           element: <Notifications />,
-        },
-        {
-          path: "create",
-          element: <Create />,
         },
         {
           path: "profile",
