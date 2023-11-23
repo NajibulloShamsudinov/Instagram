@@ -14,9 +14,11 @@ const layout = createSlice({
     setModalSearch: (state, action) => {
       state.modalSearch = action.payload;
     },
+
     setModalCreate: (state, action) => {
       state.modalCreate = action.payload;
     },
+
   },
 });
 
