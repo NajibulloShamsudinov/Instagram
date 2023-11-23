@@ -1,54 +1,106 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { get } from "../../api/home/home";
+import Checkbox from '@mui/material/Checkbox';
+import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
+import Favorite from '@mui/icons-material/Favorite';
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
+
+
 
 
 function Home () {
+  const data=useSelector(({home})=>home.data)
+  const dispatch=useDispatch()
+
+
+useEffect(()=>{
+  dispatch(get())
+},[dispatch])
+
+
   return (
-    <div onClick={() => (modalMore = false)} className="mx-[auto] p-[20px]">
-      <div className="wrapper-text flex justify-between">
-        <p className="text-center text-[28px] mx-auto">Главная</p>
-        <Link to="/">Логин</Link>
+    <div className="mx-[auto] p-[20px] pb-[10vh]">
+      <div className="flex justify-between">
+        <div className="w-[65%]">
+        <div className="flex gap-[10px] px-[40px]">
+         <div className="text-center">
+          <div className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-[30px] p-[2px]">
+          <img src="https://static.vecteezy.com/system/resources/previews/019/896/012/original/female-user-avatar-icon-in-flat-design-style-person-signs-illustration-png.png"
+          className="w-[50px] rounded-[30px] border-[2px] border-[white]"  alt="" />
+          </div>
+          <span className="text-[12px]">betman</span>
+         </div>
+         <div className="text-center">
+          <div className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-[30px] p-[2px]">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSinUiRqVB94sfZZbtNZgPJswUTs4R7YDskvXfVjUSejKfQqAoMaedQBNfybdIdduiix4&usqp=CAU"
+          className="w-[50px] rounded-[30px] border-[2px] border-[white]"  alt="" />
+          </div>
+          <span className="text-[12px]">betman</span>
+         </div>
+         <div className="text-center">
+          <div className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-[30px] p-[2px]">
+          <img src="https://e7.pngegg.com/pngimages/799/987/png-clipart-computer-icons-avatar-icon-design-avatar-heroes-computer-wallpaper-thumbnail.png"
+          className="w-[50px] rounded-[30px] border-[2px] border-[white]"  alt="" />
+          </div>
+          <span className="text-[12px]">betman</span>
+         </div>
+        </div>
+        <div className="my-[10vh] ">
+      {
+     data.map((e,i)=>{
+      return (
+        <div key={e.postId} className="w-[400px] h-[500px] border-[1px] m-auto my-[20px]">
+        <img src={`${import.meta.env.VITE_APP_FILES_URL}${e.images[i]}`}
+         className="w-[100%]" alt="error" />
+        <div className="p-[2px]">
+        <div>
+        <Checkbox icon={<FavoriteBorder />} checkedIcon={<Favorite sx={{color:"red"}} />}
+         sx={{color:"red",":hover":{
+          color:"red",
+        }}} />
+          <Checkbox
+         icon={<BookmarkBorderIcon />}
+           checkedIcon={<BookmarkIcon />}
+         />
+        </div>
+        <h1>{e.title}</h1>
+        </div>
+        </div>
+      )
+     })
+     }</div>
+        </div>
+        
+        {/* right side */}
+       
+       <div className="mx-[50px]">
+       <div className="flex items-center gap-[10px]">
+        <img src="https://static.vecteezy.com/system/resources/previews/019/896/012/original/female-user-avatar-icon-in-flat-design-style-person-signs-illustration-png.png"
+          className="w-[40px] rounded-[30px]"  alt="" />
+          <div>
+          <h1 className="text-[12px]">betman</h1>
+          <h1 className="text-[12px]">noctua 😊</h1>
+          </div>
+          <h1 className="text-[10px] text-[blue]">Переключиться</h1>
+         </div>
+         <div className="text-[grey] my-[20px] text-[12px] flex justify-between">
+         <h1>Рекомендации для вас</h1>
+         <h1>Все</h1>
+         </div>
+           <div className="flex items-center gap-[10px]">
+        <img src="https://icons-for-free.com/iconfiles/png/512/instagram+profile+user+icon-1320184028326496024.png"
+          className="w-[40px] rounded-[30px]"  alt="" />
+          <div>
+          <h1 className="text-[12px]">betman</h1>
+          <h1 className="text-[12px]">noctua 😊</h1>
+          </div>
+          <h1 className="text-[10px] text-[blue]">Подписаться</h1>
+         </div>
+       </div>
       </div>
-      <p>POST 1</p>
-      <p>POST 2</p>
-      <p>POST 3</p>
-      <p>POST 4</p>
-      <p>POST 5</p>
-      <p>POST 6</p>
-      <p>POST 7</p>
-      <p>POST 8</p>
-      <p>POST 9</p>
-      <p>POST 10</p>
-      <p>POST 11</p>
-      <p>POST 12</p>
-      <p>POST 13</p>
-      <p>POST 14</p>
-      <p>POST 15</p>
-      <p>POST 16</p>
-      <p>POST 17</p>
-      <p>POST 18</p>
-      <p>POST 19</p>
-      <p>POST 20</p>
-      <p>POST 21</p>
-      <p>POST 22</p>
-      <p>POST 23</p>
-      <p>POST 24</p>
-      <p>POST 25</p>
-      <p>POST 26</p>
-      <p>POST 27</p>
-      <p>POST 28</p>
-      <p>POST 29</p>
-      <p>POST 30</p>
-      <p>POST 31</p>
-      <p>POST 32</p>
-      <p>POST 33</p>
-      <p>POST 34</p>
-      <p>POST 35</p>
-      <p>POST 36</p>
-      <p>POST 37</p>
-      <p>POST 38</p>
-      <p>POST 39</p>
-      <p>POST 40</p>
     </div>
   );
   }

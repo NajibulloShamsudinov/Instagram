@@ -9,7 +9,7 @@ const MoreModal = (props) => {
     <div
       className={`${
         props.modal === true ? "block" : "hidden"
-      } modal-container fixed top-[12%] left-[1%] bg-[#fff] rounded-[20px] shadow-lg p-[10px] border-[1px]`}
+      } modal-container fixed top-[12%] z-10 left-[1%] bg-[#fff] rounded-[20px] shadow-lg p-[10px] border-[1px]`}
     >
       <ul className="flex flex-col gap-[7px]">
         <Link>
