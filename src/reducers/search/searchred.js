@@ -4,6 +4,7 @@ import search from "../../pages/search/search";
 const searchred = createSlice({
   name: "searchred",
   initialState: {
+    data:[],
    modalsrc:false
   },
   reducers: {
