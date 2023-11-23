@@ -5,7 +5,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 const Explore = () => {
   let dispatch = useDispatch();
   let open = useSelector((store) => store.explore.ModalPost);
-  console.log(open);
+  console.log(open,"Ss");
   return (
     <>
       <div className="Continer justify-start  pl-[5%]  p-[10px] flex flex-wrap  gap-[5px]   m-auto  w-[85%] m-auto items-center   ">
