@@ -2,11 +2,16 @@ import React from "react";
 import { useState, useEffect } from "react";
 import "../App.css";
 import { useSelector, useDispatch } from "react-redux";
-import { setModalMore, setModalSearch } from "../reducers/Layout/Layout";
+import {
+  setModalMore,
+  setModalSearch,
+  setModalCreate,
+} from "../reducers/Layout/Layout";
 
 import InstagramIcon from '@mui/icons-material/Instagram';
 
 import MoreModal from "../components/Layout/MoreModal";
+import CreateModal from "../components/Layout/CreateModal";
 import { Link, Outlet, NavLink } from "react-router-dom/dist";
 import logo from "../assets/icons/instagram-wordmark.svg";
 import navHome from "../assets/icons/nav-home.svg";
@@ -53,6 +58,7 @@ export const Layout = () => {
   const dispatch = useDispatch();
   const modalMore = useSelector((store) => store.layout.modalMore);
   const modalSearch = useSelector((store) => store.layout.modalSearch);
+  const modalCreate = useSelector((store) => store.layout.modalCreate);
 
 
 
@@ -142,12 +148,13 @@ export const Layout = () => {
                 <p className={modalSearch ? "hidden" : "block"}>Уведомления</p>
               </li>
             </NavLink>
-            <NavLink to="create">
-              <li className="flex items-center gap-[15px] hover:bg-[#00000010] rounded-[7px] p-[10px] transition-all duration-300">
-                <AddBoxOutlinedIcon />
-                <p className={modalSearch ? "hidden" : "block"}>Создать</p>
-              </li>
-            </NavLink>
+            <li
+              onClick={() => dispatch(setModalCreate(true))}
+              className="flex items-center cursor-pointer gap-[15px] hover:bg-[#00000010] rounded-[7px] p-[10px] transition-all duration-300"
+            >
+              <AddBoxOutlinedIcon />
+              <p className={modalSearch ? "hidden" : "block"}>Создать</p>
+            </li>
             <NavLink to="profile">
               <li className="flex items-center gap-[15px] hover:bg-[#00000010] rounded-[7px] p-[10px] transition-all duration-300">
                 <Avatar
@@ -183,6 +190,8 @@ export const Layout = () => {
             />
           }
         />
+        {/* Modal Create */}
+        <CreateModal modal={modalCreate} />
       </aside>
       {/* searchmodal  */}
 
