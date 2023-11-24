@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, TextField } from "@mui/material";
-import { ImageVideo } from "../../icons/imagesVideo";
+import ImageVideo from "../../icons/Create/ImageVideo";
 import "../../App.css";
 
 const CreateModal = (props) => {
@@ -20,10 +20,10 @@ const CreateModal = (props) => {
             <p>Перетащите сюда фото и видео</p>
             <form
               method="post"
-              enctype="multipart/form-data"
+              encType="multipart/form-data"
               className="m-auto"
             >
-              <label class="input-file">
+              <label className="input-file">
                 <input type="file" name="file" multiple={true} accept="" />
                 <span className="text-white font-medium">
                   Выбрать на компьютере
