@@ -96,8 +96,13 @@ const Reels = () => {
       <div className="flex items-end gap-4">
         <video
           className="rounded-md"
+
+         
+          autoPlay
+
           loop
-          // autoPlay
+       
+
           src={vid}
           width="350"
           height="100"
