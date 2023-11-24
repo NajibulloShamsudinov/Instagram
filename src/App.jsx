@@ -6,6 +6,7 @@ import Reels from "./pages/Reels/Reels";
 import Message from "./pages/Message/Message";
 import Notifications from "./pages/Notifications/Notifications";
 import Profile from "./pages/Profile/Profile";
+import Settings from "./pages/Settings/Settings";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Layout } from "./Layout/Layout";
 import Registration from "./pages/Registration/Registration";
@@ -33,7 +34,7 @@ export const App = () => {
           element: <Reels />,
         },
         {
-          path: "message",
+          path: "message/*",
           element: <Message />,
         },
         {
@@ -45,6 +46,10 @@ export const App = () => {
           element: <Profile />,
         },
       ],
+    },
+    {
+      path: "/settings",
+      element: <Settings />,
     },
     {
       path: "/registration",

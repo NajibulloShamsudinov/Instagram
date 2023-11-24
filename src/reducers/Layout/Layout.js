@@ -6,6 +6,7 @@ const layout = createSlice({
     modalMore: false,
     modalSearch: false,
     modalCreate: false,
+    listBg: false,
   },
   reducers: {
     setModalMore: (state, action) => {
@@ -14,13 +15,15 @@ const layout = createSlice({
     setModalSearch: (state, action) => {
       state.modalSearch = action.payload;
     },
-
     setModalCreate: (state, action) => {
       state.modalCreate = action.payload;
     },
-
+    setListBg: (state, action) => {
+      state.listBg = action.payload;
+    },
   },
 });
 
 export default layout.reducer;
-export const { setModalMore, setModalSearch, setModalCreate } = layout.actions;
+export const { setModalMore, setModalSearch, setModalCreate, setListBg } =
+  layout.actions;
