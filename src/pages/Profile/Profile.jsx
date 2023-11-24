@@ -25,7 +25,7 @@ const Profile = () => {
 
         <div className="mt-[40px] ml-[60px]">
           <div className="setting w-[613px]  items-center  flex">
-            <h1 className="pr-[25px] text-[20px] font-[400]">alijjon8</h1>
+            <h1 className="pr-[25px] text-[20px] font-[400]">alijjon82</h1>
             <button className=" bg-[#EFEFEF] font-[500] text-[14px] px-[16px] h-[32px] hover:bg-[#e3e1e1] rounded-[8px]">Редактировать профиль</button>
             <button className=" bg-[#EFEFEF] font-[500] text-[14px] px-[16px] h-[32px] hover:bg-[#e3e1e1] ml-[8px] rounded-[8px]">Показать архив</button>
             <div className="flex ml-[15px] gap-[10px]">
