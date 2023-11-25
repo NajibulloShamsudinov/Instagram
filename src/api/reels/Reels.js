@@ -6,7 +6,7 @@ import axios from "axios";
 export const getData = createAsyncThunk("reels/getData", async () => {
   try {
     const { data } = await axiosRequest.get("Post/get-reels");
-    
+    console.log(data);
     return data.data;
   } catch (error) {
     console.error(error);

@@ -31,8 +31,8 @@ const style = {
   boxShadow: 24,
   p: 5,
   borderRadius: "25px",
-  border: "white",
-  border:"1px"
+  // border: "white",
+  // borderWidth:"1px"
 
 };
 
@@ -78,7 +78,7 @@ const Reels = () => {
 
   const posts = useSelector((store) => store.reels.posts);
   let load = useSelector((store) => store.reels.loading);
-  console.log(posts);
+  // console.log(posts);
   // const modal = useSelector((store) => store.post.modal);
   // console.log(posts);
 
@@ -86,134 +86,19 @@ const Reels = () => {
 
   // const PostImagesApi = "http://65.108.148.136:8085/";
 
-  const [counter, setCounter] = useState(0)
+  // const [counter, setCounter] = useState(0)
 
     useEffect(() => {
       dispatch(getData());
     }, [dispatch]);
   return (
     <div className="mt-14 flex flex-col gap-14  px-[30%]">
-      <div className="flex items-end gap-4">
-        <video
-          className="rounded-md"
-          loop
-          // autoPlay
-          src={vid}
-          width="350"
-          height="100"
-          // controls
-          muted
-          preload=""
-        ></video>
-        <div className=" rounded-[20px]">
-          <div className=" rounded-[20px]">
-            {/* <Button onClick={handleOpen1}>Open modal</Button> */}
-            <Modal
-              sx={{ boxShadow: "20px", borderRadius: "60px" }}
-              open={open1}
-              onClose={handleClose1}
-              aria-labelledby="modal-modal-title"
-              aria-describedby="modal-modal-description"
-            >
-              <Box sx={style}>
-                <div className="flex flex-col gap-5">
-                  <p className="text-[red] p-2 hover:bg-[#00000010]">
-                    Пожаловаться
-                  </p>
-                  <p className="text-[blue] hover:bg-[#00000010]">
-                    Подписаться
-                  </p>
-                  <p className="hover:bg-[#00000010] ">Перейти к публикации</p>
-                  <p className="hover:bg-[#00000010] ">Поделиться...</p>
-                  <p className="hover:bg-[#00000010] ">Копировать сылку</p>
-                  <p className="hover:bg-[#00000010] ">Всавить на сайт</p>
-                  <p className="hover:bg-[#00000010] ">Об аккаунте</p>
-                </div>
-              </Box>
-            </Modal>
-          </div>
-        </div>
-        <div className="flex justify-end">
-          <React.Fragment>
-            {/* <Button onClick={handleClickOpen("paper")}>scroll=paper</Button> */}
-            <Dialog
-              sx={{
-                width: "25%",
-                height: "50%",
-                left: "73%",
-                top: "12%",
-              }}
-              open={open}
-              onClose={handleClose}
-              scroll={scroll}
-              aria-labelledby="scroll-dialog-title"
-              aria-describedby="scroll-dialog-description"
-            >
-              <div className="flex justify-start  items-center my-3 ">
-                <p onClick={handleClose} className="pl-7 mr-20 text-3xl">
-                  x
-                </p>
-                {/* <DialogActions>
-                  <Button>X</Button>
-                </DialogActions> */}
-                <p className="font-bold">Коментарии</p>
-                {/* <DialogTitle
-                  className="text-center font-bold"
-                  // id="scroll-dialog-title"
-                >
-                  Коментарии
-                </DialogTitle> */}
-              </div>
+  
 
-              <DialogContent dividers={scroll === "paper"}>
-                <DialogContentText
-                  id="scroll-dialog-description"
-                  ref={descriptionElementRef}
-                  tabIndex={-1}
-                >
-                  {[...new Array(50)]
-                    .map(
-                      () => `Cras mattis consectetur purus sit amet fermentum.
-                      consectetur et.`
-                    )
-                    .join("\n")}
-                </DialogContentText>
-              </DialogContent>
-              <DialogActions>
-                <input
-                  placeholder="Добавьте коментарий..."
-                  type="text"
-                  className="border-[grey] border-[1px] w-[90%] rounded-[30px] px-14 mx-5 p-1"
-                />
-              </DialogActions>
-            </Dialog>
-          </React.Fragment>
-        </div>
-
-        <div className="w-[25px] gap-6 flex flex-col ">
-          <div className="flex flex-col items-center">
-            {" "}
-            <Checkbox
-              onClick={() => postLike(elem.id)}
-              {...label}
-              sx={{
-                "&.Mui-checked": {
-                  color: "red",
-                  borderColor: "green",
-                },
-              }}
-              icon={<FavoriteBorder />}
-              checkedIcon={<Favorite />}
-            />
-            {/* <p>{elem.postLikeCount}</p> */}
-          </div>
-        </div>
-      </div>
-
-      <div>
+      <div className="flex flex-col gap-5">
         {posts.map((elem) => {
           return (
-            <div key={elem.postId} className="flex items-end">
+            <div key={elem.postId} className="flex items-end ">
               <img
                 src={`${import.meta.env.VITE_APP_FILES_URL}${elem.images[0]}`}
                 alt=""
@@ -221,13 +106,13 @@ const Reels = () => {
               <video
                 className="rounded-md"
                 src={vid}
-                width="350"
-                height="100"
-                // controls
+                width="400"
+                loop
+                controls
                 muted
                 autoPlay
 
-              ><button>add</button></video>
+              ></video>
               <div className="flex flex-col ml-8 items-center gap-3">
                 <div className="flex flex-col items-center">
                   {elem.postLike ? (
@@ -244,7 +129,7 @@ const Reels = () => {
 
                   <p>{elem.postLikeCount}</p>
                 </div>
-                <span>
+                <span className="pb-4">
                   <svg
                     onClick={() => dispatch(handleClickOpen())}
                     aria-label="Комментировать"
