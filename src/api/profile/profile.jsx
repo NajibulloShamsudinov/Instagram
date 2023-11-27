@@ -15,3 +15,16 @@ export const getProfile = createAsyncThunk(
         }
     } 
 )
+
+export const getPostById = createAsyncThunk(
+    'profile/getPostById',
+    async function(id){
+        try {
+            const {data} = await axiosRequest.get(`Post/get-posts?UserId=${id}`)
+            console.log(data.data);
+            return data.data
+        } catch (error) {
+            
+        }
+    } 
+)
