@@ -34,7 +34,7 @@ const Message = () => {
 
   useEffect(() => {
     dispatch(getUsers());
-  }, [dispatch]);
+  }, [dispatch, search]);
 
   return (
     <main className="h-[100vh]">
