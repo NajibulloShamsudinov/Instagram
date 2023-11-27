@@ -73,7 +73,7 @@ export default function Login() {
           </Avatar>
           <Typography component="h1" variant="h5">
             Sign in
-          </Typography>
+          </Typography>,
           <Box
             component="form"
             onSubmit={handleSubmit}
