@@ -232,7 +232,7 @@ export const Layout = () => {
                     <div  className="flex hover:cursor-pointer  items-center gap-2">
                       <img className="rounded-full w-[50px]" src={el.avatar ? el.avatar :img } alt="" />
                       <div onClick={()=>dispatch(postuser(el.userName))} className="">
-                        <h1 className="font-semibold text-[14px]">{el.userName}</h1>
+                        <h1 className="font-semibold text-[14px]">{searchinp.length==0?el.text:el.userName}</h1>
                         <p className="text-[grey] text-[14px] font-semibold">{el.email}</p>
                       </div>  
                     </div>

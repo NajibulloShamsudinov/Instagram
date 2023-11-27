@@ -5,8 +5,11 @@ export const getdata = createAsyncThunk(
     "search/getdata",
     async function (_, { getState }) {
         
-
         let api2 = "User/get-users";
+        if(getState().searchred.searchinp.length==0){
+            api2="SearchHistory/get-search-histories"
+        }
+
         if (getState().searchred.searchinp.length !== 0) {
             api2 = `User/get-users?UserName=${getState().searchred.searchinp}`
         }
@@ -37,9 +40,10 @@ export const getdata = createAsyncThunk(
 export const postuser=createAsyncThunk(
     "search/postuser",
     async  function(username,{dispatch}){
+        console.log(1)
         try {
             const {data}=await axiosRequest.post(`SearchHistory/add-search-history?Text=${username}`)
-           dispatch(getdata)
+           dispatch(getdata())
         } catch (error) {
             console.log(error);
         }
