@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getUsers } from "../../api/Message/messageApi";
+import { getUsers, getUsersSearch } from "../../api/Message/messageApi";
 
 const message = createSlice({
   name: "message",
@@ -17,7 +17,7 @@ const message = createSlice({
       state.search = action.payload;
     },
   },
-  // getData
+  // getUsers
   extraReducers: (builder) => {
     builder.addCase(getUsers.pending, (state, action) => {
       state.loading = true;
@@ -27,6 +27,17 @@ const message = createSlice({
       state.data = action.payload;
     });
     builder.addCase(getUsers.rejected, (state, action) => {
+      state.loading = false;
+    });
+    // getUsersSearch
+    builder.addCase(getUsersSearch.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(getUsersSearch.fulfilled, (state, action) => {
+      state.loading = true;
+      state.dataSearch = action.payload;
+    });
+    builder.addCase(getUsersSearch.rejected, (state, action) => {
       state.loading = false;
     });
   },

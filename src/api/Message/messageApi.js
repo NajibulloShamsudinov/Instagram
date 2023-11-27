@@ -17,3 +17,19 @@ export const getUsers = createAsyncThunk(
     }
   }
 );
+// Async GET SEARCH
+export const getUsersSearch = createAsyncThunk(
+  "message/getUsersSearch",
+  async function (_, { getState, dispatch, rejectWithValue }) {
+    let apiTemp = "User/get-users";
+    if (getState().message.search != "") {
+      apiTemp = `User/get-users?UserName=${getState().message.search}`;
+    }
+    try {
+      const { data } = await axiosRequest.get(apiTemp);
+      return data.data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);

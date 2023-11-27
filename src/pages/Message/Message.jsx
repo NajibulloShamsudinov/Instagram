@@ -16,7 +16,7 @@ import ImageInput from "../../icons/Message/ImageInput";
 import HeartInput from "../../icons/Message/HeartInput";
 import { Avatar } from "@mui/material";
 import userMessage from "../../assets/images/nav-profile.jpg";
-import { getUsers } from "../../api/Message/messageApi";
+import { getUsers, getUsersSearch } from "../../api/Message/messageApi";
 import CloseIcon from "@mui/icons-material/Close";
 
 const Message = () => {
@@ -28,12 +28,12 @@ const Message = () => {
   // Data from state Redux
   const dataUsers = useSelector((store) => store.message.data);
   const search = useSelector((store) => store.message.search);
-  console.log(search);
 
   let location = useLocation();
 
   useEffect(() => {
     dispatch(getUsers());
+    dispatch(getUsersSearch());
   }, [dispatch, search]);
 
   return (
