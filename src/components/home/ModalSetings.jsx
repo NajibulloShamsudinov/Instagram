@@ -19,11 +19,10 @@ const style = {
   boxShadow: 24,
 };
 
-const ModalSetings = ({open,close}) => (
+const ModalSetings = ({open,children}) => (
     <div>
         <Modal
             open={open}
-            close={close}
             closeAfterTransition
             slots={{ backdrop: Backdrop }}
             slotProps={{
@@ -44,7 +43,7 @@ const ModalSetings = ({open,close}) => (
                         <li className='border-[2px] p-[10px]'>Всатавить на сайт</li>
                         <li className='border-[2px] p-[10px]'>Об аккаунте</li>
                         <li className='border-[2px] p-[10px]' >
-                        <button>Отмена</button>
+                        {children}
                         </li>
                     </ul>
                 </Box>
