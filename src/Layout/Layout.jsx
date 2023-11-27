@@ -8,7 +8,8 @@ import {
   setModalCreate,
 } from "../reducers/Layout/Layout";
 
-import InstagramIcon from "@mui/icons-material/Instagram";
+import InstagramIcon from '@mui/icons-material/Instagram';
+import img from "/src/assets/images/polzovatel.jpg"
 
 import MoreModal from "../components/Layout/MoreModal";
 import CreateModal from "../components/Layout/CreateModal";
@@ -32,25 +33,26 @@ import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
 import { Avatar, TextField } from "@mui/material";
 import navProfile from "../assets/images/nav-profile.jpg";
 
-import ClearIcon from "@mui/icons-material/Clear";
+import ClearIcon from '@mui/icons-material/Clear';
 
 // import search from "../pages/search/search";
 
-import AOS from "aos";
-import "aos/dist/aos.css";
-import { deluser, getdata } from "../pages/search/search";
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+import { deluser, getdata, postuser} from "../pages/search/search";
 import { handleChange } from "../reducers/search/searchred";
+
 
 export const Layout = () => {
   // Функция для модального окна "Еще"
 
-  const location = useLocation();
+  const location = useLocation()
   const dispatch = useDispatch();
   const modalMore = useSelector((store) => store.layout.modalMore);
   const modalSearch = useSelector((store) => store.layout.modalSearch);
   const modalCreate = useSelector((store) => store.layout.modalCreate);
-  const searchinp = useSelector((store) => store.searchred.searchinp);
-  const search = useSelector((store) => store.searchred.search);
+  const searchinp = useSelector((store) => store.searchred.searchinp)
+  const search = useSelector((store) => store.searchred.search)
 
   const toggleModalSearch = () => {
     dispatch(setModalSearch(!modalSearch));
@@ -59,221 +61,104 @@ export const Layout = () => {
     dispatch(setModalMore(!modalMore));
   };
 
-  const data = useSelector((store) => store.searchred.data);
+
+
+  const data = useSelector((store) => store.searchred.data)
+
 
   useEffect(() => {
     AOS.init();
-  }, []);
+  }, [])
   useEffect(() => {
-    dispatch(getdata());
-  }, [dispatch, searchinp]);
+    dispatch(getdata())
+  }, [dispatch, searchinp])
   return (
     // Главный контейнер
     <main className="flex">
       {/* Флекс контейнер */}
       {/* Navbar */}
-      <aside
-        className={`left ${
-          location.pathname === "/basic/message" ||
-          location.pathname === "/basic/message/newMessage"
-            ? "w-[6%]"
-            : "w-[19%]"
-        }`}
-      >
+      <aside className={`left ${location.pathname === "/basic/message" || location.pathname === "/basic/message/newMessage" ? "w-[6%]" : "w-[19%]"}`}>
         {/* Панель навигации */}
         <div
-          className={`${
-            location.pathname === "/basic/message" ||
-            location.pathname === "/basic/message/newMessage"
-              ? "w-[6%]"
-              : "w-[19%]"
-          } panel-navigation fixed py-[33px] px-[15px] h-[100%] border-r-[1px] border-[#d8d8d8]`}
+          className={`${location.pathname === "/basic/message" || location.pathname === "/basic/message/newMessage" ? "w-[6%]" : "w-[19%]"} panel-navigation fixed py-[33px] px-[15px] h-[100%] border-r-[1px] border-[#d8d8d8]`}
+
         >
           <ul
-            className={`${
-              modalSearch ? "items-start gap-[16.5px]" : "items-stretch"
-            } flex flex-col gap-[12px]`}
+            className={`${modalSearch ? "items-start gap-[16.5px]" : "items-stretch"
+              } flex flex-col gap-[12px]`}
           >
             {/* Logo */}
-            <Link to="/basic">
-              <li
-                className={`${
-                  location.pathname === "/basic/message" ||
-                  location.pathname === "/basic/message/newMessage"
-                    ? "hidden"
-                    : "block"
-                }mb-[15px]`}
-              >
-                <img
-                  src={logo}
-                  alt=""
-                  className={`w-[55%] ${
-                    location.pathname === "/basic/message" ||
-                    location.pathname === "/basic/message/newMessage"
-                      ? "hidden"
-                      : "block"
-                  }`}
-                />
+            <Link to="/basic" >
+              <li className={`${location.pathname === "/basic/message" || location.pathname === "/basic/message/newMessage" ? "hidden" : "block"}mb-[15px]`}>
+                <img src={logo} alt="" className={`w-[55%] ${location.pathname === "/basic/message" || location.pathname === "/basic/message/newMessage" ? "hidden" : "block"}`} />
               </li>
               {/* instagram icon */}
-              <li
-                className="px-[9px]"
-                style={{ display: modalSearch ? "block" : "none" }}
-              >
+              <li className="px-[9px]" style={{ display: modalSearch ? "block" : "none" }}>
                 <InstagramIcon sx={{ fontSize: "30px" }} />
               </li>
             </Link>
-            <NavLink
-              to="/basic"
-              onClick={() => dispatch(setModalSearch(false))}
-            >
+            <NavLink to="/basic" onClick={() => dispatch(setModalSearch(false))}>
               <li className="flex items-center gap-[15px] hover:bg-[#00000010] rounded-[7px] p-[10px] transition-all duration-300">
                 <img src={navHome} alt="" />
                 {/* <FontAwesomeIcon icon={faHouse} className="text-[25px]" /> */}
-                <p
-                  className={`${
-                    location.pathname === "/basic/message" ||
-                    location.pathname === "/basic/message/newMessage"
-                      ? "hidden"
-                      : "block"
-                  }`}
-                >
-                  Главная
-                </p>
+                <p className={`${location.pathname === "/basic/message" || location.pathname === "/basic/message/newMessage" ? "hidden" : "block"}`}>Главная</p>
               </li>
             </NavLink>
 
             {/* <search/> */}
             <li
-              onClick={() => {
-                toggleModalSearch();
-              }}
+              onClick={() => { toggleModalSearch() }}
               className="flex items-center gap-[15px] hover:bg-[#00000010] rounded-[7px] p-[10px] transition-all duration-300 cursor-pointer"
             >
-              <FontAwesomeIcon
-                icon={faMagnifyingGlass}
-                className="text-[22px]"
-              />
+              <FontAwesomeIcon icon={faMagnifyingGlass} className="text-[22px]" />
 
-              <p
-                className={`${
-                  location.pathname === "/basic/message" ||
-                  location.pathname === "/basic/message/newMessage"
-                    ? "hidden"
-                    : "block"
-                }`}
-              >
+              <p className={`${location.pathname === "/basic/message" || location.pathname === "/basic/message/newMessage" ? "hidden" : "block"}`}>
                 Поисковой запрос
               </p>
             </li>
 
-            <NavLink
-              to="explore"
-              onClick={() => dispatch(setModalSearch(false))}
-            >
+
+            <NavLink to="explore" onClick={() => dispatch(setModalSearch(false))}>
               <li className="flex items-center gap-[15px] hover:bg-[#00000010] rounded-[7px] p-[10px] transition-all duration-300">
                 <ExploreOutlinedIcon sx={{ fontSize: "25px" }} />
-                <p
-                  className={`${
-                    location.pathname === "/basic/message" ||
-                    location.pathname === "/basic/message/newMessage"
-                      ? "hidden"
-                      : "block"
-                  }`}
-                >
-                  Интересное
-                </p>
+                <p className={`${location.pathname === "/basic/message" || location.pathname === "/basic/message/newMessage" ? "hidden" : "block"}`}>Интересное</p>
               </li>
             </NavLink>
             <NavLink to="reels" onClick={() => dispatch(setModalSearch(false))}>
               <li className="flex items-center gap-[15px] hover:bg-[#00000010] rounded-[7px] p-[10px] transition-all duration-300">
                 <img src={navReels} alt="" className="w-[25px]" />
-                <p
-                  className={`${
-                    location.pathname === "/basic/message" ||
-                    location.pathname === "/basic/message/newMessage"
-                      ? "hidden"
-                      : "block"
-                  }`}
-                >
-                  Reels
-                </p>
+                <p className={`${location.pathname === "/basic/message" || location.pathname === "/basic/message/newMessage" ? "hidden" : "block"}`}>Reels</p>
               </li>
             </NavLink>
-            <NavLink
-              to="message"
-              onClick={() => dispatch(setModalSearch(false))}
-            >
+            <NavLink to="message" onClick={() => dispatch(setModalSearch(false))}>
               <li className="flex items-center gap-[15px] hover:bg-[#00000010] rounded-[7px] p-[10px] transition-all duration-300">
                 <img src={navMessages} alt="" className="w-[25px]" />
-                <p
-                  className={`${
-                    location.pathname === "/basic/message" ||
-                    location.pathname === "/basic/message/newMessage"
-                      ? "hidden"
-                      : "block"
-                  }`}
-                >
-                  Сообщения
-                </p>
+                <p className={`${location.pathname === "/basic/message" || location.pathname === "/basic/message/newMessage" ? "hidden" : "block"}`}>Сообщения</p>
               </li>
             </NavLink>
-            <NavLink
-              to="notifications"
-              onClick={() => dispatch(setModalSearch(false))}
-            >
+            <NavLink to="notifications" onClick={() => dispatch(setModalSearch(false))}>
               <li className="flex items-center gap-[15px] hover:bg-[#00000010] rounded-[7px] p-[10px] transition-all duration-300">
                 <FontAwesomeIcon icon={faHeart} className="text-[25px]" />
-                <p
-                  className={`${
-                    location.pathname === "/basic/message" ||
-                    location.pathname === "/basic/message/newMessage"
-                      ? "hidden"
-                      : "block"
-                  }`}
-                >
-                  Уведомления
-                </p>
+                <p className={`${location.pathname === "/basic/message" || location.pathname === "/basic/message/newMessage" ? "hidden" : "block"}`}>Уведомления</p>
               </li>
             </NavLink>
             <li
               onClick={() => {
-                dispatch(setModalSearch(false));
+                dispatch(setModalSearch(false))
                 dispatch(setModalCreate(true));
               }}
               className="flex items-center cursor-pointer gap-[15px] hover:bg-[#00000010] rounded-[7px] p-[10px] transition-all duration-300"
             >
               <AddBoxOutlinedIcon />
-              <p
-                className={`${
-                  location.pathname === "/basic/message" ||
-                  location.pathname === "/basic/message/newMessage"
-                    ? "hidden"
-                    : "block"
-                }`}
-              >
-                Создать
-              </p>
+              <p className={`${location.pathname === "/basic/message" || location.pathname === "/basic/message/newMessage" ? "hidden" : "block"}`}>Создать</p>
             </li>
-            <NavLink
-              to="profile"
-              onClick={() => dispatch(setModalSearch(false))}
-            >
+            <NavLink to="profile" onClick={() => dispatch(setModalSearch(false))}>
               <li className="flex items-center gap-[15px] hover:bg-[#00000010] rounded-[7px] p-[10px] transition-all duration-300">
                 <Avatar
                   src={navProfile}
                   sx={{ width: "25px", height: "25px" }}
                 />
-                <p
-                  className={`${
-                    location.pathname === "/basic/message" ||
-                    location.pathname === "/basic/message/newMessage"
-                      ? "hidden"
-                      : "block"
-                  }`}
-                >
-                  Профиль
-                </p>
+                <p className={`${location.pathname === "/basic/message" || location.pathname === "/basic/message/newMessage" ? "hidden" : "block"}`}>Профиль</p>
               </li>
             </NavLink>
             <li
@@ -281,16 +166,7 @@ export const Layout = () => {
               className="flex items-center gap-[15px] hover:bg-[#00000010] rounded-[7px] p-[10px] transition-all duration-300 cursor-pointer"
             >
               <FontAwesomeIcon icon={faBars} className="text-[20px]" />
-              <p
-                className={`${
-                  location.pathname === "/basic/message" ||
-                  location.pathname === "/basic/message/newMessage"
-                    ? "hidden"
-                    : "block"
-                }`}
-              >
-                Ещё
-              </p>
+              <p className={`${location.pathname === "/basic/message" || location.pathname === "/basic/message/newMessage" ? "hidden" : "block"}`}>Ещё</p>
             </li>
           </ul>
         </div>
@@ -316,67 +192,73 @@ export const Layout = () => {
       </aside>
       {/* searchmodal  */}
 
-      <div
-        data-aos="fade-right"
+
+      <div data-aos="fade-right"
         style={{ display: modalSearch ? "block" : "none" }}
-        className="searchModal border-r-[1px]  z-10   fixed left-[6%] px-[1%] py-[2%]  bg-white w-[29%] h-[100%] rounded-r-3xl"
-      >
+        className="searchModal border-r-[1px]  z-10   fixed left-[6%] px-[1%] py-[2%]  bg-white w-[29%] h-[100%] rounded-r-3xl">
+
         <div className="flex  flex-col ">
-          <h1 className="text-[25px] font-semibold">Поисковой запрос</h1>
+          <h1 className="text-[25px] font-semibold">
+            Поисковой запрос
+          </h1>
 
-          <input
-            value={searchinp}
-            onChange={(e) =>
-              dispatch(
-                handleChange({ type: "searchinp", settype: e.target.value })
-              )
-            }
-            type="search"
-            placeholder="Поиск"
-            className="w-[100%] outline-none my-[7%]  px-[5%] bg-[#EFEFEF] rounded-[10px] h-[40px]"
-          />
 
-          <div className="flex mb-[5%] pr-[1%] justify-between items-center">
+
+          <input value={searchinp} onChange={(e) => dispatch(handleChange({ type: "searchinp", settype: (e.target.value) }))} type="search" placeholder="Поиск" className="w-[100%] outline-none my-[7%]  px-[5%] bg-[#EFEFEF] rounded-[10px] h-[40px]" />
+
+
+          <div>
+
+          
+          
+          <div style={{display:searchinp.length==0?"none":"flex"}} className="flex mb-[5%] pr-[1%] justify-between items-center">
             <p className="font-semibold text-[]">Недавнее</p>
-            <h1 className="font-semibold text-[14px] cursor-pointer hover:text-[#345d77]  text-[#0F9BF7]">
-              Очистить все
-            </h1>
+            <h1 className="font-semibold text-[14px] cursor-pointer hover:text-[#345d77]  text-[#0F9BF7]">Очистить все</h1>
           </div>
 
+          </div>
+
+          <div>
+            {
+          
+              searchinp== ""?(null):( 
+
+          
           <div className=" flex  flex-col h-[66vh]  overflow-auto gap-2  ">
-            {data.map((el) => {
-              return (
-                <div
-                  key={el.id}
-                  className="flex items-center pr-[1%] justify-between"
-                >
-                  <div className="flex hover:cursor-pointer  items-center gap-2">
-                    <img
-                      className="rounded-full w-[50px]"
-                      src={
-                        el.avatar
-                          ? el.avatar
-                          : "src/assets/images/photo_2023-11-24_12-47-57.jpg"
-                      }
-                      alt=""
-                    />
-                    <div className="">
-                      <h1 className="font-semibold text-[14px]">
-                        {el.userName}
-                      </h1>
-                      <p className="text-[grey] text-[14px] font-semibold">
-                        {el.email}
-                      </p>
+            {
+              data.map((el) => {
+                return (
+                  <div key={el.id} className="flex items-center pr-[1%] justify-between">
+                    <div  className="flex hover:cursor-pointer  items-center gap-2">
+                      <img className="rounded-full w-[50px]" src={el.avatar ? el.avatar :img } alt="" />
+                      <div onClick={()=>dispatch(postuser(el.userName))} className="">
+                        <h1 className="font-semibold text-[14px]">{searchinp.length==0?el.text:el.userName}</h1>
+                        <p className="text-[grey] text-[14px] font-semibold">{el.email}</p>
+                      </div>  
                     </div>
+                    <button onClick={() => dispatch(deluser(el.id))}>
+
+                      <ClearIcon sx={{ color: "grey" }} />
+
+                    </button>
+
                   </div>
-                  <button onClick={() => dispatch(deluser(el.id))}>
-                    <ClearIcon sx={{ color: "grey" }} />
-                  </button>
-                </div>
-              );
-            })}
+
+                )
+              })
+            }
+
+          </div>
+          )}
           </div>
         </div>
+
+
+
+
+
+
+
       </div>
 
       {/* Контентная часть */}
@@ -450,6 +332,7 @@ export const Layout = () => {
             <li>
               <a href="" className="text-[12px] text-[#8D8D86]">
                 Instagram Lite
+
               </a>
             </li>
             <li>
