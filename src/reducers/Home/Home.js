@@ -7,6 +7,11 @@ const home=createSlice({
         data:[],
         user:[],
         open:false,
+        openCom:false,
+        com:"",
+        text:"",
+        name:"",
+        img:null
     },
     reducers:{
         handelChange:(state,action)=>{
@@ -15,7 +20,14 @@ const home=createSlice({
         setOpen:(state,action)=>{
             state.open=action.payload
         },
-        
+        setOpenCom:(state,action)=>{
+            state.openCom=true
+            state.name=action.payload.title
+            state.img=action.payload.images[0]
+        },
+        setCloseCom:(state,action)=>{
+            state.openCom=false
+        },
     },
     extraReducers:(builder)=>{
         builder.addCase(get.pending,(state,action)  =>{
@@ -43,4 +55,4 @@ const home=createSlice({
     }
 })
 export default home.reducer
-export const {handelChange,setOpen}=home.actions
+export const {handelChange,setOpen,setOpenCom,setCloseCom}=home.actions

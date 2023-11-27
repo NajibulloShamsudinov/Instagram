@@ -40,3 +40,7 @@
 .wrapper-message > .query:active {
   color: #aaaaaa;
 }
+
+.to-active:active {
+  color: #aaaaaa;
+}
