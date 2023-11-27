@@ -2,24 +2,62 @@ import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { get, users,likes } from "../../api/home/home";
-import { handelChange, setOpen } from "../../reducers/Home/Home";
+import { handelChange, setCloseCom, setOpen, setOpenCom } from "../../reducers/Home/Home";
 import Checkbox from '@mui/material/Checkbox';
-import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
-import Favorite from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import Followers from "../../components/home/Followers";
 import ModeCommentOutlinedIcon from '@mui/icons-material/ModeCommentOutlined';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import ModalSetings from "../../components/home/ModalSetings";
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
+import Button from '@mui/material/Button';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import Divider from '@mui/material/Divider';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import Avatar from '@mui/material/Avatar';
+import Typography from '@mui/material/Typography';
+import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  boxShadow: 24,
+  p: 4,
+};
+
+const style2 = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 800,
+  bgcolor: 'background.paper',
+  boxShadow: 24,
+  p: 1,
+  height:"auto"
+};
 function Home () {
 /////datas
   const data=useSelector(({home})=>home.data)
   const user=useSelector(({home})=>home.user)
+  console.log(user);
   const open=useSelector(({home})=>home.open)
+  const openCom=useSelector(({home})=>home.openCom)
+  const com=useSelector(({home})=>home.com)
+  const name=useSelector(({home})=>home.name)
+  const img=useSelector(({home})=>home.img)
   const dispatch=useDispatch()
 
 
@@ -33,22 +71,32 @@ useEffect(()=>{
     <div className="mx-[auto] p-[20px] pb-[10vh]">
       <div className="flex justify-between">
         <div className="w-[65%]">
-        <div className="flex gap-[10px] mx-[40px]">
+         <div className="mx-[50px]">
+         <Swiper
+            spaceBetween={15}
+            slidesPerView={9}
+            onSlideChange={() => console.log('slide change')}
+            onSwiper={(swiper) => console.log(swiper)}
+            >
         {
           user.map((e)=>{
             return (
-              <div className="text-center">
+              <SwiperSlide>
+                 <div className="text-center">
               <div className="w-[60px] bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-[30px] p-[2px]">
               <img src="https://cdn2.iconfinder.com/data/icons/instagram-ui/48/jee-75-512.png"
               className="rounded-[30px] border-[2px] border-[white] bg-[white]"  alt="" />
               </div>
               <span className="text-[12px]">{e.userName}</span>
              </div>
+              </SwiperSlide>
             )
           })
         }
-        </div>
-        <div className="my-[10vh] ">
+        </Swiper>
+         </div>
+        
+    <div className="my-[10vh] ">
       {
      data.map((e)=>{
       return (
@@ -59,32 +107,54 @@ useEffect(()=>{
               <img src="https://cdn2.iconfinder.com/data/icons/instagram-ui/48/jee-75-512.png"
               className="rounded-[30px] border-[2px] border-[white] bg-[white]"  alt="" />
               </div>
-             <span className="text-[14px] font-semibold">admin</span>
+             <span className="text-[14px] font-semibold">
+              {user.map(element => {
+                return e.userId == element.id ? <div> {element.userName} </div>: null
+              })}
+             </span>
+             <h1>{e.datePublished.slice(0,10)}</h1>
              </div>
              <button onClick={()=>dispatch(setOpen(true))}>
-              <MoreVertIcon/></button>
+              <MoreHorizIcon/></button>
              </div> <br />
-        <img src={`${import.meta.env.VITE_APP_FILES_URL}${e.images[0]}`}
-         className="w-[100%]" alt="error" />
+        <div>
+        {e.images.map((el)=>{
+          return (
+            !el.includes(".mp4")?(<img src={`${import.meta.env.VITE_APP_FILES_URL}${e.images}`}
+            className="w-[100%]" alt="error" onDoubleClick={()=>dispatch(likes(e.postId))} />)
+        : (<video controls src={`${import.meta.env.VITE_APP_FILES_URL}${e.images[0]}`}></video>)
+          )
+        })}
+        </div>
         <div className="p-[2px]">
-          {console.log(`${import.meta.env.VITE_APP_FILES_URL}${e.images[0]}`)}
         <div className="flex justify-between">
          <div className="flex gap-[2px] items-center">
         <div className="text-center">
-        <Checkbox icon={<FavoriteBorder />} checkedIcon={<Favorite sx={{color:"red"}} />}
-         sx={{color:"red",":hover":{
-          color:"red",
-        }}} onClick={()=>dispatch(likes(e.postId))} /> <br />
-        {e.userLikes}
+          {
+       e.postLike?(<FavoriteIcon sx={{color:"red"}} onClick={()=>dispatch(likes(e.postId))} />):
+       (<FavoriteBorderIcon onClick={()=>dispatch(likes(e.postId))} /> )
+          }
         </div>
-        <ModeCommentOutlinedIcon/>
+        <Button onClick={() => dispatch(setOpenCom(e))}
+        ><ModeCommentOutlinedIcon/></Button>
          </div>
           <Checkbox
          icon={<BookmarkBorderIcon />}
            checkedIcon={<BookmarkIcon />}
          />
         </div>
-        <h1>{e.title}</h1>
+        <p className="font-semibold">{e.postLikeCount>0?e.postLikeCount+" "+"отметок Нравится":null}</p>
+         <div className="flex gap-[5px]"> 
+         {user.map(element => {
+                return e.userId == element.id ? <h1 className="font-bold"> {element.userName} </h1>: null
+              })}
+         <h1>{e.title}</h1>
+         </div>
+        </div>
+        <h1 className="text-[grey] mt-[2px]" onClick={()=>dispatch(setOpenCom(e))}>
+          Посмотреть все комментарии ({e.commentCount})</h1>
+        <div className="my-[5px]">
+          <input type="text" className="py-[5px] w-[300px] outline-none" placeholder="Добавьте комментарий..." />
         </div>
         </div>
       )
@@ -92,7 +162,51 @@ useEffect(()=>{
      }</div>
         </div>
         {/* modals */}
-        <ModalSetings open={open} />
+        <ModalSetings children open={open}>
+        <button onClick={() => dispatch(setOpen(false))}>Отмена</button>
+        </ModalSetings>
+
+        {/* modal coment */}
+        <Modal
+        open={openCom}
+        aria-labelledby="keep-mounted-modal-title"
+        aria-describedby="keep-mounted-modal-description"
+      >
+        <Box sx={style2}>
+            <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper',display:"flex" }}> 
+            <img src={`${import.meta.env.VITE_APP_FILES_URL}${img}`} alt="" className="w-[500px] h-[300px]" /> 
+           {/* {
+            img.includes(".mp4")? <video controls src={`${import.meta.env.VITE_APP_FILES_URL}${img}`}></video>
+            :<img src={`${import.meta.env.VITE_APP_FILES_URL}${img}`} alt="" className="w-[500px] h-[300px]" />  
+           }  */}
+            <div className=" px-[5px]">
+            <ListItem alignItems="flex-start">
+             <div className="w-[100%] flex items-center justify-between border-b-2 pb-4">
+             <ListItemAvatar className="flex">
+              <div className="w-[45px] bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-[30px] p-[2px]">
+              <Avatar alt="Remy Sharp" src={`${import.meta.env.VITE_APP_FILES_URL}${img}`}
+              className="rounded-[30px] border-[2px] border-[white] bg-[white]" />
+              </div>
+              </ListItemAvatar>
+              <button onClick={()=>dispatch(setOpen(true))}>
+              <MoreHorizIcon/></button>
+             </div>
+            </ListItem>
+            <div>
+             <h1>{name}</h1>
+             
+            </div>
+            <form className="my-[5px] flex items-center gap-[6px]">
+         <InsertEmoticonIcon/>
+         <input type="text" className="py-[5px] outline-none" placeholder="Добавьте комментарий..."
+         value={com} onChange={(e)=>dispatch(handelChange({type:"com",value:e.target.value}))} />
+           <button type="submit">Опубликовать</button>
+         </form>
+       <button onClick={()=>dispatch(setCloseCom(false))}>close</button>
+            </div>
+          </List>
+        </Box>
+      </Modal>
         
         {/* right side */}
        
