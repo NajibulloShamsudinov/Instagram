@@ -1,0 +1,53 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "image": "http://localhost:5173/src/assets/images/nav-profile.jpg",
+      "title": "Najibullo Shamsudinov",
+      "status": "В сети",
+      "isComplete": false
+    },
+    {
+      "id": 2,
+      "image": "http://localhost:5173/src/assets/images/nav-profile.jpg",
+      "title": "Najibullo Shamsudinov",
+      "status": "В сети",
+      "isComplete": false
+    },
+    {
+      "id": 4,
+      "image": "http://localhost:5173/src/assets/images/nav-profile.jpg",
+      "title": "Najibullo Shamsudinov",
+      "status": "В сети",
+      "isComplete": false
+    },
+    {
+      "id": 5,
+      "image": "http://localhost:5173/src/assets/images/nav-profile.jpg",
+      "title": "Najibullo Shamsudinov",
+      "status": "В сети",
+      "isComplete": false
+    },
+    {
+      "id": 6,
+      "image": "http://localhost:5173/src/assets/images/nav-profile.jpg",
+      "title": "Najibullo Shamsudinov",
+      "status": "В сети",
+      "isComplete": false
+    },
+    {
+      "id": 7,
+      "image": "http://localhost:5173/src/assets/images/nav-profile.jpg",
+      "title": "Najibullo Shamsudinov",
+      "status": "В сети",
+      "isComplete": false
+    },
+    {
+      "id": 8,
+      "image": "http://localhost:5173/src/assets/images/nav-profile.jpg",
+      "title": "Najibullo Shamsudinov",
+      "status": "В сети",
+      "isComplete": false
+    }
+  ]
+}

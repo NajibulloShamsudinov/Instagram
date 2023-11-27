@@ -6,6 +6,7 @@ const reels = createSlice({
   initialState: {
     posts: [],
     modal: false,
+    modal2: false,
     loading: false,
   },
   reducers: {
@@ -18,7 +19,6 @@ const reels = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getData.pending, (state, action) => {
-      console.log();
       state.loading = true;
       console.log(state.loading);
     });
