@@ -1,12 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getData } from "../../api/reels/Reels.js";
+import { getData, postLike } from "../../api/reels/Reels.js";
 
-const slice = createSlice({
+const reels = createSlice({
   name: "reels",
   initialState: {
     posts: [],
     modal: false,
-    loading:false
+    loading: false,
   },
   reducers: {
     handlModal: (state, action) => {
@@ -15,22 +15,33 @@ const slice = createSlice({
     handlModal1: (state, action) => {
       state.modal = false;
     },
-    
   },
-  extraReducer: (builder) => {
+  extraReducers: (builder) => {
     builder.addCase(getData.pending, (state, action) => {
-      state.loading=true
-      console.log(2);
+      console.log();
+      state.loading = true;
+      console.log(state.loading);
     });
     builder.addCase(getData.fulfilled, (state, action) => {
-      console.log(action.payload);
+       console.log(action);
       state.posts = action.payload;
+     
     });
     builder.addCase(getData.rejected, (state, action) => {
       console.log(error);
     });
+     builder.addCase(postLike.pending, (state, action) => {
+      
+     });
+     builder.addCase(postLike.fulfilled, (state, action) => {
+       console.log(action);
+   
+     });
+     builder.addCase(postLike.rejected, (state, action) => {
+       console.log(error);
+     });
   },
 });
 
-export const { handlModal, handlModal1 } = slice.actions;
-export default slice.reducer;
+export const { handlModal, handlModal1 } = reels.actions;
+export default reels.reducer;

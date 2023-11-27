@@ -1,10 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
-import search from "../../pages/search/search";
+import { getdata } from "../../pages/search/search";
+
 
 const searchred = createSlice({
   name: "searchred",
   initialState: {
-   modalsrc:false
+    data:[],
+    searchinp:"",
+    search:false
   },
   reducers: {
 
@@ -13,6 +16,19 @@ const searchred = createSlice({
      },
     
   },
+  extraReducers:(builder)=>{
+    builder.addCase(getdata.pending,(state,action)=>{
+    });
+    builder.addCase(getdata.fulfilled,(state,action)=>{
+      state.data=action.payload
+    })
+    builder.addCase(getdata.rejected,(state,action)=>{
+    })
+  }
+
+  
+
+  
 });
 
 export default searchred.reducer;
