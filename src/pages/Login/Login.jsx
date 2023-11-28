@@ -1,11 +1,24 @@
-import * as React from "react";
+import React, { useRef, useState } from 'react';
+// Import Swiper React components
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
+
+// import './App.css';
+
+import "../../App.css"
+
+// import required modules
+import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -57,77 +70,133 @@ export default function Login() {
   };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
+    <div className=' ml-[-230px] bg-white '>
+      <div className=" flex justify-center pt-[30px] items-end ">
+        <div className=" flex">
+      <Swiper
+        spaceBetween={20}
+        centeredSlides={true}
+        autoplay={{
+          // delay: 2500,
+          // duration:500,
+          disableOnInteraction: false,
+          // dur
+        }}
+        // pagination={{
+        //   clickable: true,
+        // }}
+        // navigation={true}
+        modules={[Autoplay, Pagination, Navigation]}
+        className="mySwiper relative left-[405px] mt-[25px] rounded-[20px] "
+      >
+        <SwiperSlide>
+            <img className=" " src="src/assets/images/Снимок экрана 2023-11-27 163218.png" alt="" />  
+        </SwiperSlide>
+        <SwiperSlide>            <img className=" " src="src/assets/images/Снимок экрана 2023-11-27 162610.png" alt="" />  </SwiperSlide>
+        <SwiperSlide>    <img className=" " src="src/assets/images/Снимок экрана 2023-11-27 162804.png" alt="" /></SwiperSlide>
+        <SwiperSlide>  <img className=" " src="src/assets/images/Снимок экрана 2023-11-27 162946.png" alt="" /></SwiperSlide>
+      </Swiper> 
+          <div>
+            <img  src="src/assets/images/frames.svg" alt="" />    
+          </div>
+          <div>
+        <div
+        className=' border-[1px] p-[30px]'
+          // sx={{
+          //   marginTop: 8,
+          //   display: "flex",
+          //   flexDirection: "column",
+          //   alignItems: "center",
+          // }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign in
-          </Typography>
           <Box
             component="form"
             onSubmit={handleSubmit}
             noValidate
             sx={{ mt: 1 }}
           >
-            <TextField
+            <div className=' flex justify-center'>
+              <img src="src/assets/images/LOGO.png" alt="" />
+            </div>
+            <div className=' flex justify-center'>
+            <input
               margin="normal"
+              className=' w-[280px] p-[10px] border-[1px] '
+
               required
-              fullWidth
+              // fullWidth
               id="email"
               label="Email Address"
               name="email"
               autoComplete="email"
               autoFocus
+              placeholder='Телефон, имя пользователья или эл.почта'
             />
-            <TextField
+            </div>
+            <div className=' flex justify-center mt-[10px]'>
+            <input
+            className=' w-[280px] p-[10px] border-[1px] '
               margin="normal"
               required
-              fullWidth
+              // fullWidth
               name="password"
               label="Password"
               type="password"
               id="password"
               autoComplete="current-password"
+              placeholder='Пароль'
             />
-            <FormControlLabel
+            </div>
+            {/* <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
-            />
-            <Button
+            /> */}
+            <div className=' text-white p-[5px] bg-blue-400 mt-[20px] flex justify-center rounded-[10px]'>
+            <button
+            className='  '
               type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
-            </Button>
+            Войти
+          </button>
+            </div>
+            <div className=' p-[10px] flex justify-center'>
+              <img src="src/assets/images/separator.png" alt="" />
+            </div>
+            <div className=' p-[10px] flex justify-center'>
+              <img src="src/assets/images/continue with google.png" alt="" />
+            </div>
+            <div className=' flex justify-center p-[10px]'>
+              <p>Забыли пароль ?</p>
+            </div>
             <Grid container>
               <Grid item xs>
                 <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link variant="body2" to="/registration">
-                  {"Don't have an account? Sign Up"}
+                У вас ещё нет аккаунта? <span className=' text-blue-600'>Зарегистрироваться</span>
                 </Link>
               </Grid>
             </Grid>
           </Box>
-        </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
-      </Container>
-    </ThemeProvider>
+        </div>
+          <div className=' p-[20px] flex justify-center'>
+          Установите приложение.
+
+          </div>
+          <div className=' flex justify-center'>
+            <img src="src/assets/images/links.png" alt="" />
+          </div>
+          </div>
+        </div>
+        {/* <Copyright sx={{ mt: 8, mb: 4 }} /> */}
+      </div>
+    </div>
   );
+
+
+
+
+
+
+
+
+  
 }
