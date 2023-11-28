@@ -21,6 +21,22 @@ export const getPostById = createAsyncThunk(
     async function(id){
         try {
             const {data} = await axiosRequest.get(`Post/get-posts?UserId=${id}`)
+            // console.log(data.data);
+            return data.data
+        } catch (error) {
+            
+        }
+    } 
+)
+
+
+
+export const getSubsciption = createAsyncThunk(
+    'profile/getSubsciption',
+    async function(id){ 
+        console.log(id);
+        try {
+            const {data} = await axiosRequest.get(`FollowingRelationShip/get-subscribers?UserId=${id}`)
             console.log(data.data);
             return data.data
         } catch (error) {
@@ -28,3 +44,22 @@ export const getPostById = createAsyncThunk(
         }
     } 
 )
+
+
+
+
+export const getUser = createAsyncThunk(
+    'profile/getUser',
+    async function(){
+        try {
+            const {data} = await axiosRequest.get('User/get-users')
+            console.log(data.data);
+            return data.data
+        } catch (error) {
+            
+        }
+    } 
+)
+
+
+
