@@ -41,7 +41,12 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
 import vid from "../../assets/video/i.mp4";
 import { useSelector, useDispatch } from "react-redux";
-import { getData, postLike, postComment } from "../../api/reels/Reels";
+import {
+  getData,
+  postLike,
+  postComment,
+  getData1,
+} from "../../api/reels/Reels";
 import { blue } from "@mui/material/colors";
 // import { handlModal } from "../../reducers/reels/Reelse";
 // import { handlModal1 } from "../../reducers/reels/Reelse";
@@ -51,8 +56,7 @@ const Reels = () => {
   const handleOpen1 = () => setOpen1(true);
   const handleClose1 = () => setOpen1(false);
 
-
-  const [text3, setText3 ] = useState("")
+  const [text3, setText3] = useState("");
   // Modal
   const [open, setOpen] = React.useState(false);
   const [scroll, setScroll] = React.useState("paper");
@@ -68,7 +72,7 @@ const Reels = () => {
 
   const handlModal1 = () => {
     setModal2(false);
-  }
+  };
 
   const descriptionElementRef = React.useRef(null);
   React.useEffect(() => {
@@ -81,16 +85,17 @@ const Reels = () => {
   }, [open]);
 
   const posts = useSelector((store) => store.reels.posts);
+  const users = useSelector((store) => store.reels.users);
   let load = useSelector((store) => store.reels.loading);
   // console.log(posts);
   // const modal2 = useSelector((store) => store.reels.modal2);
 
-  const [modal2, setModal2] = useState(null)
+  const [modal2, setModal2] = useState(null);
 
   const modalUs = () => {
-    setModal2(true)
-    setOpen(false)
-  }
+    setModal2(true);
+    setOpen(false);
+  };
   // console.log(posts);
 
   const dispatch = useDispatch();
@@ -98,9 +103,10 @@ const Reels = () => {
   // const PostImagesApi = "http://65.108.148.136:8085/";
 
   // const [counter, setCounter] = useState(0)
-
+  console.log(users.length);
   useEffect(() => {
     dispatch(getData());
+    dispatch(getData1());
   }, [dispatch]);
   return (
     <div className="mt-14 flex flex-col gap-14  px-[30%]">
@@ -272,7 +278,6 @@ const Reels = () => {
                   sx={{
                     "&.Mui-checked": {
                       color: "black",
-                      
                     },
                   }}
                   icon={<BookmarkBorderIcon />}
@@ -300,10 +305,8 @@ const Reels = () => {
 
               <div>
                 <div className="flex  justify-end ">
-                 
                   <div>
                     <React.Fragment>
-                      
                       <Dialog
                         sx={{
                           width: "26%",
@@ -347,11 +350,36 @@ const Reels = () => {
                               {elem?.comments?.map((ele) => (
                                 <p className="text-black">
                                   <div>
-
+                                    {users.map((elem) => {
+                                      return (
+                                        <div>
+                                          {ele.userId == elem.id ? (
+                                            <div className="flex items-center gap-1">
+                                              {elem.avatar == "" ||
+                                              elem.avatar == null ? (
+                                                <img
+                                                  className="w-[14%]"
+                                                  src="https://avatars.mds.yandex.net/i?id=468b1d37f96f9def37f34bb75bdaa3849be0613a-10115068-images-thumbs&n=13"
+                                                  alt=""
+                                                />
+                                              ) : (
+                                                <img
+                                                  src={`${
+                                                    import.meta.env
+                                                      .VITE_APP_FILES_URL
+                                                  }${elem.avatar}`}
+                                                  alt=""
+                                                />
+                                              )}
+                                          <p>{elem.userName}</p>
+                                            </div>
+                                          ) : null}
+                                        </div>
+                                      );
+                                    })}
                                     {ele.comment}
-                                    
                                   </div>
-                                  
+
                                   <div className="flex gap-3">
                                     <p className="text-[grey]">
                                       отметки "Нравиться":3 Ответить
@@ -378,7 +406,6 @@ Praesent commodo cursus magna, vel scelerisque nisl consectetur et.`
                         </DialogContent>
                         <DialogActions>
                           <div className="flex border-[grey]  w-[100%]  border-[1px] px-3 py-1 rounded-[20px] ">
-                            
                             <input
                               value={text3}
                               onChange={(e) => setText3(e.target.value)}
@@ -386,27 +413,23 @@ Praesent commodo cursus magna, vel scelerisque nisl consectetur et.`
                               type="text"
                               className="  border-[none] outline-0 w-[100%] rounded-[30px]  p-1 "
                             />
-                            {
-                              text3 ? (
-                                 <button
-                              className="text-[blue]"
-                              onClick={() =>
-                                dispatch(
-                                  postComment({
-                                    postId: elem.postId,
-                                    comment: text3,
-                                  }),
-                                  setText3("")
-                                )
-                              }
-                            >
-                              Опубликовать
-                            </button>
-                              ) :null                              
-                            }
-                           
+                            {text3 ? (
+                              <button
+                                className="text-[blue]"
+                                onClick={() =>
+                                  dispatch(
+                                    postComment({
+                                      postId: elem.postId,
+                                      comment: text3,
+                                    }),
+                                    setText3("")
+                                  )
+                                }
+                              >
+                                Опубликовать
+                              </button>
+                            ) : null}
                           </div>
-                          
                         </DialogActions>
                       </Dialog>
                     </React.Fragment>
@@ -417,17 +440,19 @@ Praesent commodo cursus magna, vel scelerisque nisl consectetur et.`
           );
         })}
       </div>
-      
-        {modal2 ? (
-          <div className="bg-[#090909d8] h-[100vh]  w-[100%] ml-[-41%] top-0  fixed">
-            <div className=" shadow-md bg-white text-center p-14 rounded-[14px] w-[40%] ml-[32%] mt-[15%] m-8 flex flex-col z-40 ">
+
+      {modal2 ? (
+        <div className="bg-[#090909d8] h-[100vh]  w-[100%] ml-[-41%] top-0  fixed">
+          <div className=" shadow-md bg-white text-center p-14 rounded-[14px] w-[40%] ml-[32%] mt-[15%] m-8 flex flex-col z-40 ">
             {/* <input type="text" placeholder="qqq" className="bg-[blue]" /> */}
             <button className="text-[red] pb-4">Пожаловаться</button>
             <hr className=" border-b-1" />
-              <button className="pt-4" onClick={() => dispatch(handlModal1())}>Отмена</button>
-            </div>
+            <button className="pt-4" onClick={() => dispatch(handlModal1())}>
+              Отмена
+            </button>
           </div>
-        ) : null}
+        </div>
+      ) : null}
     </div>
   );
 };

@@ -1,10 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getData, postLike } from "../../api/reels/Reels.js";
+import { getData, postLike, getData1 } from "../../api/reels/Reels.js";
 
 const reels = createSlice({
   name: "reels",
   initialState: {
     posts: [],
+    users:[],
     modal: false,
     modal2: false,
     loading: false,
@@ -30,6 +31,17 @@ const reels = createSlice({
     builder.addCase(getData.rejected, (state, action) => {
       console.log(error);
     });
+        builder.addCase(getData1.pending, (state, action) => {
+          state.loading = true;
+          console.log(state.loading);
+        });
+        builder.addCase(getData1.fulfilled, (state, action) => {
+          console.log(action);
+          state.users = action.payload;
+        });
+        builder.addCase(getData1.rejected, (state, action) => {
+          console.log(error);
+        });
      builder.addCase(postLike.pending, (state, action) => {
       
      });
