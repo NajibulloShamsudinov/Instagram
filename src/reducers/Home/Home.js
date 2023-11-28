@@ -1,11 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { get,users } from "../../api/home/home";
+import { get,users,story } from "../../api/home/home";
 
 const home=createSlice({
     name:"home",
     initialState: {
         data:[],
         user:[],
+        stories:[],
+        loading:true,
         open:false,
         openCom:false,
         com:"",
@@ -41,15 +43,26 @@ const home=createSlice({
         builder.addCase(get.rejected,(state,action)  =>{
             state.loading = true
         })
+
         builder.addCase(users.pending,(state,action)  =>{
             state.loading = true
         }),
         builder.addCase(users.fulfilled,(state,action)  =>{
             state.loading = false
-            console.log(action.payload)
             state.user=action.payload
         }),
         builder.addCase(users.rejected,(state,action)  =>{
+            state.loading = true
+        })
+
+        builder.addCase(story.pending,(state,action)  =>{
+            state.loading = true
+        }),
+        builder.addCase(story.fulfilled,(state,action)  =>{
+            state.loading = false
+            state.stories=action.payload
+        }),
+        builder.addCase(story.rejected,(state,action)  =>{
             state.loading = true
         })
     }

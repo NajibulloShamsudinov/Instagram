@@ -36,17 +36,17 @@ export const likes=createAsyncThunk(
         }
     }
 )
-// export const story =createAsyncThunk(
-//     "home/story",
-//     async function() {
-//         try {
-//             const {data}=await axiosRequest.get("User/get-users")
-//             return data.data
-//         } catch (error) { 
-//             console.log(error)
-//         }
-//     }
-// )
+export const story =createAsyncThunk(
+    "home/story",
+    async function() {
+        try {
+            const {data}=await axiosRequest.get("Story/get-stories")
+            return data.data
+        } catch (error) { 
+            console.log(error)
+        }
+    }
+)
 
 // export const addCom=createAsyncThunk(
 //     "home/addCom",
