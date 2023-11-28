@@ -5,7 +5,7 @@ const Post = ({ post }) => {
   const [isHovered, setIsHovered] = useState(Array(post.length).fill(false));
 
   return (
-    <div className='grid gap-[2px] mt-[20px] grid-cols-3'>
+    <div className='grid gap-[5px] mt-[20px] grid-cols-3'>
       {post?.map((el, index) => {
         return (
           <div
@@ -25,7 +25,7 @@ const Post = ({ post }) => {
             {el.images.length !== 0 ? (
               <div className="">
                 <img
-                  className='h-[309px] w-[325px] cursor-pointer'
+                  className='h-[309px] w-[338px] cursor-pointer'
                   src={`${import.meta.env.VITE_APP_FILES_URL}${el.images[0]}`}
                   alt=""
                 />
@@ -50,4 +50,3 @@ const Post = ({ post }) => {
 };
 
 export default Post;
-
