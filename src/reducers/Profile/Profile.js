@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getProfile } from "../../api/profile/profile";
+import { getProfile, getUser } from "../../api/profile/profile";
 import { getPostById } from "../../api/profile/profile";
+import { getSubsciption } from "../../api/profile/profile";
 
 
 const profile = createSlice({
@@ -8,6 +9,8 @@ const profile = createSlice({
     initialState:{
         data:[],
         postData:[],
+        subsciption:[],
+        users:[]
     },
     reducers :{
         handleChange:(state,action)=>{
@@ -35,6 +38,31 @@ const profile = createSlice({
             state.postData = action.payload
         });
         builder.addCase(getPostById.rejected,(state,action) =>{
+            state.loading=false
+        });
+
+
+
+        builder.addCase(getSubsciption.pending,(state,action) =>{
+            state.loading = true
+        });
+        builder.addCase(getSubsciption.fulfilled,(state,action) =>{
+            state.subsciption = action.payload
+        });
+        builder.addCase(getSubsciption.rejected,(state,action) =>{
+            state.loading=false
+        });
+
+
+
+
+        builder.addCase(getUser.pending,(state,action) =>{
+            state.loading = true
+        });
+        builder.addCase(getUser.fulfilled,(state,action) =>{
+            state.users = action.payload
+        });
+        builder.addCase(getUser.rejected,(state,action) =>{
             state.loading=false
         });
     }

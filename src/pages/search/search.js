@@ -6,9 +6,9 @@ export const getdata = createAsyncThunk(
     async function (_, { getState }) {
         
         let api2 = "User/get-users";
-        if(getState().searchred.searchinp.length==0){
-            api2="SearchHistory/get-search-histories"
-        }
+        // if(getState().searchred.searchinp.length==0){
+        //     api2="SearchHistory/get-user-search-histories"
+        // }
 
         if (getState().searchred.searchinp.length !== 0) {
             api2 = `User/get-users?UserName=${getState().searchred.searchinp}`
@@ -39,11 +39,13 @@ export const getdata = createAsyncThunk(
 
 export const postuser=createAsyncThunk(
     "search/postuser",
-    async  function(username,{dispatch}){
-        console.log(1)
+    async  function(id,{dispatch,getState}){
         try {
-            const {data}=await axiosRequest.post(`SearchHistory/add-search-history?Text=${username}`)
-           dispatch(getdata())
+            const {data}=await axiosRequest.post(`SearchHistory/add-user-search-history?UserSearchId=${id}`,id)
+                // getState().searchred.search=data.data
+                console.log(data.data);
+            dispatch(getdata())
+            return data
         } catch (error) {
             console.log(error);
         }
@@ -61,5 +63,4 @@ export const deluser = createAsyncThunk(
     }
 
 )
-
 
