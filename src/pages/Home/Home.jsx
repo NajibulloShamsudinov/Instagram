@@ -178,7 +178,7 @@ useEffect(()=>{
            } 
             <div className=" pl-[3%]">
             <ListItem >
-             <div className="w-[400px] flex items-center justify-between border-b-2 pb-4">
+             <div className="w-[100%] flex items-center justify-between border-b-2 pb-4">
              <ListItemAvatar className="flex">
               <div className="w-[45px] bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-[30px] p-[2px]">
               <Avatar alt="Remy Sharp" src={`${import.meta.env.VITE_APP_FILES_URL}${img}`}
@@ -216,7 +216,7 @@ useEffect(()=>{
         
         {/* right side */}
        
-       <div className="mx-[40px] w-[35%]">
+       <div className="mx-[40px] w-[30%]">
        <div className="flex items-center justify-between">
           <div className="flex items-center gap-[10px]">
         <img src="https://static.vecteezy.com/system/resources/previews/019/896/012/original/female-user-avatar-icon-in-flat-design-style-person-signs-illustration-png.png"
