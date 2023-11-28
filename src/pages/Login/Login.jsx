@@ -77,24 +77,23 @@ export default function Login() {
         spaceBetween={20}
         centeredSlides={true}
         autoplay={{
-          // delay: 2500,
-          // duration:500,
+          delay: 2500,
           disableOnInteraction: false,
           // dur
         }}
-        // pagination={{
-        //   clickable: true,
-        // }}
-        // navigation={true}
+        pagination={{
+          clickable: true,
+        }}
+        navigation={true}
         modules={[Autoplay, Pagination, Navigation]}
         className="mySwiper relative left-[405px] mt-[25px] rounded-[20px] "
       >
-        <SwiperSlide>
-            <img className=" " src="src/assets/images/Снимок экрана 2023-11-27 163218.png" alt="" />  
-        </SwiperSlide>
+         ` {/* <SwiperSlide>
+              <img className="w-[20%]" src="src/assets/images/Снимок экрана 2023-11-27 163218.png" alt="" />  
+          </SwiperSlide>
         <SwiperSlide>            <img className=" " src="src/assets/images/Снимок экрана 2023-11-27 162610.png" alt="" />  </SwiperSlide>
         <SwiperSlide>    <img className=" " src="src/assets/images/Снимок экрана 2023-11-27 162804.png" alt="" /></SwiperSlide>
-        <SwiperSlide>  <img className=" " src="src/assets/images/Снимок экрана 2023-11-27 162946.png" alt="" /></SwiperSlide>
+        <SwiperSlid`e>  <img className="src/assets/images/Снимок экрана 2023-11-27 162946.png" alt="" /></SwiperSlide> */}
       </Swiper> 
           <div>
             <img  src="src/assets/images/frames.svg" alt="" />    
