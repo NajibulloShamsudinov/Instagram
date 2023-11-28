@@ -39,17 +39,16 @@ const style2 = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: "auto",
+  width: "70%",
   bgcolor: 'background.paper',
   boxShadow: 24,
-  p: 1,
-  height:"auto"
+  p: 0,
+  height:"500"
 };
 function Home () {
 /////datas
   const data=useSelector(({home})=>home.data)
   const user=useSelector(({home})=>home.user)
-  console.log(user);
   const open=useSelector(({home})=>home.open)
   const openCom=useSelector(({home})=>home.openCom)
   const com=useSelector(({home})=>home.com)
@@ -66,13 +65,13 @@ useEffect(()=>{
 
 
   return (
-    <div className="mx-[auto] p-[20px] pb-[10vh]">
+    <div className="mx-[80px] p-[20px] pb-[10vh]">
       <div className="flex justify-between">
-        <div className="w-[65%]">
+        <div className="w-[60%]">
          <div className="mx-[50px]">
          <Swiper
             spaceBetween={15}
-            slidesPerView={9}
+            slidesPerView={8}
             onSlideChange={() => console.log('slide change')}
             onSwiper={(swiper) => console.log(swiper)}
             >
@@ -173,12 +172,13 @@ useEffect(()=>{
         <Box sx={style2}>
             <List sx={{display:"flex"}}> 
            {
-            !`${import.meta.env.VITE_APP_FILES_URL}${img}`.includes(".mp4")?<img src={`${import.meta.env.VITE_APP_FILES_URL}${img}`} alt="" className="w-[500px] h-[300px]" />
-            : <video controls src={`${import.meta.env.VITE_APP_FILES_URL}${img}`}></video>
+            !`${import.meta.env.VITE_APP_FILES_URL}${img}`.includes(".mp4")?<img src={`${import.meta.env.VITE_APP_FILES_URL}${img}`} 
+            alt="" className="w-[600px] h-[600px]" />
+            : <video controls className="w-[600px] h-[600px]" src={`${import.meta.env.VITE_APP_FILES_URL}${img}`}></video>
            } 
-            <div className=" px-[5px]">
-            <ListItem alignItems="flex-start">
-             <div className="w-[100%] flex items-center justify-between border-b-2 pb-4">
+            <div className=" pl-[3%]">
+            <ListItem >
+             <div className="w-[400px] flex items-center justify-between border-b-2 pb-4">
              <ListItemAvatar className="flex">
               <div className="w-[45px] bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-[30px] p-[2px]">
               <Avatar alt="Remy Sharp" src={`${import.meta.env.VITE_APP_FILES_URL}${img}`}
