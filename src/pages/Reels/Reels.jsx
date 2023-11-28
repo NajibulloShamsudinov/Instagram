@@ -41,7 +41,12 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
 import vid from "../../assets/video/i.mp4";
 import { useSelector, useDispatch } from "react-redux";
-import { getData, postLike, postComment } from "../../api/reels/Reels";
+import {
+  getData,
+  postLike,
+  postComment,
+  getData1,
+} from "../../api/reels/Reels";
 import { blue } from "@mui/material/colors";
 // import { handlModal } from "../../reducers/reels/Reelse";
 // import { handlModal1 } from "../../reducers/reels/Reelse";
@@ -81,6 +86,7 @@ const Reels = () => {
   }, [open]);
 
   const posts = useSelector((store) => store.reels.posts);
+  const users = useSelector((store) => store.reels.users);
   let load = useSelector((store) => store.reels.loading);
   // console.log(posts);
   // const modal2 = useSelector((store) => store.reels.modal2);
@@ -98,9 +104,11 @@ const Reels = () => {
   // const PostImagesApi = "http://65.108.148.136:8085/";
 
   // const [counter, setCounter] = useState(0)
-
+console.log(users.length);
   useEffect(() => {
     dispatch(getData());
+    dispatch(getData1());
+
   }, [dispatch]);
   return (
     <div className="mt-14 flex flex-col gap-14  px-[30%]">
@@ -272,7 +280,6 @@ const Reels = () => {
                   sx={{
                     "&.Mui-checked": {
                       color: "black",
-                      
                     },
                   }}
                   icon={<BookmarkBorderIcon />}
@@ -300,10 +307,8 @@ const Reels = () => {
 
               <div>
                 <div className="flex  justify-end ">
-                 
                   <div>
                     <React.Fragment>
-                      
                       <Dialog
                         sx={{
                           width: "26%",
@@ -347,11 +352,22 @@ const Reels = () => {
                               {elem?.comments?.map((ele) => (
                                 <p className="text-black">
                                   <div>
-
+                                    {
+                                      users.map((elem) => {
+                                        return (
+                                          <div>
+                                            <h1>dddd</h1>
+                                            <img
+                                              src="https://www.clipartkey.com/mpngs/m/233-2338776_img-default-user-image-png.png"
+                                              alt=""
+                                            />
+                                          </div>
+                                        );
+                                      })
+                                    }
                                     {ele.comment}
-                                    
                                   </div>
-                                  
+
                                   <div className="flex gap-3">
                                     <p className="text-[grey]">
                                       отметки "Нравиться":3 Ответить
@@ -378,7 +394,6 @@ Praesent commodo cursus magna, vel scelerisque nisl consectetur et.`
                         </DialogContent>
                         <DialogActions>
                           <div className="flex border-[grey]  w-[100%]  border-[1px] px-3 py-1 rounded-[20px] ">
-                            
                             <input
                               value={text3}
                               onChange={(e) => setText3(e.target.value)}
@@ -386,27 +401,23 @@ Praesent commodo cursus magna, vel scelerisque nisl consectetur et.`
                               type="text"
                               className="  border-[none] outline-0 w-[100%] rounded-[30px]  p-1 "
                             />
-                            {
-                              text3 ? (
-                                 <button
-                              className="text-[blue]"
-                              onClick={() =>
-                                dispatch(
-                                  postComment({
-                                    postId: elem.postId,
-                                    comment: text3,
-                                  }),
-                                  setText3("")
-                                )
-                              }
-                            >
-                              Опубликовать
-                            </button>
-                              ) :null                              
-                            }
-                           
+                            {text3 ? (
+                              <button
+                                className="text-[blue]"
+                                onClick={() =>
+                                  dispatch(
+                                    postComment({
+                                      postId: elem.postId,
+                                      comment: text3,
+                                    }),
+                                    setText3("")
+                                  )
+                                }
+                              >
+                                Опубликовать
+                              </button>
+                            ) : null}
                           </div>
-                          
                         </DialogActions>
                       </Dialog>
                     </React.Fragment>
