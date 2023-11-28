@@ -24,6 +24,7 @@ const searchred = createSlice({
     })
     builder.addCase(getdata.rejected, (state, action) => {
     })
+    
   }
 
 
