@@ -4,7 +4,7 @@ import Post from "../../components/Profile/Post"
 import Save from '../../components/Profile/Save'
 import Tagged from '../../components/Profile/Tagged'
 import { useDispatch, useSelector } from "react-redux";
-import { getProfile, getPostById } from "../../api/profile/profile";
+import { getProfile, getPostById, getSubsciption, getUser } from "../../api/profile/profile";
 import { getToken } from "../../utils/token";
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -25,12 +25,38 @@ const style = {
 };
 
 
+const style2 = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  boxShadow: 24,
+  borderRadius: "15px",
+};
+
+
 const Profile = () => {
 
 
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+
+
+  const [open2, setOpen2] = useState(false);
+  const handleOpen2 = () => setOpen2(true);
+  const handleClose2 = () => setOpen2(false);
+
+
+
+  const [open3, setOpen3] = useState(false);
+  const handleOpen3 = () => setOpen3(true);
+  const handleClose3 = () => setOpen3(false);
+
+
 
   const userId = getToken().sid
   console.log(userId)
@@ -46,7 +72,13 @@ const Profile = () => {
   const data = useSelector((store) => store.profile.data)
 
   const postdata = useSelector((store) => store.profile.postData)
-  console.log(postdata);
+  const subsciption = useSelector((store) => store.profile.subsciption)
+  console.log(subsciption);
+  const users = useSelector((store) => store.profile.users)
+
+
+
+
 
 
   const dispatch = useDispatch()
@@ -56,6 +88,9 @@ const Profile = () => {
   useEffect(() => {
     dispatch(getProfile())
     dispatch(getPostById(userId))
+    dispatch(getSubsciption(userId))
+    dispatch(getUser())
+
   }, [dispatch])
 
 
@@ -81,21 +116,60 @@ const Profile = () => {
                   <svg aria-label="Параметры" class="x1lliihq x1n2onr6 x5n08af" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24"><title>Параметры</title><circle cx="12" cy="12" fill="none" r="8.635" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></circle><path d="M14.232 3.656a1.269 1.269 0 0 1-.796-.66L12.93 2h-1.86l-.505.996a1.269 1.269 0 0 1-.796.66m-.001 16.688a1.269 1.269 0 0 1 .796.66l.505.996h1.862l.505-.996a1.269 1.269 0 0 1 .796-.66M3.656 9.768a1.269 1.269 0 0 1-.66.796L2 11.07v1.862l.996.505a1.269 1.269 0 0 1 .66.796m16.688-.001a1.269 1.269 0 0 1 .66-.796L22 12.93v-1.86l-.996-.505a1.269 1.269 0 0 1-.66-.796M7.678 4.522a1.269 1.269 0 0 1-1.03.096l-1.06-.348L4.27 5.587l.348 1.062a1.269 1.269 0 0 1-.096 1.03m11.8 11.799a1.269 1.269 0 0 1 1.03-.096l1.06.348 1.318-1.317-.348-1.062a1.269 1.269 0 0 1 .096-1.03m-14.956.001a1.269 1.269 0 0 1 .096 1.03l-.348 1.06 1.317 1.318 1.062-.348a1.269 1.269 0 0 1 1.03.096m11.799-11.8a1.269 1.269 0 0 1-.096-1.03l.348-1.06-1.317-1.318-1.062.348a1.269 1.269 0 0 1-1.03-.096" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></path></svg>
                 </div>
               </div>
+
+
               <div className="flex gap-[38px] mt-[20px]">
                 <div className="flex gap-[7px]">
                   <h1 className="font-bold">0</h1>
                   <h1 onClick={() => setPost()} className=""> публикаций</h1>
                 </div>
                 <div className="flex gap-[7px]">
-                  <h1 className="font-bold">166</h1>
-                  <h1> подписчиков</h1>
+                  <h1 onClick={handleOpen2} className="font-bold cursor-pointer"></h1>
+                  <div>
+                    {subsciption.length}
+                    {/* {
+                      users.map((el) => {
+                        console.log(subsciption.length);
+                        return (
+                         <div>  
+                           {
+                            subsciption.map((e) => {
+                              let a=e.userShortInfo.userId == el.id
+                             
+                              return (e.userShortInfo.userId == el.id ? <p>{subsciption.length}</p> : null)
+                            })
+                          }
+                         </div>
+                        )
+                      })
+
+                    } */}
+                  </div>
+                  <h1 onClick={handleOpen2} className="cursor-pointer">подписчиков</h1>
                 </div>
                 <div className="flex gap-[7px]">
-                  <h1 className="font-bold">961</h1>
-                  <h1> подписок</h1>
+                  <h1 onClick={handleOpen3} className="font-bold cursor-pointer">961</h1>
+                  <h1 onClick={handleOpen3} className="cursor-pointer">подписок</h1>
                 </div>
               </div>
+
+
             </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -201,11 +275,92 @@ const Profile = () => {
             <div className="border-b-[1px] my-[15px] border-[#a6a5a5]">
             </div>
             <div className="flex cursor-pointer justify-center">
-              <h1>Далее</h1>
+              <h1 className="">Далее</h1>
             </div>
           </Box>
         </Modal>
       </div>
+
+
+
+      <div className="mt-[10px]">
+        <Modal
+          open={open2}
+          onClose={handleClose2}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style2}>
+            <div className="">
+              <div className="grid py-[10px] px-[10px] grid-cols-[1.6fr,1fr] items-center  ">
+                <h1 className="text-[16px] justify-self-end font-[500]">Подписчики</h1>
+                <div onClick={handleClose2} className="flex justify-self-end">
+                  <CloseIcon />
+                </div>
+              </div>
+              <div className="border-b-[1px] my-[5px] mx-[1%]] border-[#a6a5a5]">
+              </div>
+              <div className="">
+                <div className="flex justify-center">
+                  <input type="text" className="rounded-[5px] border  bg-[#efefef] w-[370px]  py-[3px] my-[10px] px-[6px] " placeholder="Поиск" />
+                </div>
+                <div className="mt-[10px] px-[18px] h-[300px] overflow-y-auto">
+                  <h1>Hello</h1>
+                  <h1>Hello</h1>
+                  <h1>Hello</h1>
+                  <h1>Hello</h1>
+                  <h1>Hello</h1>
+                  <h1>Hello</h1>
+                  <h1>Hello</h1>
+                  <h1>Hello</h1>
+                  <h1>Hello</h1>
+                  <h1>Hello</h1>
+                  <h1>Hello</h1>
+                  <h1>Hello</h1>
+                  <h1>Hello</h1>
+                  <h1>Hello</h1>
+                  <h1>Hello</h1>
+                  <h1>Hello</h1>
+                  <h1>Hello</h1>
+                  <h1>Hello</h1>
+                  <h1>Hello</h1>
+                </div>
+              </div>
+            </div>
+          </Box>
+        </Modal>
+      </div>
+
+
+      <div className="overflow-y-auto">
+        <Modal
+          open={open3}
+          onClose={handleClose3}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <div className="flex ml-[100px]">
+              <h1 className="">Создание актуального</h1>
+              <div onClick={handleClose3} className="pl-[80px]">
+                <CloseIcon />
+              </div>
+            </div>
+            <div className="border-b-[1px] my-[15px] border-[#a6a5a5]">
+            </div>
+            <div className="flex justify-center">
+              <input type="text" className="rounded-[5px] border-[1px] w-[380px]  py-[10px] my-[10px] px-[8px] border-[gray]" placeholder="Название актуального" />
+            </div>
+            <div className="border-b-[1px] my-[15px] border-[#a6a5a5]">
+            </div>
+            <div className="flex cursor-pointer justify-center">
+              <h1 className="text-[blue]">Далее</h1>
+            </div>
+          </Box>
+        </Modal>
+      </div>
+
+
 
     </div>
 

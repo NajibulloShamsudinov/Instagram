@@ -65,7 +65,7 @@ export const Layout = () => {
 
   const data = useSelector((store) => store.searchred.data)
 
-
+// console.log(search);
   useEffect(() => {
     AOS.init();
   }, [])
@@ -231,19 +231,20 @@ export const Layout = () => {
                   <div key={el.id} className="flex items-center pr-[1%] justify-between">
                     <div  className="flex hover:cursor-pointer  items-center gap-2">
                       <img className="rounded-full w-[50px]" src={el.avatar ? el.avatar :img } alt="" />
-                      <div onClick={()=>dispatch(postuser(el.userName))} className="">
+                      <div onClick={()=>dispatch(postuser(el.id))} className="">
                         <h1 className="font-semibold text-[14px]">{searchinp.length==0?el.text:el.userName}</h1>
                         <p className="text-[grey] text-[14px] font-semibold">{el.email}</p>
                       </div>  
+                      
                     </div>
                     <button onClick={() => dispatch(deluser(el.id))}>
 
                       <ClearIcon sx={{ color: "grey" }} />
 
                     </button>
-
+                      
                   </div>
-
+                    
                 )
               })
             }
