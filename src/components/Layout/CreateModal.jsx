@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { Button, TextField } from "@mui/material";
-
+import { addNewPost } from "../../api/post/post";
 import { fileToBase64 } from "../../utils/fileToBase64";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
-// import { addNewPost } from "../../api/create/create";
 import "../../App.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ImageVideo from "../../icons/Create/ImageVideo";
 
 const CreateModal = (props) => {
+  let dispatch = useDispatch();
   let [img, setImg] = useState(null);
 
   let handlImg = async () => {
@@ -44,7 +44,9 @@ const CreateModal = (props) => {
                   <p className=" font-bold ">Crop</p>
                   <p
                     onClick={() =>
-                      alert("HOZIR LOGIKAI POST NAVISHTA NASHUDAAST")
+                      addNewPost({
+                        images: img,
+                      })
                     }
                     className="  cursor-pointer  text-[#697aae] "
                   >
