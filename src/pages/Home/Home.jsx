@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { get, users,likes } from "../../api/home/home";
+import { get, users,likes, story } from "../../api/home/home";
 import { handelChange, setCloseCom, setOpen, setOpenCom } from "../../reducers/Home/Home";
 import Checkbox from '@mui/material/Checkbox';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
@@ -17,11 +17,8 @@ import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import Divider from '@mui/material/Divider';
-import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
-import Typography from '@mui/material/Typography';
 import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
@@ -42,17 +39,16 @@ const style2 = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 800,
+  width: "70%",
   bgcolor: 'background.paper',
   boxShadow: 24,
-  p: 1,
-  height:"auto"
+  p: 0,
+  height:"500"
 };
 function Home () {
 /////datas
   const data=useSelector(({home})=>home.data)
   const user=useSelector(({home})=>home.user)
-  console.log(user);
   const open=useSelector(({home})=>home.open)
   const openCom=useSelector(({home})=>home.openCom)
   const com=useSelector(({home})=>home.com)
@@ -64,17 +60,18 @@ function Home () {
 useEffect(()=>{
   dispatch(get())
   dispatch(users())
+  dispatch(story())
 },[dispatch])
 
 
   return (
-    <div className="mx-[auto] p-[20px] pb-[10vh]">
+    <div className="mx-[80px] p-[20px] pb-[10vh]">
       <div className="flex justify-between">
-        <div className="w-[65%]">
+        <div className="w-[60%]">
          <div className="mx-[50px]">
          <Swiper
             spaceBetween={15}
-            slidesPerView={9}
+            slidesPerView={8}
             onSlideChange={() => console.log('slide change')}
             onSwiper={(swiper) => console.log(swiper)}
             >
@@ -132,7 +129,7 @@ useEffect(()=>{
         <div className="text-center">
           {
        e.postLike?(<FavoriteIcon sx={{color:"red"}} onClick={()=>dispatch(likes(e.postId))} />):
-       (<FavoriteBorderIcon onClick={()=>dispatch(likes(e.postId))} /> )
+       (<FavoriteBorderIcon sx={{":hover":{color:"red"}}} onClick={()=>dispatch(likes(e.postId))} /> )
           }
         </div>
         <Button onClick={() => dispatch(setOpenCom(e))}
@@ -173,19 +170,29 @@ useEffect(()=>{
         aria-describedby="keep-mounted-modal-description"
       >
         <Box sx={style2}>
-            <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper',display:"flex" }}> 
-           {/* {
-            img.includes(".mp4")? <video controls src={`${import.meta.env.VITE_APP_FILES_URL}${img}`}></video>
-            :<img src={`${import.meta.env.VITE_APP_FILES_URL}${img}`} alt="" className="w-[500px] h-[300px]" />  
-           }  */}
-            <div className=" px-[5px]">
-            <ListItem alignItems="flex-start">
-             <div className="w-[100%] flex items-center justify-between border-b-2 pb-4">
+            <List sx={{display:"flex"}}> 
+           {
+            !`${import.meta.env.VITE_APP_FILES_URL}${img}`.includes(".mp4")?<img src={`${import.meta.env.VITE_APP_FILES_URL}${img}`} 
+            alt="" className="w-[600px] h-[600px]" />
+            : <video controls className="w-[600px] h-[600px]" src={`${import.meta.env.VITE_APP_FILES_URL}${img}`}></video>
+           } 
+            <div className=" pl-[3%]">
+            <ListItem >
+             <div className="w-[400px] flex items-center justify-between border-b-2 pb-4">
              <ListItemAvatar className="flex">
               <div className="w-[45px] bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-[30px] p-[2px]">
               <Avatar alt="Remy Sharp" src={`${import.meta.env.VITE_APP_FILES_URL}${img}`}
               className="rounded-[30px] border-[2px] border-[white] bg-[white]" />
               </div>
+              {/* <h1>{
+                data.map(e=>{
+                  return(
+                    user.map(element => {
+                      return e.userId == element.id ? <h1 className="font-bold"> {element.userName} </h1>: null
+                    })
+                  )
+                })
+                }</h1> */}
               </ListItemAvatar>
               <button onClick={()=>dispatch(setOpen(true))}>
               <MoreHorizIcon/></button>

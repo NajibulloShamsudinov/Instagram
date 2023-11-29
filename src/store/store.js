@@ -5,7 +5,8 @@ import explore from "../reducers/explore/Explore";
 import Reelse from "../reducers/reels/Reelse";
 import searchred from "../reducers/search/searchred";
 import home from "../reducers/home/home";
-import message from "../reducers/Message/Message";
+
+import message from "../reducers/Message/Message"
 
 export const store = configureStore({
   reducer: {
@@ -15,6 +16,6 @@ export const store = configureStore({
     reels: Reelse,
     searchred,
     home,
-    message,
+    message
   },
 });
