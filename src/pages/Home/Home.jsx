@@ -21,7 +21,7 @@ import Avatar from '@mui/material/Avatar';
 import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import storyModal from "../../components/home/Stories";
+import StoryModal from "../../components/home/Stories";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 
@@ -45,7 +45,7 @@ const style2 = {
   bgcolor: 'background.paper',
   boxShadow: 24,
   p: 0,
-  height:"500"
+  height:"auto"
 };
 
 function Home () {
@@ -59,8 +59,11 @@ function Home () {
   const comEl=useSelector(({home})=>home.comEl)
   const name=useSelector(({home})=>home.name)
   const img=useSelector(({home})=>home.img)
+  const strImg=useSelector(({home})=>home.strImg)
   const comments=useSelector(({home})=>home.comments)
   const openstr=useSelector(({home})=>home.openstr)
+  const openStor=useSelector(({home})=>home.openStor)
+
   const dispatch=useDispatch()
 
 useEffect(()=>{
@@ -95,13 +98,15 @@ const openMenu = Boolean(anchorEl);
           stories.map((e)=>{
             return e.viewerDto?.userName? (
               <SwiperSlide>
-                 <div onClick={()=>dispatch(openStor())} className="text-center">
+               <button onClick={()=>dispatch(openStor(e))}>
+               <div  className="text-center">
               <div className="w-[60px] bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-[30px] p-[2px]">
               <img src="https://cdn2.iconfinder.com/data/icons/instagram-ui/48/jee-75-512.png"
               className="rounded-[30px] border-[2px] border-[white] bg-[white]"  alt="" />
               </div>
               <span className="text-[12px]">{e.viewerDto?.userName}</span>
              </div>
+               </button>
               </SwiperSlide>
             ):null
           })
@@ -197,16 +202,18 @@ const openMenu = Boolean(anchorEl);
       >
         <Box sx={style2}>
             <List sx={{display:"flex"}}> 
-           <div className="w-[60%]">
+            
+           <div className="w-[60%] text-center">
            {
             !`${import.meta.env.VITE_APP_FILES_URL}${img}`.includes(".mp4")?
             <img src={`${import.meta.env.VITE_APP_FILES_URL}${img}`} 
-            alt="" className="w-[100%] h-[600px]" />
+            alt="" className="w-[auto] h-[600px] m-auto" />
             : <video controls className="w-[100%] h-[600px]" 
             src={`${import.meta.env.VITE_APP_FILES_URL}${img}`}></video>
            } 
            </div>
-            <div className="w-[40%] pl-[3%]">
+
+            <div className="w-[60%] pl-[3%]">
              <div className="flex justify-between items-center border-b-2 pb-4 w-[100%] px-[10px]">
              <div className="flex items-center gap-[5px]">
               <div className="w-[45px] bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-[30px] p-[2px]">
@@ -217,11 +224,11 @@ const openMenu = Boolean(anchorEl);
                       user.map(el=> {
                         return comEl.userId == el.id?<h1 className="font-bold">{el.userName}</h1>: null
                       })
-                    )}</div>
-              </div>
-              <button onClick={()=>dispatch(setOpen(true))}>
-              <MoreHorizIcon/></button>
-             </div>
+              )}</div>
+            </div>
+            <button onClick={()=>dispatch(setOpen(true))}>
+            <MoreHorizIcon/></button>
+            </div>
             <div>
              
             <div className="flex gap-[10px] m-[10px]">
@@ -289,10 +296,10 @@ const openMenu = Boolean(anchorEl);
 
             </div>
             <div className="absolute top-[85%]">
-            <div className="my-[5px] flex items-center gap-[70px]">
+            <div className="my-[5px] flex items-center justify-between">
               <div className="gap-[10px] flex items-center">
           <InsertEmoticonIcon/>
-          <input type="text" className="py-[5px] outline-none" placeholder="Добавьте комментарий..."
+          <input type="text" className="py-[5px] outline-none w-[400px]" placeholder="Добавьте комментарий..."
           value={com} onChange={(e)=>dispatch(handelChange({type:"com",value:e.target.value}))} />
               </div>
           <button onClick={()=>dispatch(addCom({comment:com,postId:comEl.postId}),handelChange({type:"com",value:""}))}>Опубликовать</button>
@@ -306,9 +313,20 @@ const openMenu = Boolean(anchorEl);
 
       {/* story Modal */}
 
-      <storyModal open={openstr} handleClose={setCloseStr} >
-
-      </storyModal>
+    <StoryModal open={openstr}>
+    <div> 
+          {
+            !`${import.meta.env.VITE_APP_FILES_URL}${strImg}`.includes(".mp4")?
+            <img src={`${import.meta.env.VITE_APP_FILES_URL}${strImg}`} 
+            alt="" className="w-[auto] h-[600px] m-auto" />
+            : <video controls className="w-[100%] h-[600px]" 
+            src={`${import.meta.env.VITE_APP_FILES_URL}${strImg}`}></video>
+          }
+           </div> 
+    <Button autoFocus onClick={()=>dispatch(setCloseStr())}>
+     close
+    </Button>
+    </StoryModal>
         
         {/* right side */}
        

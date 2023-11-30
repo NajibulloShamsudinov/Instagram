@@ -18,12 +18,11 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-export default function storyModal({open,handleClose,children}) {
+export default function StoryModal({open,children}) {
 
   return (
    
       <BootstrapDialog
-        onClose={handleClose}
         aria-labelledby="customized-dialog-title"
         open={open}
       >
@@ -32,7 +31,6 @@ export default function storyModal({open,handleClose,children}) {
         </DialogTitle>
         <IconButton
           aria-label="close"
-          onClick={handleClose}
           sx={{
             position: 'absolute',
             right: 8,
@@ -42,14 +40,10 @@ export default function storyModal({open,handleClose,children}) {
         >
           <CloseIcon />
         </IconButton>
-        <DialogContent dividers>
+        <DialogContent dividers 
+        sx={{width:"300px"}}>
           {children}
         </DialogContent>
-        <DialogActions>
-          <Button autoFocus onClick={handleClose}>
-            close
-          </Button>
-        </DialogActions>
       </BootstrapDialog>
   );
 }
