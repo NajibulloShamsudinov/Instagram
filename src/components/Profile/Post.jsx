@@ -25,7 +25,7 @@ const Post = ({ post }) => {
             {el.images.length !== 0 ? (
               <div className="">
                 <img
-                  className='h-[309px] w-[338px] cursor-pointer'
+                  className='h-[309px] w-[2212%] cursor-pointer'
                   src={`${import.meta.env.VITE_APP_FILES_URL}${el.images[0]}`}
                   alt=""
                 />

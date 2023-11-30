@@ -1,27 +1,34 @@
 import { createSlice } from "@reduxjs/toolkit";
-
+import { getPosts } from "../../api/ExploreApi/ExploreApi";
 let explore = createSlice({
   name: "explore",
   initialState: {
-    exploreData: [],
+    data: [],
     ModalPost: false,
+    newimg: null,
+    showUserId: "",
+    Comments:""
   },
   reducers: {
     CloseModals: (state) => {
       state.ModalPost = false;
     },
-    ModalPostTrue: (state) => {
+    ModalPostTrue: (state, action) => {
       state.ModalPost = true;
+      state.newimg = action.payload;
     },
-    setHiddenInput: (state, actions) => {
-      state.hiddenInput = actions.payload;
-      if (state.hiddenInput.length > 0) {
-        state.ModalImg = true;
-      }
+    setComment: (state, action) => {
+      state.Comments = action.payload;
     },
+   
   },
-  extraReducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(getPosts.pending, (state, action) => {});
+    builder.addCase(getPosts.fulfilled, (state, action) => {
+      state.data = action.payload;
+    });
+    builder.addCase(getPosts.rejected, (state, action) => {});
+  },
 });
-export let { ModalPostTrue, CloseModals } =
-  explore.actions;
+export let { ModalPostTrue, CloseModals, setComment } = explore.actions;
 export default explore.reducer;
