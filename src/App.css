@@ -41,6 +41,8 @@
   color: #aaaaaa;
 }
 
-.to-active:active {
+.to-active:active,
+.delete-active:active {
   color: #aaaaaa;
 }
+
