@@ -267,8 +267,8 @@ export const Layout = () => {
         <Outlet />
         {/* Футер */}
 
-        <footer className="py-[10px]">
-          {/* Список с тегом <a> в будущем заменить на Link Router */}
+        {/* <footer  className="py-[10px]">
+  
           <ul className="flex flex-wrap items-center justify-center gap-x-[10px] mx-auto w-[55%]">
             <li>
               <a
@@ -356,7 +356,7 @@ export const Layout = () => {
             </li>
           </ul>
           <div className="product-info flex justify-center gap-[10px] mx-auto mt-[20px]">
-            {/* Локализация, реализовать в будущем */}
+       
             <div className="localization flex gap-[10px]">
               <a href="" className="text-[12px] text-[#8D8D86]">
                 Русский
@@ -366,7 +366,7 @@ export const Layout = () => {
               © 2023 Instagram from Meta
             </p>
           </div>
-        </footer>
+        </footer> */}
       </aside>
     </main>
   );
