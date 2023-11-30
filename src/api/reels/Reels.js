@@ -3,8 +3,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosRequest } from "../../utils/axiosRequest";
 import axios from "axios";
 
-export const getData = createAsyncThunk("reels/getData",
-  async () => {
+export const getData = createAsyncThunk("reels/getData", async () => {
   try {
     const { data } = await axiosRequest.get("Post/get-reels");
     console.log(data);
@@ -12,10 +11,11 @@ export const getData = createAsyncThunk("reels/getData",
   } catch (error) {
     console.error(error);
   }
-<<<<<<< HEAD
+
 });
-=======
-  });
+
+});
+
 
 
   export const getData1 = createAsyncThunk("reels/getData1", async () => {
@@ -29,7 +29,17 @@ export const getData = createAsyncThunk("reels/getData",
   });
 
 
->>>>>>> 37febd93801d9015b3755e37df3deaad5b539a2e
+export const getData1 = createAsyncThunk("reels/getData1", async () => {
+  try {
+    const { data } = await axiosRequest.get("User/get-users");
+    console.log(data);
+    return data.data;
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+
 export const postLike = createAsyncThunk(
   "reels/postLike",
   async function (id, { dispatch }) {
@@ -41,6 +51,8 @@ export const postLike = createAsyncThunk(
     }
   }
 );
+
+
 export const postComment = createAsyncThunk(
   "reels/postComment",
   async function (e, { dispatch }) {
@@ -49,6 +61,21 @@ export const postComment = createAsyncThunk(
         comment: e.comment,
         postId: e.postId,
       });
+      console.log(data);
+      dispatch(getData());
+    } catch (error) {
+      console.error(error);
+    }
+  }
+);
+
+export const deleteComment = createAsyncThunk(
+  "reels/deleteComment",
+  async function (id, { dispatch }) {
+    try {
+      const { data } = await axiosRequest.delete(
+        `Post/delete-comment?commentId=${id}`
+      );
       console.log(data);
       dispatch(getData());
     } catch (error) {
