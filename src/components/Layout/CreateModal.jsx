@@ -12,21 +12,32 @@ import { handleChange } from "../../reducers/post/post";
 
 const CreateModal = (props) => {
   let dispatch = useDispatch();
-  const inptitle=((store)=>store.post.inptitle)
-  const inpcontent=((store)=>store.post.inpcontent)
+  // const inptitle=((store)=>store.post.inptitle)
+  // const inpcontent=((store)=>store.post.inpcontent)
   const inpimg=((store)=>store.post.inpimg)
 
 
 
   const [next,setNext]=useState(false)
-  let [img, setImg] = useState(null);
+  let [img, setImg] = useState("");
+  let [inpcontent, setInpcontent] = useState("");
+  let [inptitle, setInptitle] = useState("");
 
 
 
-  let handlImg = async () => {
-    let newImg = await fileToBase64(event.target.files[0]);
-    setImg(newImg);
+  let handlImg = async (event) => {
+
+    setImg(event.target.files[0]);
   };
+
+  const handlesubmit =()=>{
+    let form =new FormData()
+    form.append("images",img)
+    form.append("title",inptitle)
+    form.append("content",inpcontent)
+
+    dispatch(addNewPost(form))
+  }
   return (
     <div>
       <div
@@ -69,7 +80,7 @@ const CreateModal = (props) => {
                   >
                     Next
                   </p>
-                  <button style={{display:next?"block":"none"}} onClick={()=>dispatch(addNewPost(img))} className="text-[#4876fe] font-bold">Поделиться</button>
+                  <button style={{display:next?"block":"none"}} onClick={()=>handlesubmit()} className="text-[#4876fe] font-bold">Поделиться</button>
                 </div>
               </div>
              <div className="modal-content      ">   
@@ -82,8 +93,8 @@ const CreateModal = (props) => {
                     </div>
 
                     <form
-                      method="post"
-                      enctype="multipart/form-data"
+                      // method="post"
+                      // enctype="multipart/form-data"
                       className=""
                     >
                       <label class="input-file">
@@ -102,12 +113,22 @@ const CreateModal = (props) => {
                           src={img}
                           alt=""
                         />
-                        {/* <div className="comment bg-[#000] h-[100vh] w-[30%]">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolores nemo molestias quam itaque eius! Reiciendis voluptas enim eum nihil quas culpa laborum facilis vero assumenda cumque unde, est eius dignissimos.</div> */}
-                        {/* </div> */}
+                        
                         <span className="text-white font-medium">
                           Выбрать на компьютере
                         </span>
                       </label>
+                      {/* <div style={{display:next?"flex":"none"}} className="comment  flex-col gap-5 h-[75vh] p-[1%] w-[40%]   ">
+                      <div className="flex items-center gap-3">
+                        <img className="w-[30px] rounded-full" src={img1} alt="" />
+                        <h1 className=" font-semibold">damir </h1>
+                      </div>
+                      <div className="flex  flex-col gap-5">
+                        <input value={inptitle} onChange={(e)=>dispatch(handleChange({type:"inptitle",settype:(e.target.value)}))} className=" border-2 w-[80%] h-[50px] rounded-[2px]" type="text" />
+                        <input value={inpcontent} onChange={(e)=>dispatch(handleChange({type:"inpcontent",settype:(e.target.value) }))} className=" border-2 w-[80%] h-[50px] rounded-[2px]" type="text" />
+                      </div>
+
+                    </div> */}
                     </form>
                   </div>
                 </div>
@@ -127,8 +148,8 @@ const CreateModal = (props) => {
                         <h1 className=" font-semibold">damir </h1>
                       </div>
                       <div className="flex  flex-col gap-5">
-                        <input value={inptitle} onChange={(e)=>dispatch(handleChange({type:"inptitle",settype:(e.target.value)}))} className=" border-2 w-[80%] h-[50px] rounded-[2px]" type="text" />
-                        <input value={inpcontent} onChange={(e)=>dispatch(handleChange({type:"inpcontent",settype:(e.target.value) }))} className=" border-2 w-[80%] h-[50px] rounded-[2px]" type="text" />
+                        <input value={inptitle} onChange={(e)=>setInptitle(e.target.value)} className=" border-2 w-[80%] h-[50px] rounded-[2px]" type="text" />
+                        <input value={inpcontent} onChange={(e)=>setInpcontent(e.target.value)} className=" border-2 w-[80%] h-[50px] rounded-[2px]" type="text" />
                       </div>
 
                     </div>
