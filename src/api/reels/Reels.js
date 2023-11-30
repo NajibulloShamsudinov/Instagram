@@ -12,6 +12,9 @@ export const getData = createAsyncThunk("reels/getData",
   } catch (error) {
     console.error(error);
   }
+<<<<<<< HEAD
+});
+=======
   });
 
 
@@ -26,6 +29,7 @@ export const getData = createAsyncThunk("reels/getData",
   });
 
 
+>>>>>>> 37febd93801d9015b3755e37df3deaad5b539a2e
 export const postLike = createAsyncThunk(
   "reels/postLike",
   async function (id, { dispatch }) {
@@ -37,8 +41,6 @@ export const postLike = createAsyncThunk(
     }
   }
 );
-
-
 export const postComment = createAsyncThunk(
   "reels/postComment",
   async function (e, { dispatch }) {
