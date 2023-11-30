@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { get, users,likes, story } from "../../api/home/home";
-import { handelChange, setCloseCom, setOpen, setOpenCom } from "../../reducers/Home/Home";
+import { get, users,likes, story, addCom, delCom } from "../../api/home/home";
+import { handelChange, setCloseCom, setOpen, setOpenCom,setCloseStr,openStor } from "../../reducers/Home/Home";
 import Checkbox from '@mui/material/Checkbox';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -12,14 +12,16 @@ import Followers from "../../components/home/Followers";
 import ModeCommentOutlinedIcon from '@mui/icons-material/ModeCommentOutlined';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import ModalSetings from "../../components/home/ModalSetings";
+import DeleteIcon from '@mui/icons-material/Delete';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import storyModal from "../../components/home/Stories";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 
@@ -39,23 +41,27 @@ const style2 = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: "70%",
+  width: "80%",
   bgcolor: 'background.paper',
   boxShadow: 24,
   p: 0,
   height:"500"
 };
+
 function Home () {
 /////datas
   const data=useSelector(({home})=>home.data)
   const user=useSelector(({home})=>home.user)
+  const stories=useSelector(({home})=>home.stories)
   const open=useSelector(({home})=>home.open)
   const openCom=useSelector(({home})=>home.openCom)
   const com=useSelector(({home})=>home.com)
+  const comEl=useSelector(({home})=>home.comEl)
   const name=useSelector(({home})=>home.name)
   const img=useSelector(({home})=>home.img)
+  const comments=useSelector(({home})=>home.comments)
+  const openstr=useSelector(({home})=>home.openstr)
   const dispatch=useDispatch()
-
 
 useEffect(()=>{
   dispatch(get())
@@ -63,11 +69,21 @@ useEffect(()=>{
   dispatch(story())
 },[dispatch])
 
+const [anchorEl, setAnchorEl] = useState(null);
+const openMenu = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <div className="mx-[80px] p-[20px] pb-[10vh]">
       <div className="flex justify-between">
         <div className="w-[60%]">
+
+          {/* stories */}
          <div className="mx-[50px]">
          <Swiper
             spaceBetween={15}
@@ -76,23 +92,24 @@ useEffect(()=>{
             onSwiper={(swiper) => console.log(swiper)}
             >
         {
-          user.map((e)=>{
-            return (
+          stories.map((e)=>{
+            return e.viewerDto?.userName? (
               <SwiperSlide>
-                 <div className="text-center">
+                 <div onClick={()=>dispatch(openStor())} className="text-center">
               <div className="w-[60px] bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-[30px] p-[2px]">
               <img src="https://cdn2.iconfinder.com/data/icons/instagram-ui/48/jee-75-512.png"
               className="rounded-[30px] border-[2px] border-[white] bg-[white]"  alt="" />
               </div>
-              <span className="text-[12px]">{e.userName}</span>
+              <span className="text-[12px]">{e.viewerDto?.userName}</span>
              </div>
               </SwiperSlide>
-            )
+            ):null
           })
         }
         </Swiper>
          </div>
-        
+        {/*  */}
+
     <div className="my-[10vh] ">
       {
      data.map((e)=>{
@@ -115,13 +132,22 @@ useEffect(()=>{
               <MoreHorizIcon/></button>
              </div> <br />
         <div>
-        {e.images.map((el)=>{
+        <Swiper
+         spaceBetween={15}
+         slidesPerView={1}
+         onSlideChange={() => console.log('slide change')}
+         onSwiper={(swiper) => console.log(swiper)}
+        >
+          
+          {e.images.map((el)=>{
           return (
-            !el.includes(".mp4")?(<img src={`${import.meta.env.VITE_APP_FILES_URL}${e.images}`}
-            className="w-[100%]" alt="error" onDoubleClick={()=>dispatch(likes(e.postId))} />)
+            !el.includes(".mp4")?<SwiperSlide><img src={`${import.meta.env.VITE_APP_FILES_URL}${e.images.slice(0,1)}`}
+            className="w-[100%]" alt="error" onDoubleClick={()=>dispatch(likes(e.postId))} /></SwiperSlide>
         : (<video controls src={`${import.meta.env.VITE_APP_FILES_URL}${e.images[0]}`}></video>)
           )
         })}
+          
+        </Swiper>
         </div>
         <div className="p-[2px]">
         <div className="flex justify-between">
@@ -171,48 +197,118 @@ useEffect(()=>{
       >
         <Box sx={style2}>
             <List sx={{display:"flex"}}> 
+           <div className="w-[60%]">
            {
-            !`${import.meta.env.VITE_APP_FILES_URL}${img}`.includes(".mp4")?<img src={`${import.meta.env.VITE_APP_FILES_URL}${img}`} 
-            alt="" className="w-[600px] h-[600px]" />
-            : <video controls className="w-[600px] h-[600px]" src={`${import.meta.env.VITE_APP_FILES_URL}${img}`}></video>
+            !`${import.meta.env.VITE_APP_FILES_URL}${img}`.includes(".mp4")?
+            <img src={`${import.meta.env.VITE_APP_FILES_URL}${img}`} 
+            alt="" className="w-[100%] h-[600px]" />
+            : <video controls className="w-[100%] h-[600px]" 
+            src={`${import.meta.env.VITE_APP_FILES_URL}${img}`}></video>
            } 
-            <div className=" pl-[3%]">
-            <ListItem >
-             <div className="w-[100%] flex items-center justify-between border-b-2 pb-4">
-             <ListItemAvatar className="flex">
+           </div>
+            <div className="w-[40%] pl-[3%]">
+             <div className="flex justify-between items-center border-b-2 pb-4 w-[100%] px-[10px]">
+             <div className="flex items-center gap-[5px]">
               <div className="w-[45px] bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-[30px] p-[2px]">
               <Avatar alt="Remy Sharp" src={`${import.meta.env.VITE_APP_FILES_URL}${img}`}
               className="rounded-[30px] border-[2px] border-[white] bg-[white]" />
               </div>
-              {/* <h1>{
-                data.map(e=>{
-                  return(
-                    user.map(element => {
-                      return e.userId == element.id ? <h1 className="font-bold"> {element.userName} </h1>: null
-                    })
-                  )
-                })
-                }</h1> */}
-              </ListItemAvatar>
+              <div>{(
+                      user.map(el=> {
+                        return comEl.userId == el.id?<h1 className="font-bold">{el.userName}</h1>: null
+                      })
+                    )}</div>
+              </div>
               <button onClick={()=>dispatch(setOpen(true))}>
               <MoreHorizIcon/></button>
              </div>
-            </ListItem>
             <div>
-             <h1>{name}</h1>
              
+            <div className="flex gap-[10px] m-[10px]">
+                   
+                   <div className="w-[100%] px-[10px] overflow-y-auto h-[450px]">
+                         {comments.length == 0 ? (
+                      <div className="text-center pt-4 pb-4">
+                        <h3 className="text-3xl text-black pb-4">
+                          Коментариев нет
+                        </h3>
+                        <p>Начните переписку </p>
+                      </div>
+                    ) : (
+                      comments.map((ele) => (
+                        <p className="text-black">
+                          <div className="flex ">
+                            {user.map((elem) => {
+                              return (
+                                <div>
+                                  {ele.userId == elem.id ? (
+                                    <div className="flex gap-2 my-[10px]">
+                                      {elem.avatar == "" ||
+                                      elem.avatar == null ? (
+                                        <img
+                                          className="w-[8%] rounded-[20px]"
+                                          src="https://w7.pngwing.com/pngs/178/595/png-transparent-user-profile-computer-icons-login-user-avatars-thumbnail.png"
+                                          alt=""
+                                        />) : (<img
+                                          src={`${
+                                            import.meta.env.VITE_APP_FILES_URL
+                                          }${elem?.avatar}`} className="w-[10%] rounded-[20px]"
+                                          alt=""
+                                        />)}
+                                      <p>{elem.userName}</p>
+                                       {ele.comment}
+                                    </div>
+                                  ) : null}
+                                </div>
+                              );
+                            })}
+                             {/* <button  aria-controls={openMenu ? 'basic-menu' : undefined}
+                         aria-haspopup="true"
+                         aria-expanded={openMenu ? 'true' : undefined}
+                         onClick={handleClick}><MoreHorizIcon/></button> */}
+                         <FavoriteBorderIcon />
+                          </div>
+                        </p>
+                      ))
+                    )}
+                         </div>
+
+             {/* for delet */}
+             <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={openMenu}
+        onClose={handleClose}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button',
+        }}
+      >
+        <MenuItem onClick={handleClose}><DeleteIcon/></MenuItem>
+      </Menu>
             </div>
-            <form className="my-[5px] flex items-center gap-[6px]">
-         <InsertEmoticonIcon/>
-         <input type="text" className="py-[5px] outline-none" placeholder="Добавьте комментарий..."
-         value={com} onChange={(e)=>dispatch(handelChange({type:"com",value:e.target.value}))} />
-           <button type="submit">Опубликовать</button>
-         </form>
-       <button onClick={()=>dispatch(setCloseCom(false))}>close</button>
+
             </div>
+            <div className="absolute top-[85%]">
+            <div className="my-[5px] flex items-center gap-[70px]">
+              <div className="gap-[10px] flex items-center">
+          <InsertEmoticonIcon/>
+          <input type="text" className="py-[5px] outline-none" placeholder="Добавьте комментарий..."
+          value={com} onChange={(e)=>dispatch(handelChange({type:"com",value:e.target.value}))} />
+              </div>
+          <button onClick={()=>dispatch(addCom({comment:com,postId:comEl.postId}),handelChange({type:"com",value:""}))}>Опубликовать</button>
+          </div>
+          <button onClick={()=>dispatch(setCloseCom(false))}>close</button>
+            </div>
+          </div>
           </List>
         </Box>
       </Modal>
+
+      {/* story Modal */}
+
+      <storyModal open={openstr} handleClose={setCloseStr} >
+
+      </storyModal>
         
         {/* right side */}
        

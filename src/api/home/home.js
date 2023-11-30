@@ -7,7 +7,6 @@ export const get =createAsyncThunk(
     async function() {
         try {
             const {data}=await axiosRequest.get("Post/get-posts")
-            console.log(data);
             return data.data
         } catch (error) { 
             console.log(error)
@@ -48,14 +47,28 @@ export const story =createAsyncThunk(
     }
 )
 
-// export const addCom=createAsyncThunk(
-//     "home/addCom",
-//     async function(obj,{dispatch}) {
-//         try {
-//             const {data}=await axiosRequest.post(`Post/like-post?postId=${id}`,obj)
-//             dispatch(get())
-//         } catch (error) { 
-//             console.log(error)
-//         }
-//     }
-// )
+export const addCom=createAsyncThunk(
+    "home/addCom",
+    async function(e,{dispatch}) {
+        try {
+            const {data}=await axiosRequest.post("Post/add-comment",{
+                comment:e.comment,
+                postId:e.postId
+            })
+            dispatch(get())
+        } catch (error) { 
+            console.log(error)
+        }
+    }
+)
+export const delCom=createAsyncThunk(
+    "home/delCom",
+    async function(postCommentId,{dispatch}) {
+        try {
+            const {data}=await axiosRequest.delete(`Post/delete-comment?commentId=${postCommentId}`)
+            dispatch(get())
+        } catch (error) { 
+            console.log(error)
+        }
+    }
+)
