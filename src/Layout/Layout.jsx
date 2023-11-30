@@ -8,6 +8,7 @@ import {
   setModalCreate,
 } from "../reducers/Layout/Layout";
 
+
 import InstagramIcon from '@mui/icons-material/Instagram';
 import img from "/src/assets/images/polzovatel.jpg"
 
@@ -39,8 +40,11 @@ import ClearIcon from '@mui/icons-material/Clear';
 
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-import { deluser, getdata, postuser} from "../pages/search/search";
+import { deluser, getdata, postuser,obdelet, storget} from "../pages/search/search";
 import { handleChange } from "../reducers/search/searchred";
+import HomeIcon from "../icons/Layout/HomeIcon";
+import ReelsIcon from "../icons/Layout/ReelsIcon";
+import MessageIcon from "../icons/Layout/MessageIcon";
 
 
 export const Layout = () => {
@@ -64,17 +68,19 @@ export const Layout = () => {
 
 
   const data = useSelector((store) => store.searchred.data)
+  const storg = useSelector((store) => store.searchred.storg)
 
-// console.log(search);
   useEffect(() => {
     AOS.init();
   }, [])
   useEffect(() => {
     dispatch(getdata())
+    dispatch(storget())
+    
   }, [dispatch, searchinp])
   return (
     // Главный контейнер
-    <main className="flex">
+    <main className="flex dark:bg-black dark:text-white">
       {/* Флекс контейнер */}
       {/* Navbar */}
       <aside className={`left ${location.pathname === "/basic/message" || location.pathname === "/basic/message/newMessage" ? "w-[6%]" : "w-[19%]"}`}>
@@ -99,7 +105,8 @@ export const Layout = () => {
             </Link>
             <NavLink to="/basic" onClick={() => dispatch(setModalSearch(false))}>
               <li className="flex items-center gap-[15px] hover:bg-[#00000010] rounded-[7px] p-[10px] transition-all duration-300">
-                <img src={navHome} alt="" />
+                {/* <img src={navHome} alt="" /> */}
+                <HomeIcon/>
                 {/* <FontAwesomeIcon icon={faHouse} className="text-[25px]" /> */}
                 <p className={`${location.pathname === "/basic/message" || location.pathname === "/basic/message/newMessage" ? "hidden" : "block"}`}>Главная</p>
               </li>
@@ -126,13 +133,15 @@ export const Layout = () => {
             </NavLink>
             <NavLink to="reels" onClick={() => dispatch(setModalSearch(false))}>
               <li className="flex items-center gap-[15px] hover:bg-[#00000010] rounded-[7px] p-[10px] transition-all duration-300">
-                <img src={navReels} alt="" className="w-[25px]" />
+                {/* <img src={navReels} alt="" className="w-[25px]" /> */}
+                <ReelsIcon/>
                 <p className={`${location.pathname === "/basic/message" || location.pathname === "/basic/message/newMessage" ? "hidden" : "block"}`}>Reels</p>
               </li>
             </NavLink>
             <NavLink to="message" onClick={() => dispatch(setModalSearch(false))}>
               <li className="flex items-center gap-[15px] hover:bg-[#00000010] rounded-[7px] p-[10px] transition-all duration-300">
-                <img src={navMessages} alt="" className="w-[25px]" />
+                {/* <img src={navMessages} alt="" className="w-[25px]" /> */}
+                <MessageIcon/>
                 <p className={`${location.pathname === "/basic/message" || location.pathname === "/basic/message/newMessage" ? "hidden" : "block"}`}>Сообщения</p>
               </li>
             </NavLink>
@@ -195,7 +204,7 @@ export const Layout = () => {
 
       <div data-aos="fade-right"
         style={{ display: modalSearch ? "block" : "none" }}
-        className="searchModal border-r-[1px]  z-10   fixed left-[6%] px-[1%] py-[2%]  bg-white w-[29%] h-[100%] rounded-r-3xl">
+        className="searchModal border-r-[1px]   z-10   fixed left-[6%] px-[1%] py-[2%]  bg-white dark:bg-black w-[29%] h-[100%] rounded-r-3xl">
 
         <div className="flex  flex-col ">
           <h1 className="text-[25px] font-semibold">
@@ -204,16 +213,16 @@ export const Layout = () => {
 
 
 
-          <input value={searchinp} onChange={(e) => dispatch(handleChange({ type: "searchinp", settype: (e.target.value) }))} type="search" placeholder="Поиск" className="w-[100%] outline-none my-[7%]  px-[5%] bg-[#EFEFEF] rounded-[10px] h-[40px]" />
+          <input value={searchinp} onChange={(e) => dispatch(handleChange({ type: "searchinp", settype: (e.target.value) }))} type="search" placeholder="Поиск" className="w-[100%] outline-none my-[7%]  px-[5%] bg-[#EFEFEF] dark:bg-[#262626] rounded-[10px] h-[40px]" />
 
 
           <div>
 
           
           
-          <div style={{display:searchinp.length==0?"none":"flex"}} className="flex mb-[5%] pr-[1%] justify-between items-center">
+          <div style={{display:searchinp.length==0?"flex":"none"}} className="flex mb-[5%] pr-[1%] justify-between items-center">
             <p className="font-semibold text-[]">Недавнее</p>
-            <h1 className="font-semibold text-[14px] cursor-pointer hover:text-[#345d77]  text-[#0F9BF7]">Очистить все</h1>
+            <button onClick={()=>dispatch(obdelet())} className="font-semibold text-[14px] cursor-pointer hover:text-[#345d77]  text-[#0F9BF7]">Очистить все</button>
           </div>
 
           </div>
@@ -221,45 +230,58 @@ export const Layout = () => {
           <div>
             {
           
-              searchinp== ""?(null):( 
+              // searchinp== ""?(null):( 
 
           
           <div className=" flex  flex-col h-[66vh]  overflow-auto gap-2  ">
             {
-              data.map((el) => {
+              // searchinp.length==0? storg.map((elem)=>{
+              //   return(console.log(WDQQW))
+              // }
+              // ):
+              searchinp.length==0?
+              storg.map((el) => {
+                
                 return (
                   <div key={el.id} className="flex items-center pr-[1%] justify-between">
+                   
                     <div  className="flex hover:cursor-pointer  items-center gap-2">
                       <img className="rounded-full w-[50px]" src={el.avatar ? el.avatar :img } alt="" />
                       <div onClick={()=>dispatch(postuser(el.id))} className="">
-                        <h1 className="font-semibold text-[14px]">{searchinp.length==0?el.text:el.userName}</h1>
-                        <p className="text-[grey] text-[14px] font-semibold">{el.email}</p>
-                      </div>  
-                      
+                        <h1 className="font-semibold text-[14px]">{el.users.userName}</h1>
+                        <p className="text-[grey] text-[14px] font-semibold">{}</p>
+                      </div>             
                     </div>
-                    <button onClick={() => dispatch(deluser(el.id))}>
-
-                      <ClearIcon sx={{ color: "grey" }} />
-
-                    </button>
+                     
                       
+                    <button onClick={() => dispatch(deluser(el.id))}>
+                      <ClearIcon sx={{ color: "grey" }} />
+                    </button>
                   </div>
                     
                 )
               })
+              :
+              data.map((el) => {
+                return (
+                  <div key={el.id} className="flex items-center pr-[1%] justify-between">
+                   
+                    <div  className="flex hover:cursor-pointer  items-center gap-2">
+                      <img className="rounded-full w-[50px]" src={el.avatar ? el.avatar :img } alt="" />
+                      <div onClick={()=>dispatch(postuser(el.id))} className="">
+                        <h1 className="font-semibold text-[14px]">{el.userName}</h1>
+                        <p className="text-[grey] text-[14px] font-semibold">{}</p>
+                      </div>             
+                    </div>
+                    
+                  </div>
+                )
+              })
             }
-
           </div>
-          )}
+}
           </div>
         </div>
-
-
-
-
-
-
-
       </div>
 
       {/* Контентная часть */}
@@ -267,8 +289,8 @@ export const Layout = () => {
         <Outlet />
         {/* Футер */}
 
-        <footer className="py-[10px]">
-          {/* Список с тегом <a> в будущем заменить на Link Router */}
+        {/* <footer  className="py-[10px]">
+  
           <ul className="flex flex-wrap items-center justify-center gap-x-[10px] mx-auto w-[55%]">
             <li>
               <a
@@ -356,7 +378,7 @@ export const Layout = () => {
             </li>
           </ul>
           <div className="product-info flex justify-center gap-[10px] mx-auto mt-[20px]">
-            {/* Локализация, реализовать в будущем */}
+       
             <div className="localization flex gap-[10px]">
               <a href="" className="text-[12px] text-[#8D8D86]">
                 Русский
@@ -366,7 +388,7 @@ export const Layout = () => {
               © 2023 Instagram from Meta
             </p>
           </div>
-        </footer>
+        </footer> */}
       </aside>
     </main>
   );

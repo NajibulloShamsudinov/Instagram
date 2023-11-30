@@ -2,50 +2,52 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosRequest } from "../../utils/axiosRequest";
 import axios from "axios";
 export const getdata = createAsyncThunk(
-    "search/getdata",
-    async function (_, { getState }) {
-        
-        let api2 = "User/get-users";
-        // if(getState().searchred.searchinp.length==0){
-        //     api2="SearchHistory/get-user-search-histories"
-        // }
+    "searchred/getdata",
+    async function (_, { getState ,rejectWithValue}) {
 
-        if (getState().searchred.searchinp.length !== 0) {
-            api2 = `User/get-users?UserName=${getState().searchred.searchinp}`
-        }
+        // let api2 = "User/get-users";
+        // console.log(getState().searchred.searchinp);
+        // if(getState().searchred.searchinp.length == 0){
+        //     console.log("S");
+        //     api2 = `SearchHistory/get-user-search-histories`
+        // }
+        // if (getState().searchred.searchinp.length !== 0) {
+        //     api2 = `User/get-users?UserName=${getState().searchred.searchinp}`
+        // }
         try {
-            const { data } = await axiosRequest.get(api2)
+           
+            const { data } = await axiosRequest.get(`User/get-users?UserName=${getState().searchred.searchinp}`)
             return data.data
         } catch (error) {
-            console.log(error);
+          return   rejectWithValue(error)
         }
     }
 
 )
 
-// export const storget=createAsyncThunk(
-//     "search/storget",
-//     async function(){
-//         try {
-//             const {datastor}=await axiosRequest.get("User/get-search-histories")
-           
-//             return datastor.data
-//             console.log(datastor);
-//         } catch (error) {
-//             console.log(error);
-//         }
-//     }
-// )
+
+export const storget=createAsyncThunk(
+    "search/storget",
+    async function(){
+        try {
+            const {data}=await axiosRequest.get("SearchHistory/get-user-search-histories")   
+            return data.data
+        } catch (error) {
+            console.log(error);
+        }
+    }
+)
 
 export const postuser=createAsyncThunk(
     "search/postuser",
     async  function(id,{dispatch,getState}){
         try {
-            const {data}=await axiosRequest.post(`SearchHistory/add-user-search-history?UserSearchId=${id}`,id)
-                // getState().searchred.search=data.data
-                console.log(data.data);
+            const {data}=await axiosRequest.post(`SearchHistory/add-user-search-history?UserSearchId=${id}`)
+                // getState().searchred.search=data.
+                
+                console.log(data);
             dispatch(getdata())
-            return data
+            // dispatch(storget())
         } catch (error) {
             console.log(error);
         }
@@ -55,8 +57,20 @@ export const deluser = createAsyncThunk(
     "seacrh/deluser",
     async function (id, { dispatch }) {
         try {
-            const { data } = await axiosRequest.delete(`User/delete-User?userId=${id}`)
-            dispatch(getdata())
+            const { data } = await axiosRequest.delete(`SearchHistory/delete-user-search-history?id=${id}`)
+            dispatch(storget())
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+)
+export const obdelet = createAsyncThunk(
+    "seacrh/obdelet",
+    async function (_, { dispatch }) {
+        try {
+            const { data } = await axiosRequest.delete(`SearchHistory/delete-user-search-histories`)
+            dispatch(storget())
         } catch (error) {
             console.log(error);
         }
