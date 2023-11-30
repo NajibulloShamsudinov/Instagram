@@ -53,13 +53,14 @@ export const postComment = createAsyncThunk(
 
 export const deleteComment = createAsyncThunk(
   "reels/deleteComment",
-  async function (id, { dispatch }) {
+  async function (id, { dispatch, getState }) {
     try {
       const { data } = await axiosRequest.delete(
         `Post/delete-comment?commentId=${id}`
       );
       console.log(data);
       dispatch(getData());
+      
     } catch (error) {
       console.error(error);
     }

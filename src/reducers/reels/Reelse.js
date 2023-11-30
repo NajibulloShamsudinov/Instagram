@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getData, postLike, getData1 } from "../../api/reels/Reels.js";
+import { getData, postLike, getData1, deleteComment } from "../../api/reels/Reels.js";
 
 const reels = createSlice({
   name: "reels",
@@ -52,6 +52,17 @@ const reels = createSlice({
      builder.addCase(postLike.rejected, (state, action) => {
        console.log(error);
      });
+    builder.addCase(deleteComment.pending, (state, action) => {
+      
+     });
+     builder.addCase(deleteComment.fulfilled, (state, action) => {
+        state.modal2=false
+   
+     });
+     builder.addCase(deleteComment.rejected, (state, action) => {
+       console.log(error);
+     });
+  
   },
 });
 

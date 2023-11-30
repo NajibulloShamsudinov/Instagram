@@ -65,7 +65,7 @@ const Reels = () => {
   // function handleOnEnter(text) {
   //   console.log("enter", text);
   // }
-   
+
   const [open1, setOpen1] = React.useState(false);
   const handleOpen1 = () => setOpen1(true);
   const handleClose1 = () => setOpen1(false);
@@ -127,8 +127,10 @@ const Reels = () => {
   // const modal2 = useSelector((store) => store.reels.modal2);
 
   const [modal2, setModal2] = useState(null);
-
-  const modalUs = () => {
+  const [idSave, setIdSave] = useState(null);
+  const modalUs = (id) => {
+  
+    setIdSave(id);
     setModal2(true);
     setOpen(false);
   };
@@ -225,7 +227,6 @@ const Reels = () => {
                 loop
                 controls
                 muted
-                autoPlay
               ></video>
 
               <div className="flex flex-col ml-8 items-center gap-3">
@@ -471,12 +472,8 @@ const Reels = () => {
                     ) : (
                       comments.map((ele) => (
                         <p className="text-black">
-                          
                           <div>
                             {users.map((elem) => {
-                              
-                              
-                              
                               return (
                                 <div>
                                   {ele.userId == elem.id ? (
@@ -511,7 +508,7 @@ const Reels = () => {
                               отметки "Нравиться":0 Ответить
                             </p>
                             <p
-                              onClick={() => modalUs()}
+                              onClick={() => modalUs(ele.postCommentId)}
                               className="text-white hover:text-[grey]"
                             >
                               ...
@@ -595,7 +592,14 @@ Praesent commodo cursus magna, vel scelerisque nisl consectetur et.`
           <div className=" shadow-md bg-white text-center p-14 rounded-[14px] w-[40%] ml-[32%] mt-[15%] m-8 flex flex-col z-40 ">
             {/* <input type="text" placeholder="qqq" className="bg-[blue]" /> */}
             <button className="text-[red] pb-4">Пожаловаться</button>
-            <button className="text-[red] pb-4" onClick={()=> dispatch(deleteComment(elem.id))}>Удалить</button>
+            <button
+              className="text-[red] pb-4"
+              onClick={() => {
+                dispatch(deleteComment(idSave)), dispatch(handlModal1());
+              }}
+            >
+              Удалить
+            </button>
             <hr className=" border-b-1" />
             <button className="pt-4" onClick={() => dispatch(handlModal1())}>
               Отмена
