@@ -10,10 +10,14 @@ const home=createSlice({
         loading:true,
         open:false,
         openCom:false,
+        openstr:false,
+        comEl:[],
         com:"",
         text:"",
         name:"",
-        img:null
+        comments:[],
+        img:null,
+        openStor:[]
     },
     reducers:{
         handelChange:(state,action)=>{
@@ -24,11 +28,20 @@ const home=createSlice({
         },
         setOpenCom:(state,action)=>{
             state.openCom=true
+            state.comEl=action.payload
             state.name=action.payload.title
-            state.img=action.payload.images[0]
+            state.img=action.payload.images[0],
+            state.comments=action.payload.comments
+        },
+        openStor:(state,action)=>{
+            state.openstr=true
+            state.openStor=action.payload
         },
         setCloseCom:(state,action)=>{
             state.openCom=false
+        },
+        setCloseStr:(state,action)=>{
+            state.open=false
         },
     },
     extraReducers:(builder)=>{
@@ -68,4 +81,4 @@ const home=createSlice({
     }
 })
 export default home.reducer
-export const {handelChange,setOpen,setOpenCom,setCloseCom}=home.actions
+export const {handelChange,setOpen,setOpenCom,setCloseCom,setCloseStr,openStor}=home.actions
