@@ -3,7 +3,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { setListBg } from "../../reducers/Layout/Layout";
 import { useState, useEffect } from "react";
 import { Route, Routes, Link, NavLink, useLocation } from "react-router-dom";
-import { setModalUsers, setSearch } from "../../reducers/Message/Message";
+import IOSSwitch from "../../components/Message/IOSSwitch";
+import {
+  setModalUsers,
+  setSearch,
+  setValueSearch,
+  setUserChat,
+  setShowMessageChats,
+} from "../../reducers/Message/Message";
 import ModalUsers from "../../components/Message/ModalUsers";
 import NewMessage from "../../icons/Message/NewMessage";
 import ControlPhone from "../../icons/Message/ControlPhone";
@@ -16,8 +23,16 @@ import ImageInput from "../../icons/Message/ImageInput";
 import HeartInput from "../../icons/Message/HeartInput";
 import { Avatar } from "@mui/material";
 import userMessage from "../../assets/images/nav-profile.jpg";
-import { getUsers, getUsersSearch } from "../../api/Message/messageApi";
+import {
+  getChats,
+  getUsersSearch,
+  createChat,
+  getChatById,
+  deleteChat,
+  // sendMessage,
+} from "../../api/Message/messageApi";
 import CloseIcon from "@mui/icons-material/Close";
+import { data } from "autoprefixer";
 
 const Message = () => {
   // Stata from Redux
@@ -26,19 +41,59 @@ const Message = () => {
   const modalUsers = useSelector((store) => store.message.modalUsers);
 
   // Data from state Redux
-  const dataUsers = useSelector((store) => store.message.data);
+  const dataChats = useSelector((store) => store.message.data);
+  const dataSearch = useSelector((store) => store.message.dataSearch);
   const search = useSelector((store) => store.message.search);
+  const valueSearch = useSelector((store) => store.message.valueSearch);
+  const userChat = useSelector((store) => store.message.userChat);
+  const chatId = useSelector((store) => store.message.chatId);
+  const dataChatById = useSelector((store) => store.message.dataChatById);
+  console.log(dataChatById);
+
+  // const sendMessage = useSelector((store) => store.message.sendMessage);
+  // const dataSendMessage = useSelector((store) => store.message.dataSendMessage);
+  const [closeChoose, setCloseChoose] = useState(false);
+  const [info, setInfo] = useState(false);
+  const [userChatId, setUserChatId] = useState(null);
+
+  const handleInfo = () => {
+    setInfo(!info);
+  };
 
   let location = useLocation();
 
   useEffect(() => {
-    dispatch(getUsers());
+    dispatch(getChats());
     dispatch(getUsersSearch());
+    dispatch(getChatById());
   }, [dispatch, search]);
+
+  const showMessageChats = useSelector(
+    (store) => store.message.showMessageChats
+  );
+  const MessageChats = () => {
+    return (
+      <div className={`${showMessageChats ? "block" : "hidden"}`}>
+        <p>Chat Id:{chatId}</p>
+      </div>
+    );
+  };
+
+  // map 1
+  // dataChats.map((elemChat) => {
+  //   console.log(elemChat);
+  // });
+  // map 2
+  // dataChatById.map((elemChatById) => {
+  //   console.log(elemChatById);
+  //   if (elemChat.chatId === elemChatById.chatId) {
+  //     setUserChatId(elemChatById.chatId);
+  //   }
+  // });
 
   return (
     <main className="h-[100vh]">
-      <div className="wrapper-message  flex justify-between items-start">
+      <div className="wrapper-message flex justify-between items-start">
         <aside className="left w-[30%] border-r-[1px] over h-[100vh]">
           <div className="wrapper-text flex flex-col gap-[20px] p-[20px]">
             <div className="wrapper-user flex justify-between items-center">
@@ -55,23 +110,34 @@ const Message = () => {
             </div>
           </div>
           <div className="wrapper-list mt-[25px] h-[77%] overflow-auto">
-            {dataUsers.map((e) => {
+            {dataChats.map((e) => {
               return (
                 <NavLink to="newMessage">
                   <div
+                    onClick={() => {
+                      dispatch(getChatById(e.chatId));
+                      // if (e.chatId === userChatId) {
+                      //   dispatch(setShowMessageChats(true));
+                      // }
+                    }}
                     key={e.id}
                     className="
                      list hover:bg-[#00000005] cursor-pointer"
                   >
                     <div className="user flex items-center gap-[15px] p-[20px]">
                       <Avatar
-                        src={e.avatar}
+                        src={e.receiveUser.userPhoto}
                         sx={{ width: "56px", height: "56px" }}
                       />
 
                       <div className="wrapper-text">
-                        <p className="text-[14px]">{e.userName}</p>
-                        <p className="text-[12px] text-[#737373]">В сети</p>
+                        <p className="text-[14px]">{e.receiveUser.userName}</p>
+                        <div className="wrapper-text flex items-end gap-[10px]">
+                          <p>{e.receiveUser.fullname}</p>
+                          <p className="text-[12px] text-[#737373]">
+                            {e.chatId}
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -97,20 +163,44 @@ const Message = () => {
                     <div className="wrapper-icons flex items-center gap-[18px]">
                       <ControlPhone style={{ cursor: "pointer" }} />
                       <ControlVideoChat style={{ cursor: "pointer" }} />
-                      <ControlUserInfo style={{ cursor: "pointer" }} />
+                      <button
+                        onClick={() => {
+                          handleInfo();
+                          console.log(info);
+                        }}
+                      >
+                        <ControlUserInfo style={{ cursor: "pointer" }} />
+                      </button>
                     </div>
                   </div>
                   <div className="wrapper-input fixed w-[66%] bottom-0">
-                    <form className="bg-[#fff] p-[20px]  w-full">
+                    <form
+                      // onSubmit={(event) => {
+                      //   sendMessage({
+                      //     chatId: chatId,
+                      //     messageText: sendMessage,
+                      //   });
+                      //   event.preventDefault();
+                      // }}
+                      className={`${
+                        info ? "w-[77%]" : "w-full"
+                      } bg-[#fff] p-[20px]`}
+                    >
                       <div className="wrapper-input flex justify-between px-[15px] items-center border-[1px] w-full rounded-[50px]">
                         <SmileInput style={{ cursor: "pointer" }} />
                         <input
+                          // value={sendMessage}
+                          // onChange={(event) => {
+                          //   dispatch(setSendMessage(event.target.value));
+                          // }}
                           type="text"
                           className=" p-[10px] outline-none w-full"
                           placeholder="Напишите сообщение..."
                         />
                         <div className="input-icons flex items-center gap-[20px]">
-                          <VoiceInput style={{ cursor: "pointer" }} />
+                          <button>
+                            <VoiceInput style={{ cursor: "pointer" }} />
+                          </button>
                           <ImageInput style={{ cursor: "pointer" }} />
                           <HeartInput style={{ cursor: "pointer" }} />
                         </div>
@@ -137,9 +227,76 @@ const Message = () => {
               Отправить сообщение
             </button>
           </div>
-          <div className="wrapper-chat overflow-auto h-[76vh]"></div>
+
+          {/* CHAT ================== */}
+          <div
+            className={`${
+              location.pathname === "/basic/message/newMessage"
+                ? "h-[76vh]"
+                : "h-[auto]"
+            } wrapper-chat overflow-auto`}
+          >
+            <div className="wrapper-message flex flex-col-reverse gap-[20px]">
+              <MessageChats />
+              {dataChatById.map((e) => {
+                return (
+                  <div className="message flex items-center gap-[10px]">
+                    <Avatar />
+                    <p className="bg-[#00000010] inline rounded-[20px] p-[5px] px-[10px]">
+                      {e.messageText}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </aside>
+        {/* Chat INFO */}
+        <div
+          className={`${
+            info ? "block" : "hidden"
+          } wrapper-chat-info  bg-[#fff] border-l-[1px] w-[28%] h-[100vh]`}
+        >
+          <p className="text-[20px] font-[600] p-[20px]">Информация</p>
+          <div className="natification-off mt-[20px] px-[20px] py-[10px] border-b-[1px] flex items-center justify-between w-full gap-[20px]">
+            <p>Выключить уведомления о сообщениях</p>
+            <IOSSwitch />
+          </div>
+          <div className="wrapper-user h-[30vh]">
+            <p className="p-[20px] text-[16px] font-[600]">Участники</p>
+            {dataChats.map((e) => {
+              if (e.chatId === userChatId && showMessageChats === true) {
+                return (
+                  <div className="user flex items-center gap-[10px] py-[10px] px-[20px] hover:bg-[#00000005] cursor-pointer transition-all duration-100">
+                    <Avatar
+                      src={e.receiveUser.userPhoto}
+                      sx={{ width: "56px", height: "56px" }}
+                    />
+                    <p className="text-[14px] font-[600]">
+                      {e.receiveUser.userName}
+                    </p>
+                  </div>
+                );
+              }
+            })}
+          </div>
+          <div className="panel-control flex flex-col gap-[20px] p-[20px] border-t-[1px]">
+            <p className="text-[16px] cursor-pointer text-[#ed4956] tracking-[0.5px]">
+              Пожаловать
+            </p>
+            <p className="text-[16px] cursor-pointer text-[#ed4956] tracking-[0.5px]">
+              Заблокировать
+            </p>
+            <p
+              onClick={() => dispatch(deleteChat(chatId))}
+              className="delete-active text-[16px] cursor-pointer text-[#ed4956] tracking-[0.5px]"
+            >
+              Удалить чат
+            </p>
+          </div>
+        </div>
       </div>
+
       {/* Modal Add Users */}
       <ModalUsers modal={modalUsers}>
         <div className="wrapper-text flex justify-between items-center p-[15px]">
@@ -153,9 +310,30 @@ const Message = () => {
             />
           </button>
         </div>
-        <form>
+        <form
+          onSubmit={(event) => {
+            dispatch(createChat());
+            event.preventDefault();
+            dispatch(setModalUsers(false));
+          }}
+        >
           <div className="wrapper-input flex items-end gap-[20px] py-[7px] px-[20px] border-[1px]">
             <label className="font-[500]">Кому:</label>
+            <div
+              className={`${
+                valueSearch == "" ? "hidden" : "flex"
+              } items-end gap-[10px] bg-[#e0f1ff] rounded-[12px] px-[12px] py-[3px] font-[600] cursor-pointer`}
+            >
+              <p className="text-[14px] text-[#0095F6] hover:text-[#1d4a68]">
+                {valueSearch}
+              </p>
+              <button type="button" onClick={() => setCloseChoose(false)}>
+                <CloseIcon
+                  className="to-active cursor-pointer"
+                  sx={{ fontSize: "18px", color: "#0095F6" }}
+                />
+              </button>
+            </div>
             <input
               onChange={(event) => dispatch(setSearch(event.target.value))}
               value={search}
@@ -164,31 +342,42 @@ const Message = () => {
               className="text-[14px] outline-none w-[100%]"
             />
           </div>
-        </form>
-        <div className="wrapper-search overflow-auto h-[45vh]">
-          {dataUsers.map((e) => {
-            return (
-              <div
-                key={e.id}
-                className="
-                     list hover:bg-[#00000005] cursor-pointer"
-              >
-                <div className="user flex items-center gap-[15px] p-[10px]">
-                  <Avatar
-                    src={e.avatar}
-                    sx={{ width: "44px", height: "44px" }}
-                  />
 
-                  <div className="wrapper-text">
-                    <p className="text-[14px]">{e.userName}</p>
-                    {/* Здесь должен быть {e.fullname} */}
-                    <p className="text-[12px] text-[#737373]">В сети</p>
+          <div className="wrapper-search overflow-auto h-[45vh]">
+            {dataSearch.map((e) => {
+              return (
+                <div
+                  key={e.id}
+                  onClick={() => {
+                    dispatch(setUserChat(e.id));
+                    dispatch(setValueSearch(e.userName));
+                  }}
+                  className="
+                     list hover:bg-[#00000005] cursor-pointer"
+                >
+                  <div className="user flex items-center gap-[15px] p-[10px]">
+                    <Avatar
+                      src={e.avatar}
+                      sx={{ width: "44px", height: "44px" }}
+                    />
+
+                    <div className="wrapper-text">
+                      <p className="text-[14px]">{e.userName}</p>
+                      {/* Здесь должен быть {e.fullname} */}
+                      <p className="text-[12px] text-[#737373]">В сети</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+          <button
+            type="submit"
+            className="h-[44px] flex justify-center items-center text-center mx-auto w-[94%] bg-[#0095f6] text-[#fff] text-[14px] font-[600] rounded-[8px]"
+          >
+            Чат
+          </button>
+        </form>
       </ModalUsers>
     </main>
   );

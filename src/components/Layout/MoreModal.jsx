@@ -5,11 +5,11 @@ import WbSunnyOutlinedIcon from "@mui/icons-material/WbSunnyOutlined";
 import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
 
 const MoreModal = (props) => {
-    useEffect(() => {
-      window.onclick = () => {
-        props.modal1 = false;
-      };
-    });
+  useEffect(() => {
+    window.onclick = () => {
+      props.modal1 = false;
+    };
+  });
   return (
     <div
       className={`${
