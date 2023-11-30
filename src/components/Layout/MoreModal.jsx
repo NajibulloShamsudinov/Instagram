@@ -6,11 +6,18 @@ import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
 import Switcher from "../switcher/Switcher";
 import Settings from "../../icons/Layout/settings";
 const MoreModal = (props) => {
-    // useEffect(() => {
-    //   window.onclick = () => {
-    //     props.modal1 = false;
-    //   };
-    // });
+  useEffect(() => {
+    window.onclick = () => {
+      props.modal1 = false;
+    };
+  });
+
+  // useEffect(() => {
+  //   window.onclick = () => {
+  //     props.modal1 = false;
+  //   };
+  // });
+
   return (
     <div
       className={`${
@@ -21,7 +28,7 @@ const MoreModal = (props) => {
         <Link>
           <li className="flex items-center gap-[15px] hover:bg-[#00000010] rounded-[7px] p-[15px] transition-all duration-300 text-[14px]">
             {/* <img src={props.img} alt="" className="w-[18px]" /> */}
-            <Settings/>
+            <Settings />
             <p>Настройки</p>
           </li>
         </Link>
@@ -38,8 +45,13 @@ const MoreModal = (props) => {
           </li>
         </Link>
         <Link>
-          <li onClick={()=>{Switcher()}} className="flex items-center gap-[15px] hover:bg-[#00000010] rounded-[7px] p-[15px] transition-all duration-300 text-[14px]">
-            <Switcher/>
+          <li
+            onClick={() => {
+              Switcher();
+            }}
+            className="flex items-center gap-[15px] hover:bg-[#00000010] rounded-[7px] p-[15px] transition-all duration-300 text-[14px]"
+          >
+            <Switcher />
             <p>Переключить режим</p>
           </li>
         </Link>
