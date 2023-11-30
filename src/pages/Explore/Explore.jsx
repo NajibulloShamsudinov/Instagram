@@ -57,6 +57,7 @@ const Explore = () => {
           );
         })}
       </div>
+      
       {open ? (
         <div className="w-[100%] h-[100vh]  bg-[#00000097] fixed translate-x-[-50%] translate-y-[-50%] top-1/2 left-1/2 ">
           <div

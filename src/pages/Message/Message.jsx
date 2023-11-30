@@ -33,6 +33,7 @@ import {
 } from "../../api/Message/messageApi";
 import CloseIcon from "@mui/icons-material/Close";
 import { data } from "autoprefixer";
+import { getToken } from "../../utils/token";
 
 const Message = () => {
   // Stata from Redux
@@ -55,6 +56,9 @@ const Message = () => {
   const [closeChoose, setCloseChoose] = useState(false);
   const [info, setInfo] = useState(false);
   const [userChatId, setUserChatId] = useState(null);
+
+  const myUd = getToken().sid
+  console.log(myUd);
 
   const handleInfo = () => {
     setInfo(!info);

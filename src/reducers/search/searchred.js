@@ -1,11 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getdata } from "../../pages/search/search";
+import { getdata,storget } from "../../pages/search/search";
 
 
 const searchred = createSlice({
   name: "searchred",
   initialState: {
     data: [],
+    storg:[],
     searchinp: "",
     search: false
   },
@@ -23,6 +24,14 @@ const searchred = createSlice({
       state.data = action.payload
     })
     builder.addCase(getdata.rejected, (state, action) => {
+    })
+
+    builder.addCase(storget.pending, (state, action) => {
+    });
+    builder.addCase(storget.fulfilled, (state, action) => {
+      state.storg = action.payload
+    })
+    builder.addCase(storget.rejected, (state, action) => {
     })
     
   }
