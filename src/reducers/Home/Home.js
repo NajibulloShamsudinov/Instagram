@@ -17,7 +17,8 @@ const home=createSlice({
         name:"",
         comments:[],
         img:null,
-        openStor:[]
+        openStor:[],
+        strImg:null
     },
     reducers:{
         handelChange:(state,action)=>{
@@ -35,13 +36,14 @@ const home=createSlice({
         },
         openStor:(state,action)=>{
             state.openstr=true
-            state.openStor=action.payload
+            // state.openStor=action.payload
+            state.strImg=action.payload.fileName
         },
         setCloseCom:(state,action)=>{
             state.openCom=false
         },
         setCloseStr:(state,action)=>{
-            state.open=false
+            state.openstr=false
         },
     },
     extraReducers:(builder)=>{
