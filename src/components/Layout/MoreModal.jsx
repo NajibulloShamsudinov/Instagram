@@ -3,23 +3,32 @@ import { Link } from "react-router-dom";
 import BookmarkBorderOutlinedIcon from "@mui/icons-material/BookmarkBorderOutlined";
 import WbSunnyOutlinedIcon from "@mui/icons-material/WbSunnyOutlined";
 import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
-
+import Switcher from "../switcher/Switcher";
+import Settings from "../../icons/Layout/settings";
 const MoreModal = (props) => {
-    useEffect(() => {
-      window.onclick = () => {
-        props.modal1 = false;
-      };
-    });
+  useEffect(() => {
+    window.onclick = () => {
+      props.modal1 = false;
+    };
+  });
+
+  // useEffect(() => {
+  //   window.onclick = () => {
+  //     props.modal1 = false;
+  //   };
+  // });
+
   return (
     <div
       className={`${
         props.modal === true ? "block" : "hidden"
-      } modal-container fixed top-[12%] z-10 left-[1%] bg-[#fff] rounded-[20px] shadow-lg p-[10px] border-[1px]`}
+      } modal-container fixed top-[12%] z-10 left-[1%] bg-[#fff] dark:text-white dark:bg-[#262626] dark:border-0 rounded-[20px] shadow-lg p-[10px] border-[1px]`}
     >
-      <ul className="flex flex-col gap-[7px]">
+      <ul className="flex flex-col  gap-[7px]">
         <Link>
           <li className="flex items-center gap-[15px] hover:bg-[#00000010] rounded-[7px] p-[15px] transition-all duration-300 text-[14px]">
-            <img src={props.img} alt="" className="w-[18px]" />
+            {/* <img src={props.img} alt="" className="w-[18px]" /> */}
+            <Settings />
             <p>Настройки</p>
           </li>
         </Link>
@@ -36,8 +45,13 @@ const MoreModal = (props) => {
           </li>
         </Link>
         <Link>
-          <li className="flex items-center gap-[15px] hover:bg-[#00000010] rounded-[7px] p-[15px] transition-all duration-300 text-[14px]">
-            <WbSunnyOutlinedIcon />
+          <li
+            onClick={() => {
+              Switcher();
+            }}
+            className="flex items-center gap-[15px] hover:bg-[#00000010] rounded-[7px] p-[15px] transition-all duration-300 text-[14px]"
+          >
+            <Switcher />
             <p>Переключить режим</p>
           </li>
         </Link>

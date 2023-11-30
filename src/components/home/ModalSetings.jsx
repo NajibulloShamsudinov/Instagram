@@ -34,10 +34,10 @@ const ModalSetings = ({open,children}) => (
             <Fade in={open}>
                 <Box sx={style}>
                     <ul className='text-center  '>
-                        <li className='text-[red] border-[2px] p-[10px]'>Пожаловатся</li>
-                        <li className='text-[red] border-[2px] p-[10px]'>Отменить подписку</li>
-                        <li className='border-[2px] p-[10px]'>Добавить в избранное</li>
-                        <li className='border-[2px] p-[10px]'>Перейти к публикатции</li>
+                        <li onClick={()=>alert("hello")} className='text-[red] border-[2px] p-[10px]'>Пожаловатся</li>
+                        <li onClick={()=>alert("Невозможно отменить подписку")} className='text-[red] border-[2px] p-[10px]'>Отменить подписку</li>
+                        <li onClick={()=>alert("Избранное 😃")} className='border-[2px] p-[10px]'>Добавить в избранное</li>
+                        <li onClick={()=>alert("Публикатция не найдена")} className='border-[2px] p-[10px]'>Перейти к публикатции</li>
                         <li className='border-[2px] p-[10px]'>Поделиться...</li>
                         <li className='border-[2px] p-[10px]'>Копировать ссылку</li>
                         <li className='border-[2px] p-[10px]'>Всатавить на сайт</li>
