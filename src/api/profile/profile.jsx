@@ -80,13 +80,29 @@ export const getUser = createAsyncThunk(
 
 
 export const updateProfile = createAsyncThunk(
-    async function (form,{dispatch}) {
+    'profile/updateProfile',
+    async function (form, { dispatch }) {
+        console.log(form);
         try {
-            const { data } = await axiosRequest.put('UserProfile/update-profile-photo', form,{
+            const { data } = await axiosRequest.put('UserProfile/update-profile-photo', form, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
-                  },
-            } )
+                },
+            })
+            dispatch(getUser())
+        } catch (error) {
+            console.error(error);
+        }
+    }
+)
+
+
+export const deletPhoto = createAsyncThunk(
+    'profile/deletPhoto',
+    async function (_,{ dispatch }) {
+        try {
+            const { data } = await axiosRequest.delete('UserProfile/delete-profile-photo')
+            dispatch(getUser())
         } catch (error) {
             console.error(error);
         }

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Checkbox from '@mui/material/Checkbox';
 import Button from '@mui/material/Button';
-import { getUser,updateProfile } from "../../api/profile/profile";
+import { getProfile, getUser,updateProfile,deletPhoto } from "../../api/profile/profile";
 import { useDispatch } from "react-redux";
 import { getToken } from "../../utils/token";
 import { useSelector } from "react-redux";
@@ -38,9 +38,7 @@ const Settings = () => {
 
 
   const handleEdit = async (e) =>{
-    let file = await fileToBase64(e.target.files[0])
-    setImage(file)
-    console.log(file);
+    setImage(e.target.files[0])
   }
 
 
@@ -52,7 +50,8 @@ const Settings = () => {
 
   const handleSubmit = () =>{
     let form  = new FormData();
-    form.append("avatar", image)
+    
+    form.append("photo", image )
 
     dispatch(updateProfile(form));
   }
@@ -60,7 +59,6 @@ const Settings = () => {
 
   useEffect(() => {
     dispatch(getUser())
-    dispatch(updateProfile())
   }, [dispatch])
 
   return (
@@ -164,8 +162,6 @@ const Settings = () => {
                         <h1>{e.userName}</h1>
                         <h1 onClick={handleOpen2} className="text-[#0095F6] cursor-pointer hover:text-[black]">Изменить фото профиля </h1>
 
-
-
                       </div>
                     </div>
 
@@ -210,7 +206,7 @@ const Settings = () => {
 
 
                   <div className="ml-[28%] pt-[4%]">
-                    <Button onClick={handleSubmit} style={{ backgroundColor: "#0094f6", paddingTop: "3px", paddingBottom: "3px", fontSize: "14px", borderRadius: "8px" }} variant="contained">Отправить</Button>
+                    <Button  style={{ backgroundColor: "#0094f6", paddingTop: "3px", paddingBottom: "3px", fontSize: "14px", borderRadius: "8px" }} variant="contained">Отправить</Button>
                   </div>
 
       
@@ -256,9 +252,14 @@ const Settings = () => {
               
               </div>
               <hr />
-              <div className="py-[10px]">
-                <h1 className="cursor-pointer font-[600] text-[#ED4956]">Удалить текущее фото</h1>
+              <div className="pt-[10px] pb-[15px]">
+                <h1 className="cursor-pointer text-[#3b87ba] font-[600]" onClick={()=>{handleSubmit(),setOpen2(false)}}>ADD</h1>
               </div>
+              <hr />
+              <div className="py-[10px]">
+                <h1 onClick={()=>{dispatch(deletPhoto()),setOpen2(false)}} className="cursor-pointer font-[600] text-[#ED4956]">Удалить текущее фото</h1>
+              </div>
+              <hr />
               <hr />
               <div className="pt-[10px] pb-[15px]">
                 <h1 className="cursor-pointer font-[400]" onClick={handleClose2}>Отмена</h1>
