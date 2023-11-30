@@ -13,8 +13,6 @@ export const getData = createAsyncThunk("reels/getData",
     console.error(error);
   }
 });
-
-
 export const postLike = createAsyncThunk(
   "reels/postLike",
   async function (id, { dispatch }) {
@@ -26,8 +24,6 @@ export const postLike = createAsyncThunk(
     }
   }
 );
-
-
 export const postComment = createAsyncThunk(
   "reels/postComment",
   async function (e, { dispatch }) {
