@@ -12,7 +12,24 @@ export const getData = createAsyncThunk("reels/getData",
   } catch (error) {
     console.error(error);
   }
+<<<<<<< HEAD
 });
+=======
+  });
+
+
+  export const getData1 = createAsyncThunk("reels/getData1", async () => {
+    try {
+      const { data } = await axiosRequest.get("User/get-users");
+      console.log(data);
+      return data.data;
+    } catch (error) {
+      console.error(error);
+    }
+  });
+
+
+>>>>>>> 37febd93801d9015b3755e37df3deaad5b539a2e
 export const postLike = createAsyncThunk(
   "reels/postLike",
   async function (id, { dispatch }) {
