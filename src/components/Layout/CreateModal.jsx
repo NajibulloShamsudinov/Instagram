@@ -6,10 +6,22 @@ import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import "../../App.css";
 import { useDispatch, useSelector } from "react-redux";
 import ImageVideo from "../../icons/Create/ImageVideo";
+import img1 from "/src/assets/images/polzovatel.jpg"
+import { handleChange } from "../../reducers/post/post";
+
 
 const CreateModal = (props) => {
   let dispatch = useDispatch();
+  const inptitle=((store)=>store.post.inptitle)
+  const inpcontent=((store)=>store.post.inpcontent)
+  const inpimg=((store)=>store.post.inpimg)
+
+
+
+  const [next,setNext]=useState(false)
   let [img, setImg] = useState(null);
+
+
 
   let handlImg = async () => {
     let newImg = await fileToBase64(event.target.files[0]);
@@ -22,8 +34,8 @@ const CreateModal = (props) => {
           props.modal ? "block" : "hidden"
         } modal-container bg-[#00000089] fixed z-30 w-full h-full top-0 left-0`}
       >
-        <div>
-          <div className="modal bg-[#fff] rounded-[10px] fixed translate-x-[-50%] translate-y-[-50%] top-1/2 left-1/2 w-[36%] h-[80%]">
+        <div className="flex justify-center items-center h-[100vh]">
+          <div style={{width:next?"50%":"36%"}} className="modal overflow-hidden bg-[#fff] rounded-[10px] w-[36%] h-[80%]">
             <div>
               <p
                 style={{ display: img == null ? "block" : "none" }}
@@ -43,27 +55,36 @@ const CreateModal = (props) => {
                   </button>
                   <p className=" font-bold ">Crop</p>
                   <p
-                    onClick={() =>
+                    onClick={() =>{
+                      
                       addNewPost({
                         images: img,
                       })
+                      setNext(true)
+
                     }
-                    className="  cursor-pointer  text-[#697aae] "
+                    }
+                    style={{display:next?"none":"block"}}
+                    className="  cursor-pointer  text-[#4366cc] "
                   >
                     Next
                   </p>
+                  <button style={{display:next?"block":"none"}} onClick={()=>dispatch(addNewPost(img))} className="text-[#4876fe] font-bold">Поделиться</button>
                 </div>
               </div>
-              <div className="modal-content   flex flex-col gap-[10px] mt-[33%] ">
+             <div className="modal-content      ">   
                 <div style={{ display: img == null ? "block" : "none" }}>
-                  <div className="wrapper-image flex flex-col items-center gap-[20px]">
-                    <ImageVideo />
-
+                  <div className="wrapper-image flex flex-col items-center h-[70vh] justify-center gap-[20px]">
+                    <div className="flex flex-col items-center">
+                    <ImageVideo style={{width:"200px"}} />
                     <p className=" text-[20px]">Перетащите сюда фото и видео</p>
+
+                    </div>
+
                     <form
                       method="post"
                       enctype="multipart/form-data"
-                      className="m-auto"
+                      className=""
                     >
                       <label class="input-file">
                         <input
@@ -73,12 +94,16 @@ const CreateModal = (props) => {
                           multiple={true}
                           accept=""
                         />
+                        {/* <div className="flex justify-between"> */}
+
                         <img
                           style={{ display: img == null ? "none" : "block" }}
                           className=" p-[60px] m-auto fixed left-0 right-0   "
                           src={img}
                           alt=""
                         />
+                        {/* <div className="comment bg-[#000] h-[100vh] w-[30%]">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolores nemo molestias quam itaque eius! Reiciendis voluptas enim eum nihil quas culpa laborum facilis vero assumenda cumque unde, est eius dignissimos.</div> */}
+                        {/* </div> */}
                         <span className="text-white font-medium">
                           Выбрать на компьютере
                         </span>
@@ -87,12 +112,28 @@ const CreateModal = (props) => {
                   </div>
                 </div>
                 <div>
+                  <div className="flex overflow-hidden ">
+
                   <img
-                    style={{ display: img == null ? "none" : "block" }}
-                    className="  bottom-[0.1%] h-[90%] w-[100%] m-auto fixed left-0 right-0   "
+                    style={{ display: img == null ? "none" : "block",width:next?"60%":"100%" }}
+                    className=" w-[100%] h-[100%]  p-[1%]                 "
                     src={img}
                     alt=""
                   />
+                  
+                    <div style={{display:next?"flex":"none"}} className="comment  flex-col gap-5 h-[75vh] p-[1%] w-[40%]   ">
+                      <div className="flex items-center gap-3">
+                        <img className="w-[30px] rounded-full" src={img1} alt="" />
+                        <h1 className=" font-semibold">damir </h1>
+                      </div>
+                      <div className="flex  flex-col gap-5">
+                        <input value={inptitle} onChange={(e)=>dispatch(handleChange({type:"inptitle",settype:(e.target.value)}))} className=" border-2 w-[80%] h-[50px] rounded-[2px]" type="text" />
+                        <input value={inpcontent} onChange={(e)=>dispatch(handleChange({type:"inpcontent",settype:(e.target.value) }))} className=" border-2 w-[80%] h-[50px] rounded-[2px]" type="text" />
+                      </div>
+
+                    </div>
+
+                  </div>
                 </div>
               </div>
             </div>
