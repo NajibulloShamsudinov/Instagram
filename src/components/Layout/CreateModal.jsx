@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, TextField } from "@mui/material";
-import { addNewPost } from "../../api/post/post";
+import { addNewPost, getpost } from "../../api/post/post";
 import { fileToBase64 } from "../../utils/fileToBase64";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import "../../App.css";
@@ -8,13 +8,15 @@ import { useDispatch, useSelector } from "react-redux";
 import ImageVideo from "../../icons/Create/ImageVideo";
 import img1 from "/src/assets/images/polzovatel.jpg"
 import { handleChange } from "../../reducers/post/post";
+import {getToken} from "../../utils/token"
 
 
 const CreateModal = (props) => {
   let dispatch = useDispatch();
   // const inptitle=((store)=>store.post.inptitle)
   // const inpcontent=((store)=>store.post.inpcontent)
-  const inpimg=((store)=>store.post.inpimg)
+  const postData=useSelector((store)=>store.post.postData)
+
 
 
 
@@ -22,12 +24,15 @@ const CreateModal = (props) => {
   let [img, setImg] = useState("");
   let [inpcontent, setInpcontent] = useState("");
   let [inptitle, setInptitle] = useState("");
+  let [inpimg,setInpimg]=useState("")
 
-
-
+  const userId = getToken()?.sid
+  
   let handlImg = async (event) => {
+  let file= await fileToBase64(event.target.files[0])
 
     setImg(event.target.files[0]);
+    setInpimg(file)
   };
 
   const handlesubmit =()=>{
@@ -38,6 +43,10 @@ const CreateModal = (props) => {
 
     dispatch(addNewPost(form))
   }
+  useEffect(()=>{
+    dispatch(getpost())
+  },[dispatch])
+
   return (
     <div>
       <div
@@ -67,12 +76,10 @@ const CreateModal = (props) => {
                   <p className=" font-bold ">Crop</p>
                   <p
                     onClick={() =>{
-                      
                       addNewPost({
                         images: img,
                       })
                       setNext(true)
-
                     }
                     }
                     style={{display:next?"none":"block"}}
@@ -80,9 +87,9 @@ const CreateModal = (props) => {
                   >
                     Next
                   </p>
-                  <button style={{display:next?"block":"none"}} onClick={()=>handlesubmit()} className="text-[#4876fe] font-bold">Поделиться</button>
+                  <button style={{display:next?"block":"none"}} onClick={()=>{handlesubmit()}}  className={` text-[#4876fe] font-bold`}>Поделиться</button>
                 </div>
-              </div>
+              </div>                                                                                 
              <div className="modal-content      ">   
                 <div style={{ display: img == null ? "block" : "none" }}>
                   <div className="wrapper-image flex flex-col items-center h-[70vh] justify-center gap-[20px]">
@@ -93,8 +100,8 @@ const CreateModal = (props) => {
                     </div>
 
                     <form
-                      // method="post"
-                      // enctype="multipart/form-data"
+                      method="post"
+                      enctype="multipart/form-data"
                       className=""
                     >
                       <label class="input-file">
@@ -138,15 +145,25 @@ const CreateModal = (props) => {
                   <img
                     style={{ display: img == null ? "none" : "block",width:next?"60%":"100%" }}
                     className=" w-[100%] h-[100%]  p-[1%]                 "
-                    src={img}
+                    src={inpimg}
                     alt=""
                   />
                   
                     <div style={{display:next?"flex":"none"}} className="comment  flex-col gap-5 h-[75vh] p-[1%] w-[40%]   ">
-                      <div className="flex items-center gap-3">
-                        <img className="w-[30px] rounded-full" src={img1} alt="" />
-                        <h1 className=" font-semibold">damir </h1>
-                      </div>
+                      {
+                        
+                        postData.map((el)=>{
+                          
+                         return (
+                          el.id == userId?(   <div className="flex items-center gap-3">
+                          <img className="w-[30px] rounded-full" src={el.avatar ? el.avatar :img1 } alt="" />
+                          <h1 className=" font-semibold">{el.userName}</h1>
+                        </div>)  :null
+                   
+                       )
+                       
+                      })
+                    }
                       <div className="flex  flex-col gap-5">
                         <input value={inptitle} onChange={(e)=>setInptitle(e.target.value)} className=" border-2 w-[80%] h-[50px] rounded-[2px]" type="text" />
                         <input value={inpcontent} onChange={(e)=>setInpcontent(e.target.value)} className=" border-2 w-[80%] h-[50px] rounded-[2px]" type="text" />
