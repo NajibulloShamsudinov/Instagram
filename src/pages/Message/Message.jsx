@@ -216,7 +216,7 @@ const Message = () => {
               location.pathname === "/basic/message/newMessage"
                 ? "h-[76vh]"
                 : "h-[auto]"
-            } wrapper-chat overflow-auto`}
+            } wrapper-chat overflow-auto p-[20px]`}
           >
             <div className="wrapper-message flex flex-col-reverse gap-[20px]">
               {dataChatById.map((e) => {
