@@ -6,7 +6,7 @@ import axios from "axios";
 export const getData = createAsyncThunk("reels/getData", async () => {
   try {
     const { data } = await axiosRequest.get("Post/get-reels");
-    console.log(data);
+    
     return data.data;
   } catch (error) {
     console.error(error);
@@ -20,23 +20,13 @@ export const getData = createAsyncThunk("reels/getData", async () => {
   export const getData1 = createAsyncThunk("reels/getData1", async () => {
     try {
       const { data } = await axiosRequest.get("User/get-users");
-      console.log(data);
+      
       return data.data;
     } catch (error) {
       console.error(error);
     }
   });
 
-
-// export const getData1 = createAsyncThunk("reels/getData1", async () => {
-//   try {
-//     const { data } = await axiosRequest.get("User/get-users");
-//     console.log(data);
-//     return data.data;
-//   } catch (error) {
-//     console.error(error);
-//   }
-// });
 
 
 export const postLike = createAsyncThunk(
@@ -75,9 +65,26 @@ export const deleteComment = createAsyncThunk(
       const { data } = await axiosRequest.delete(
         `Post/delete-comment?commentId=${id}`
       );
-      console.log(data);
+      
+      
       dispatch(getData());
       
+    } catch (error) {
+      console.error(error);
+    }
+  }
+);
+
+
+export const addFollowing = createAsyncThunk(
+  "reels/addFollowing",
+  async function (userId, { dispatch }) {
+    try {
+      const { data } = await axiosRequest.post(
+        `FollowingRelationShip/add-following-relation-ship?followingUserId=${userId}`
+      );
+      console.log(data);
+      dispatch(getData());
     } catch (error) {
       console.error(error);
     }
