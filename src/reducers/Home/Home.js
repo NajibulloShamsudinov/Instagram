@@ -34,9 +34,9 @@ const home=createSlice({
             state.img=action.payload.images[0],
             state.comments=action.payload.comments
         },
-        openStor:(state,action)=>{
+        setOpenStor:(state,action)=>{
             state.openstr=true
-            // state.openStor=action.payload
+            state.openStor=action.payload
             state.strImg=action.payload.fileName
         },
         setCloseCom:(state,action)=>{
@@ -83,4 +83,4 @@ const home=createSlice({
     }
 })
 export default home.reducer
-export const {handelChange,setOpen,setOpenCom,setCloseCom,setCloseStr,openStor}=home.actions
+export const {handelChange,setOpen,setOpenCom,setCloseCom,setCloseStr,setOpenStor}=home.actions
