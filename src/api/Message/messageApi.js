@@ -84,6 +84,7 @@ export const sendMessage = createAsyncThunk(
     console.log(newObj);
     try {
       const { data } = await axiosRequest.post("Chat/send-message", newObj);
+      console.log(data);
       dispatch(getChatById());
     } catch (error) {
       return rejectWithValue(error);
