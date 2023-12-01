@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Checkbox from '@mui/material/Checkbox';
 import Button from '@mui/material/Button';
-import { getProfile, getUser,updateProfile,deletPhoto, editUser,} from "../../api/profile/profile";
+import { getProfile, getUser,updateProfile,deletPhoto, editUser, getProfileById} from "../../api/profile/profile";
 import { handleChange } from "../../reducers/Profile/Profile";
 import { useDispatch } from "react-redux";
 import { getToken } from "../../utils/token";
@@ -40,7 +40,7 @@ const Settings = () => {
   const users = useSelector((store) => store.profile.users)
   const text = useSelector((store) => store.profile.text)
   const gender = useSelector((store) => store.profile.gender)
-  // const ProfileById = useSelector((store) => store.profile.ProfileById)
+  const ProfileById = useSelector((store) => store.profile.ProfileById)
 
 
   const [image, setImage] = useState("");
@@ -154,8 +154,10 @@ const Settings = () => {
 
       {
         users.map((e) => {
+          console.log(e.id, userId);
           return (
             <div className="">
+              
               {e.id == userId ? (
                 <div className="right-side">
 
@@ -223,7 +225,7 @@ const Settings = () => {
                     }))} style={{ backgroundColor: "#0094f6", paddingTop: "3px", paddingBottom: "3px", fontSize: "14px", borderRadius: "8px" }} variant="contained">Отправить</Button>
                   </div>
                 </div>
-              ) : null}
+              ) : null }
             </div>
           )
 

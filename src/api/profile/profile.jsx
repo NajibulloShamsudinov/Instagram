@@ -87,7 +87,7 @@ export const getUser = createAsyncThunk(
     'profile/getUser',
     async function () {
         try {
-            const { data } = await axiosRequest.get('User/get-users')
+            const { data } = await axiosRequest.get("User/get-users?PageSize=100")
             console.log(data.data);
             return data.data
         } catch (error) {
