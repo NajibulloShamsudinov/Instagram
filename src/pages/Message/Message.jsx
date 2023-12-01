@@ -174,12 +174,19 @@ const Message = () => {
                           placeholder="Напишите сообщение..."
                         />
                         <div className="input-icons flex items-center gap-[20px]">
+                          <button
+                            type="submit"
+                            className={`${
+                              messageText ? "block" : "hidden"
+                            } text-[14px] font-[600] text-[#0095f6] hover:text-[#19405a] transition-all duration-100`}
+                          >
+                            Отправить
+                          </button>
                           <VoiceInput style={{ cursor: "pointer" }} />
                           <ImageInput style={{ cursor: "pointer" }} />
                           <HeartInput style={{ cursor: "pointer" }} />
                         </div>
                       </div>
-                      <button type="submit">Кнопка</button>
                     </form>
                   </div>
                 </>
