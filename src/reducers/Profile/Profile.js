@@ -12,11 +12,14 @@ const profile = createSlice({
         postData:[],
         subsciption:[],
         subsciptions:[],
-        users:[]
+        users:[],
+        profileById:[],
+        text:'',
+        gender:0
     },
     reducers :{
         handleChange:(state,action)=>{
-            state[data.payload.type] = action.payload.setType 
+            state[action.payload.type] = action.payload.setType 
         }
     },
     extraReducers:(builder) => {
@@ -86,3 +89,4 @@ const profile = createSlice({
 
 
 export default profile.reducer
+export const {handleChange}  = profile.actions

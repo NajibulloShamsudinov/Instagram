@@ -8,13 +8,15 @@ export const getProfile = createAsyncThunk(
     'profile/getProfile',
     async function () {
         try {
-            const { data } = await axiosRequest.get("User/get-users")
+            const { data } = await axiosRequest.get("User/get-users?PageSize=100")
             return data.data
         } catch (error) {
 
         }
     }
 )
+
+
 
 export const getPostById = createAsyncThunk(
     'profile/getPostById',
@@ -28,6 +30,23 @@ export const getPostById = createAsyncThunk(
         }
     }
 )
+
+
+
+
+export const getProfileById = createAsyncThunk(
+    'profile/getProfileById',
+    async function (id) {
+        try {
+            const { data } = await axiosRequest.get(`UserProfile/get-user-profile-by-id?UserId=${id}`)
+            return data.data
+        } catch (error) {
+
+        }
+    }
+)
+
+
 
 
 
@@ -68,7 +87,7 @@ export const getUser = createAsyncThunk(
     'profile/getUser',
     async function () {
         try {
-            const { data } = await axiosRequest.get('User/get-users')
+            const { data } = await axiosRequest.get("User/get-users?PageSize=100")
             console.log(data.data);
             return data.data
         } catch (error) {
@@ -99,7 +118,7 @@ export const updateProfile = createAsyncThunk(
 
 export const deletPhoto = createAsyncThunk(
     'profile/deletPhoto',
-    async function (_,{ dispatch }) {
+    async function (_, { dispatch }) {
         try {
             const { data } = await axiosRequest.delete('UserProfile/delete-profile-photo')
             dispatch(getUser())
@@ -108,6 +127,33 @@ export const deletPhoto = createAsyncThunk(
         }
     }
 )
+
+
+
+export const editUser = createAsyncThunk(
+    'profile/editUser',
+    async function editUser(_, { dispatch , getState}) {
+        let text = getState().profile.text
+        let gender = getState().profile.gender
+        try {
+
+            const { data } = await axiosRequest.put('UserProfile/update-user-profile', {
+                about: text,
+                fullName:"",
+                dob:"",
+                gender:0,
+                phoneNumber:"",
+                email:""
+            })
+
+            dispatch(getUser())
+            
+        } catch (error) {
+            console.log(error);
+        }
+    }
+)
+
 
 
 
