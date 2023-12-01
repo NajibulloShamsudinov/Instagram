@@ -5,7 +5,7 @@ import {
   createChat,
   getChatById,
   deleteChat,
-  // sendMessage,
+  sendMessage,
 } from "../../api/Message/messageApi";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
@@ -20,10 +20,8 @@ const message = createSlice({
     search: "",
     valueSearch: "",
     userChat: null,
-    showMessageChats: false,
-
-    // sendMessage: "",
-    // dataSendMessage: [],
+    messageText: "",
+    chatIdAdd: null,
   },
   reducers: {
     setModalUsers: (state, action) => {
@@ -41,8 +39,11 @@ const message = createSlice({
     setSendMessage: (state, action) => {
       state.sendMessage = action.payload;
     },
-    setShowMessageChats: (state, action) => {
-      state.showMessageChats = action.payload;
+    setMessageText: (state, action) => {
+      state.messageText = action.payload;
+    },
+    setChatIdAdd: (state, action) => {
+      state.chatIdAdd = action.payload;
     },
   },
   // getChats
@@ -90,18 +91,6 @@ const message = createSlice({
     builder.addCase(getChatById.rejected, (state, action) => {
       state.loading = false;
     });
-
-    // send message
-    // builder.addCase(sendMessage.pending, (state, action) => {
-    //   state.loading = true;
-    // });
-    // builder.addCase(sendMessage.fulfilled, (state, action) => {
-    //   state.loading = true;
-    //   state.dataSendMessage = action.payload;
-    // });
-    // builder.addCase(sendMessage.rejected, (state, action) => {
-    //   state.loading = false;
-    // });
   },
 });
 
@@ -111,6 +100,6 @@ export const {
   setSearch,
   setValueSearch,
   setUserChat,
-  setSendMessage,
-  setShowMessageChats,
+  setMessageText,
+  setChatIdAdd,
 } = message.actions;

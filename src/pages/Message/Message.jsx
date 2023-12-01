@@ -9,7 +9,8 @@ import {
   setSearch,
   setValueSearch,
   setUserChat,
-  setShowMessageChats,
+  setMessageText,
+  setChatIdAdd,
 } from "../../reducers/Message/Message";
 import ModalUsers from "../../components/Message/ModalUsers";
 import NewMessage from "../../icons/Message/NewMessage";
@@ -29,7 +30,7 @@ import {
   createChat,
   getChatById,
   deleteChat,
-  // sendMessage,
+  sendMessage,
 } from "../../api/Message/messageApi";
 import CloseIcon from "@mui/icons-material/Close";
 import { data } from "autoprefixer";
@@ -46,19 +47,15 @@ const Message = () => {
   const dataSearch = useSelector((store) => store.message.dataSearch);
   const search = useSelector((store) => store.message.search);
   const valueSearch = useSelector((store) => store.message.valueSearch);
-  const userChat = useSelector((store) => store.message.userChat);
+  // const userChat = useSelector((store) => store.message.userChat);
   const chatId = useSelector((store) => store.message.chatId);
   const dataChatById = useSelector((store) => store.message.dataChatById);
-  console.log(dataChatById);
+  const messageText = useSelector((store) => store.message.messageText);
+  const chatIdAdd = useSelector((store) => store.message.chatIdAdd);
 
-  // const sendMessage = useSelector((store) => store.message.sendMessage);
-  // const dataSendMessage = useSelector((store) => store.message.dataSendMessage);
-  const [closeChoose, setCloseChoose] = useState(false);
   const [info, setInfo] = useState(false);
-  const [userChatId, setUserChatId] = useState(null);
 
-  const myUd = getToken().sid
-  console.log(myUd);
+  const myUd = getToken().sid;
 
   const handleInfo = () => {
     setInfo(!info);
@@ -70,30 +67,8 @@ const Message = () => {
     dispatch(getChats());
     dispatch(getUsersSearch());
     dispatch(getChatById());
+    dispatch(sendMessage());
   }, [dispatch, search]);
-
-  const showMessageChats = useSelector(
-    (store) => store.message.showMessageChats
-  );
-  const MessageChats = () => {
-    return (
-      <div className={`${showMessageChats ? "block" : "hidden"}`}>
-        <p>Chat Id:{chatId}</p>
-      </div>
-    );
-  };
-
-  // map 1
-  // dataChats.map((elemChat) => {
-  //   console.log(elemChat);
-  // });
-  // map 2
-  // dataChatById.map((elemChatById) => {
-  //   console.log(elemChatById);
-  //   if (elemChat.chatId === elemChatById.chatId) {
-  //     setUserChatId(elemChatById.chatId);
-  //   }
-  // });
 
   return (
     <main className="h-[100vh]">
@@ -120,9 +95,6 @@ const Message = () => {
                   <div
                     onClick={() => {
                       dispatch(getChatById(e.chatId));
-                      // if (e.chatId === userChatId) {
-                      //   dispatch(setShowMessageChats(true));
-                      // }
                     }}
                     key={e.id}
                     className="
@@ -179,13 +151,13 @@ const Message = () => {
                   </div>
                   <div className="wrapper-input fixed w-[66%] bottom-0">
                     <form
-                      // onSubmit={(event) => {
-                      //   sendMessage({
-                      //     chatId: chatId,
-                      //     messageText: sendMessage,
-                      //   });
-                      //   event.preventDefault();
-                      // }}
+                      onSubmit={(event) => {
+                        event.preventDefault();
+                        sendMessage({
+                          chatId: chatIdAdd,
+                          messageText: messageText,
+                        });
+                      }}
                       className={`${
                         info ? "w-[77%]" : "w-full"
                       } bg-[#fff] p-[20px]`}
@@ -193,18 +165,24 @@ const Message = () => {
                       <div className="wrapper-input flex justify-between px-[15px] items-center border-[1px] w-full rounded-[50px]">
                         <SmileInput style={{ cursor: "pointer" }} />
                         <input
-                          // value={sendMessage}
-                          // onChange={(event) => {
-                          //   dispatch(setSendMessage(event.target.value));
-                          // }}
+                          onChange={(event) =>
+                            dispatch(setMessageText(event.target.value))
+                          }
+                          value={messageText}
                           type="text"
                           className=" p-[10px] outline-none w-full"
                           placeholder="Напишите сообщение..."
                         />
                         <div className="input-icons flex items-center gap-[20px]">
-                          <button>
-                            <VoiceInput style={{ cursor: "pointer" }} />
+                          <button
+                            type="submit"
+                            className={`${
+                              messageText ? "block" : "hidden"
+                            } text-[14px] font-[600] text-[#0095f6] hover:text-[#19405a] transition-all duration-100`}
+                          >
+                            Отправить
                           </button>
+                          <VoiceInput style={{ cursor: "pointer" }} />
                           <ImageInput style={{ cursor: "pointer" }} />
                           <HeartInput style={{ cursor: "pointer" }} />
                         </div>
@@ -238,11 +216,12 @@ const Message = () => {
               location.pathname === "/basic/message/newMessage"
                 ? "h-[76vh]"
                 : "h-[auto]"
-            } wrapper-chat overflow-auto`}
+            } wrapper-chat overflow-auto p-[20px]`}
           >
             <div className="wrapper-message flex flex-col-reverse gap-[20px]">
-              <MessageChats />
               {dataChatById.map((e) => {
+                dispatch(setChatIdAdd(e.userId));
+
                 return (
                   <div className="message flex items-center gap-[10px]">
                     <Avatar />
@@ -268,21 +247,19 @@ const Message = () => {
           </div>
           <div className="wrapper-user h-[30vh]">
             <p className="p-[20px] text-[16px] font-[600]">Участники</p>
-            {dataChats.map((e) => {
+            {/* {dataChats.map((e) => {
               if (e.chatId === userChatId && showMessageChats === true) {
-                return (
-                  <div className="user flex items-center gap-[10px] py-[10px] px-[20px] hover:bg-[#00000005] cursor-pointer transition-all duration-100">
-                    <Avatar
-                      src={e.receiveUser.userPhoto}
-                      sx={{ width: "56px", height: "56px" }}
-                    />
-                    <p className="text-[14px] font-[600]">
-                      {e.receiveUser.userName}
-                    </p>
-                  </div>
-                );
+                return ( */}
+            <div className="user flex items-center gap-[10px] py-[10px] px-[20px] hover:bg-[#00000005] cursor-pointer transition-all duration-100">
+              <Avatar
+                // src={e.receiveUser.userPhoto}
+                sx={{ width: "56px", height: "56px" }}
+              />
+              <p className="text-[14px] font-[600]">Sharipov Amir</p>
+            </div>
+            {/* );
               }
-            })}
+            })} */}
           </div>
           <div className="panel-control flex flex-col gap-[20px] p-[20px] border-t-[1px]">
             <p className="text-[16px] cursor-pointer text-[#ed4956] tracking-[0.5px]">
@@ -292,7 +269,10 @@ const Message = () => {
               Заблокировать
             </p>
             <p
-              onClick={() => dispatch(deleteChat(chatId))}
+              onClick={() => {
+                dispatch(deleteChat(chatId));
+                console.log();
+              }}
               className="delete-active text-[16px] cursor-pointer text-[#ed4956] tracking-[0.5px]"
             >
               Удалить чат
