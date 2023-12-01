@@ -83,6 +83,7 @@ const Profile = () => {
   const subsciptions = useSelector((store) => store.profile.subsciptions)
   const users = useSelector((store) => store.profile.users)
   const profileById = useSelector((store) => store.profile.profileById)
+  console.log(profileById);
 
 
 
@@ -149,15 +150,7 @@ const Profile = () => {
                 </div>
 
                 <div className="mt-[20px]">
-                  {
-                    profileById.map((e)=>{
-                      return(
-                        <div className="">
-                          <h1>{e.about}</h1>
-                        </div>
-                      )
-                    })
-                  }
+                  {profileById.about}
                 </div>
 
               </div>
