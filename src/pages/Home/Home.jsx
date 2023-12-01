@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { get, users,likes, story, addCom, delCom } from "../../api/home/home";
-import { handelChange, setCloseCom, setOpen, setOpenCom,setCloseStr,openStor } from "../../reducers/Home/Home";
+import { handelChange, setCloseCom, setOpen, setOpenCom,setCloseStr,setOpenStor } from "../../reducers/Home/Home";
 import Checkbox from '@mui/material/Checkbox';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -22,6 +22,7 @@ import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import StoryModal from "../../components/home/Stories";
+import AddIcon from '@mui/icons-material/Add';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 
@@ -63,6 +64,7 @@ function Home () {
   const comments=useSelector(({home})=>home.comments)
   const openstr=useSelector(({home})=>home.openstr)
   const openStor=useSelector(({home})=>home.openStor)
+  console.log(openStor);
 
   const dispatch=useDispatch()
 
@@ -82,33 +84,47 @@ const openMenu = Boolean(anchorEl);
   };
 
   return (
-    <div className="mx-[80px] p-[20px] pb-[10vh]">
-      <div className="flex justify-between">
-        <div className="w-[60%]">
+    <div className="p-[20px] pb-[10vh]  mx-auto w-[1280px]">
+      <div className="flex justify-between ">
+        <div className="w-[65%]">
 
           {/* stories */}
-         <div className="mx-[50px]">
+         <div className="mx-[80px]">
          <Swiper
             spaceBetween={15}
-            slidesPerView={8}
-            onSlideChange={() => console.log('slide change')}
-            onSwiper={(swiper) => console.log(swiper)}
+            slidesPerView={9}
+            // onSlideChange={() => console.log('slide change')}
+            // onSwiper={(swiper) => console.log(swiper)}
             >
+              <SwiperSlide>
+              <div className="w-[60px] h-[60px] bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-[30px] p-[2px]">
+              <button className="rounded-[30px] w-[55px] h-[55px] border-[2px] border-[white] bg-[white]" >
+                <AddIcon className="text-black"/>
+              </button>
+              
+              </div>
+              </SwiperSlide>
         {
           stories.map((e)=>{
-            return e.viewerDto?.userName? (
+            // e.viewerDto?.userName? 
+            return (
               <SwiperSlide>
-               <button onClick={()=>dispatch(openStor(e))}>
+               <button onClick={()=>dispatch(setOpenStor(e))}>
                <div  className="text-center">
               <div className="w-[60px] bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-[30px] p-[2px]">
               <img src="https://cdn2.iconfinder.com/data/icons/instagram-ui/48/jee-75-512.png"
               className="rounded-[30px] border-[2px] border-[white] bg-[white]"  alt="" />
               </div>
-              <span className="text-[12px]">{e.viewerDto?.userName}</span>
+              <span className="text-[12px]">
+              {user.map(element => {
+                return e.userId == element.id ? <div> {element.userName} </div>: null
+              })}
+              </span>
              </div>
                </button>
               </SwiperSlide>
-            ):null
+            )
+            // :null
           })
         }
         </Swiper>
@@ -182,7 +198,7 @@ const openMenu = Boolean(anchorEl);
         <h1 className="text-[grey] mt-[2px]" onClick={()=>dispatch(setOpenCom(e))}>
           Посмотреть все комментарии ({e.commentCount})</h1>
         <div className="my-[5px]">
-          <input type="text" className="py-[5px] w-[300px] outline-none" placeholder="Добавьте комментарий..." />
+          <input type="text" className="py-[5px] bg-transparent w-[300px] outline-none" placeholder="Добавьте комментарий..." />
         </div>
         </div>
       )
@@ -217,7 +233,19 @@ const openMenu = Boolean(anchorEl);
              <div className="flex justify-between items-center border-b-2 pb-4 w-[100%] px-[10px]">
              <div className="flex items-center gap-[5px]">
               <div className="w-[45px] bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-[30px] p-[2px]">
-              <Avatar alt="Remy Sharp" src={`${import.meta.env.VITE_APP_FILES_URL}${img}`}
+              <Avatar alt="Remy Sharp" src={user.map((elem)=>{
+                { return elem.avatar == "" ||
+                elem.avatar == null ? (
+                  <img
+                    src="https://w7.pngwing.com/pngs/178/595/png-transparent-user-profile-computer-icons-login-user-avatars-thumbnail.png"
+                    alt=""
+                  />) : (<img
+                    src={`${
+                      import.meta.env.VITE_APP_FILES_URL
+                    }${elem?.avatar}`} 
+                    alt=""
+                  />)}
+              })}
               className="rounded-[30px] border-[2px] border-[white] bg-[white]" />
               </div>
               <div>{(
@@ -244,7 +272,7 @@ const openMenu = Boolean(anchorEl);
                     ) : (
                       comments.map((ele) => (
                         <p className="text-black">
-                          <div className="flex ">
+                          <div className="flex items-center">
                             {user.map((elem) => {
                               return (
                                 <div>
@@ -259,7 +287,7 @@ const openMenu = Boolean(anchorEl);
                                         />) : (<img
                                           src={`${
                                             import.meta.env.VITE_APP_FILES_URL
-                                          }${elem?.avatar}`} className="w-[10%] rounded-[20px]"
+                                          }${elem?.avatar}`} className="w-[10%] rounded-[30px]"
                                           alt=""
                                         />)}
                                       <p>{elem.userName}</p>
@@ -269,7 +297,9 @@ const openMenu = Boolean(anchorEl);
                                 </div>
                               );
                             })}
-                             {/* <button  aria-controls={openMenu ? 'basic-menu' : undefined}
+                             {/* <button style={{"hover":{
+                              color:"black"
+                             },color:"white"}} aria-controls={openMenu ? 'basic-menu' : undefined}
                          aria-haspopup="true"
                          aria-expanded={openMenu ? 'true' : undefined}
                          onClick={handleClick}><MoreHorizIcon/></button> */}
@@ -314,18 +344,31 @@ const openMenu = Boolean(anchorEl);
       {/* story Modal */}
 
     <StoryModal open={openstr}>
-    <div> 
-          {
-            !`${import.meta.env.VITE_APP_FILES_URL}${strImg}`.includes(".mp4")?
-            <img src={`${import.meta.env.VITE_APP_FILES_URL}${strImg}`} 
-            alt="" className="w-[auto] h-[600px] m-auto" />
-            : <video controls className="w-[100%] h-[600px]" 
-            src={`${import.meta.env.VITE_APP_FILES_URL}${strImg}`}></video>
-          }
+    <div className="mt-[20px]"> 
+      <Swiper>
+         {
+          user.map((e)=>{
+           return e.id==openStor.userId? (
+              <SwiperSlide>
+              {
+                !`${import.meta.env.VITE_APP_FILES_URL}${strImg}`.includes(".mp4")?
+                <img src={`${import.meta.env.VITE_APP_FILES_URL}${strImg}`} 
+                alt="" className="w-[100%]" />
+                : <video controls className="" 
+                src={`${import.meta.env.VITE_APP_FILES_URL}${strImg}`}></video>
+              }
+              </SwiperSlide>
+            )
+            :null
+          })
+         }
+         </Swiper>
+         {/* <div className="my-[10%]">
+            <input type="text" placeholder="add hello" />
+           </div> */}
            </div> 
-    <Button autoFocus onClick={()=>dispatch(setCloseStr())}>
-     close
-    </Button>
+          
+    
     </StoryModal>
         
         {/* right side */}

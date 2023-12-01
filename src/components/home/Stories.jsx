@@ -5,9 +5,11 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
+import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import Typography from '@mui/material/Typography';
+import { useDispatch, useSelector } from "react-redux";
+import { setCloseStr } from '../../reducers/Home/Home';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -18,32 +20,35 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-export default function StoryModal({open,children}) {
+export default function StoryModal({open,children,child}) {
 
+    const dispatch=useDispatch()
   return (
-   
-      <BootstrapDialog
-        aria-labelledby="customized-dialog-title"
-        open={open}
-      >
-        <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-          Modal title
-        </DialogTitle>
-        <IconButton
+   <div>
+     <Dialog open={open} sx={{color:"transparent"}}>
+    <button className="absolute top-[0px] text-[red] left-[550px]"
+    autoFocus onClick={()=>dispatch(setCloseStr())}>
+    <IconButton
           aria-label="close"
-          sx={{
-            position: 'absolute',
-            right: 8,
-            top: 8,
-            color: (theme) => theme.palette.grey[500],
-          }}
+        //   sx={{
+        //     // position: 'absolute',
+        //     right: 1,
+        //     top: 8,
+        //     color: "black"
+        //   }}
         >
-          <CloseIcon />
+          <CloseIcon sx={{color:"black"}} />
         </IconButton>
-        <DialogContent dividers 
-        sx={{width:"300px"}}>
+    </button>
+       <div className='w-[100%] h-[90vh]'>
+      
+        <DialogContent 
+        sx={{width:"100%"}}>
           {children}
+          
         </DialogContent>
-      </BootstrapDialog>
+       </div>
+      </Dialog>
+   </div>
   );
 }
