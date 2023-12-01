@@ -153,10 +153,13 @@ const Message = () => {
                     <form
                       onSubmit={(event) => {
                         event.preventDefault();
-                        sendMessage({
-                          chatId: chatIdAdd,
-                          messageText: messageText,
-                        });
+                        console.log(chatIdAdd);
+                        dispatch(
+                          sendMessage({
+                            chatId: chatIdAdd,
+                            messageText: messageText,
+                          })
+                        );
                       }}
                       className={`${
                         info ? "w-[77%]" : "w-full"
@@ -220,7 +223,7 @@ const Message = () => {
           >
             <div className="wrapper-message flex flex-col-reverse gap-[20px]">
               {dataChatById.map((e) => {
-                dispatch(setChatIdAdd(e.userId));
+                dispatch(setChatIdAdd(e.chatId));
 
                 return (
                   <div className="message flex items-center gap-[10px]">
