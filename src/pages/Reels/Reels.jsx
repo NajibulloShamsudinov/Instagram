@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 //emoj
+import { getToken } from "../../utils/token";
+
 
 import CircularProgress from "@mui/material/CircularProgress";
 import CloseIcon from "@mui/icons-material/Close";
@@ -53,6 +55,7 @@ import {
   postComment,
   getData1,
   deleteComment,
+  addFollowing,
 } from "../../api/reels/Reels";
 import { blue } from "@mui/material/colors";
 // import { handlModal } from "../../reducers/reels/Reelse";
@@ -65,6 +68,11 @@ const Reels = () => {
   // function handleOnEnter(text) {
   //   console.log("enter", text);
   // }
+
+  //follow
+  const userId = getToken().sid;
+  console.log(userId);
+
 
   const [open1, setOpen1] = React.useState(false);
   const handleOpen1 = () => setOpen1(true);
@@ -88,6 +96,8 @@ const Reels = () => {
     setOpen2(true);
     setScroll(scrollType);
   };
+
+  const [nabi,setNabi] = useState(false)
 
   const handleClose = () => {
     setOpen(false);
@@ -147,7 +157,7 @@ const Reels = () => {
     dispatch(getData1());
   }, [dispatch]);
   return (
-    <div className="mt-14 flex flex-col gap-14  px-[30%]">
+    <div className="mt-0 flex flex-col gap-14  px-[30%]">
       <div className="flex items-end gap-4">
         {/* <video
           className="rounded-md"
@@ -228,7 +238,26 @@ const Reels = () => {
                 controls
                 muted
               ></video>
+              <div></div>
+              <div className="absolute ml-[19%] mb-[5%]">
+                {/* {nabi && elem.postFavorite ? (
+                  <button
+                    className="text-[white] p-1 w-[80px] rounded-lg border-[1px] border-[white]"
+                    onClick={() => {
+                      setNabi(!nabi);
+                      dispatch(addFollowing(elem.postId));
+                    }}
+                  >
+                    Folow
+                  </button>
+                ) : (
+                  <button onClick={() => setNabi(!nabi)}>Unfollow</button>
+                )} */}
 
+                <p>{elem.postView}</p>
+              </div>
+
+              {console.log(nabi)}
               <div className="flex flex-col ml-8 items-center gap-3">
                 <div className="flex flex-col cursor-pointer items-center">
                   {elem.postLike ? (
@@ -408,7 +437,6 @@ const Reels = () => {
                   </svg>
                 </span>
               </div>
-
               <div>
                 <div className="flex  justify-end ">
                   <div>
@@ -509,7 +537,7 @@ const Reels = () => {
                             </p>
                             <p
                               onClick={() => modalUs(ele.postCommentId)}
-                              className="text-white hover:text-[grey]"
+                              className="text-white hover:text-[grey] cursor-pointer"
                             >
                               ...
                             </p>

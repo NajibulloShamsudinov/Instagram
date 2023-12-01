@@ -11,8 +11,20 @@ export let addNewPost = createAsyncThunk(
         } 
 
       });
-      dispatch()
+      dispatch(getpost())
   } catch (error) {
     console.error(error);
   }
 });
+
+export const getpost=createAsyncThunk(
+  "post/getpost",
+  async function(){
+    try {
+      const {data}=await axiosRequest.get("User/get-users")
+      return data.data
+    } catch (error) {
+      console.log(error);
+    }
+  }
+)
