@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getProfile, getUser } from "../../api/profile/profile";
+import { getProfile, getProfileById, getUser } from "../../api/profile/profile";
 import { getPostById } from "../../api/profile/profile";
 import { getSubsciption } from "../../api/profile/profile";
 import { getSubsciptions } from "../../api/profile/profile";
@@ -15,7 +15,7 @@ const profile = createSlice({
         users:[],
         profileById:[],
         text:'',
-        gender:0
+        gender:"Предпочитаю не указывать"
     },
     reducers :{
         handleChange:(state,action)=>{
@@ -79,6 +79,18 @@ const profile = createSlice({
             state.users = action.payload
         });
         builder.addCase(getUser.rejected,(state,action) =>{
+            state.loading=false
+        });
+
+
+
+        builder.addCase(getProfileById.pending,(state,action) =>{
+            state.loading = true
+        });
+        builder.addCase(getProfileById.fulfilled,(state,action) =>{
+            state.profileById = action.payload
+        });
+        builder.addCase(getProfileById.rejected,(state,action) =>{
             state.loading=false
         });
     }

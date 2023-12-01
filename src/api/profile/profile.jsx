@@ -38,7 +38,7 @@ export const getProfileById = createAsyncThunk(
     'profile/getProfileById',
     async function (id) {
         try {
-            const { data } = await axiosRequest.get(`UserProfile/get-user-profile-by-id?UserId=${id}`)
+            const { data } = await axiosRequest.get(`UserProfile/get-user-profile-by-id?id=${id}`)
             return data.data
         } catch (error) {
 
@@ -139,11 +139,11 @@ export const editUser = createAsyncThunk(
 
             const { data } = await axiosRequest.put('UserProfile/update-user-profile', {
                 about: text,
-                fullName:"",
-                dob:"",
-                gender:0,
-                phoneNumber:"",
-                email:""
+                fullName:"user",
+                dob:"2023/12/03",
+                gender:gender,
+                phoneNumber:"987652345",
+                email:"a@example.com"
             })
 
             dispatch(getUser())
