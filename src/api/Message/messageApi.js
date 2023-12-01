@@ -51,12 +51,10 @@ export const createChat = createAsyncThunk(
 export const getChatById = createAsyncThunk(
   "message/getChatById",
   async function (chatId, { dispatch, rejectWithValue }) {
-    // console.log(chatId);
     try {
       const { data } = await axiosRequest.get(
         `Chat/get-chat-by-id?chatId=${chatId}`
       );
-      console.log(data.data);
       return data.data;
     } catch (error) {
       return rejectWithValue(error);
@@ -80,14 +78,15 @@ export const deleteChat = createAsyncThunk(
 );
 
 // Async POST - send message
-// export const sendMessage = createAsyncThunk(
-//   "message/sendMessage",
-//   async function (newObj, { rejectWithValue }) {
-//     try {
-//       const { data } = await axiosRequest.post("Chat/send-message", newObj);
-//       return data.data;
-//     } catch (error) {
-//       return rejectWithValue(error);
-//     }
-//   }
-// );
+export const sendMessage = createAsyncThunk(
+  "message/sendMessage",
+  async function (newObj, { dispatch, rejectWithValue }) {
+    console.log(newObj);
+    try {
+      const { data } = await axiosRequest.post("Chat/send-message", newObj);
+      dispatch(getChatById());
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
