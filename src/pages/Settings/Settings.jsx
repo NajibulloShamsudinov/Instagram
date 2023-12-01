@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Checkbox from '@mui/material/Checkbox';
 import Button from '@mui/material/Button';
-import { getProfile, getUser,updateProfile,deletPhoto } from "../../api/profile/profile";
+import { getProfile, getUser,updateProfile,deletPhoto, editUser, getProfileById} from "../../api/profile/profile";
+import { handleChange } from "../../reducers/Profile/Profile";
 import { useDispatch } from "react-redux";
 import { getToken } from "../../utils/token";
 import { useSelector } from "react-redux";
@@ -10,6 +11,10 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { Form } from "react-router-dom";
 import { fileToBase64 } from "../../utils/fileToBase64";
+
+
+
+
 
 const style2 = {
   position: 'absolute',
@@ -33,6 +38,10 @@ const Settings = () => {
   const handleClose2 = () => setOpen2(false);
 
   const users = useSelector((store) => store.profile.users)
+  const text = useSelector((store) => store.profile.text)
+  const gender = useSelector((store) => store.profile.gender)
+  const ProfileById = useSelector((store) => store.profile.ProfileById)
+
 
   const [image, setImage] = useState("");
 
@@ -44,6 +53,8 @@ const Settings = () => {
 
 
   const userId = getToken()?.sid
+
+  
   const dispatch = useDispatch()
 
 
@@ -59,6 +70,7 @@ const Settings = () => {
 
   useEffect(() => {
     dispatch(getUser())
+    dispatch(getProfileById(userId))
   }, [dispatch])
 
   return (
@@ -142,8 +154,10 @@ const Settings = () => {
 
       {
         users.map((e) => {
+          console.log(e.id, userId);
           return (
             <div className="">
+              
               {e.id == userId ? (
                 <div className="right-side">
 
@@ -175,16 +189,16 @@ const Settings = () => {
 
                     <div className="flex ml-[10px] mt-[20px]  gap-[25px] items-start">
                       <h1 className="font-[700]">О себе</h1>
-                      <textarea className="w-[355px] px-[10px] border-[1px] py-[0px] h-[60px]"></textarea>
+                      <textarea  value={text} onChange={(e)=>dispatch(handleChange({type:"text", setType:e.target.value}))} className="w-[355px] px-[10px] border-[1px] py-[0px] h-[60px]"></textarea>
                     </div>
 
                     <div className="flex mt-[40px] ml-[20px] gap-[33px]">
                       <h1 className="font-[700]">Пол</h1>
                       <div className="">
-                        <select className="w-[357px] px-[5px] py-[5px] border-[1px] border-[#dfdede]" name="" id="">
-                          <option value="">Предпочитаю не указывать</option>
-                          <option value="">MAN</option>
-                          <option value="">MAN</option>
+                        <select value={gender} onChange={(e)=>dispatch(handleChange({type:"gender", setType:e.target.value}))} className="w-[357px] px-[5px] py-[5px] border-[1px] border-[#dfdede]" name="" id="">
+                          <option value="Предпочитаю не указывать">Предпочитаю не указывать</option>
+                          <option value="0">Мужской</option>
+                          <option value="1">Женский</option>
                         </select>
                         <p className="text-[12px] pt-[5px] text-[#737373]">Эта информация не будет показываться в вашем общедоступном профиле.</p>
                       </div>
@@ -206,12 +220,12 @@ const Settings = () => {
 
 
                   <div className="ml-[28%] pt-[4%]">
-                    <Button  style={{ backgroundColor: "#0094f6", paddingTop: "3px", paddingBottom: "3px", fontSize: "14px", borderRadius: "8px" }} variant="contained">Отправить</Button>
+                    <Button onClick={()=>dispatch(editUser({
+                      about:text
+                    }))} style={{ backgroundColor: "#0094f6", paddingTop: "3px", paddingBottom: "3px", fontSize: "14px", borderRadius: "8px" }} variant="contained">Отправить</Button>
                   </div>
-
-      
                 </div>
-              ) : null}
+              ) : null }
             </div>
           )
 
@@ -259,7 +273,6 @@ const Settings = () => {
               <div className="py-[10px]">
                 <h1 onClick={()=>{dispatch(deletPhoto()),setOpen2(false)}} className="cursor-pointer font-[600] text-[#ED4956]">Удалить текущее фото</h1>
               </div>
-              <hr />
               <hr />
               <div className="pt-[10px] pb-[15px]">
                 <h1 className="cursor-pointer font-[400]" onClick={handleClose2}>Отмена</h1>

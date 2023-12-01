@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { getpost } from "../../api/post/post";
 
  let post = createSlice({
   name: "post",
@@ -6,7 +7,6 @@ import { createSlice } from "@reduxjs/toolkit";
     postData: [],
     inptitle:"",
     inpcontent:"",
-    inpimg:""
 
   },
   reducers: {
@@ -17,15 +17,13 @@ import { createSlice } from "@reduxjs/toolkit";
 
   },
   extraReducers: (builder) => {
-//     builder.addCase(post.pending, (state, action) => {
-//       state.loading = true;
-//     });
-//     builder.addCase(post.fulfilled, (state, action) => {
-//       state.postData = action.payload;
-//     });
-//     builder.addCase(post.rejected, (state, action) => {
-//       state.loading.false;
-//     });
+    builder.addCase(getpost.pending, (state, action) => {
+    });
+    builder.addCase(getpost.fulfilled, (state, action) => {
+      state.postData = action.payload;
+    });
+    builder.addCase(getpost.rejected, (state, action) => {
+    });
   },
 });
 export default post.reducer

@@ -22,3 +22,17 @@ export const postLike = createAsyncThunk(
     }
   }
 );
+export const addCom2 = createAsyncThunk(
+  "home/addCom",
+  async function (e, { dispatch }) {
+    try {
+      const { data } = await axiosRequest.post("Post/add-comment", {
+        comment: e.comment,
+        postId: e.postId,
+      });
+      dispatch(getPosts());
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
