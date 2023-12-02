@@ -40,7 +40,7 @@ const Settings = () => {
   const users = useSelector((store) => store.profile.users)
   const text = useSelector((store) => store.profile.text)
   const gender = useSelector((store) => store.profile.gender)
-  const ProfileById = useSelector((store) => store.profile.ProfileById)
+  const ProfileById = useSelector((store) => store.profile.profileById)
 
 
   const [image, setImage] = useState("");
