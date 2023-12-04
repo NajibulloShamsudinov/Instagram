@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { get,users,story } from "../../api/home/home";
+import { get,users,story,addStories } from "../../api/home/home";
 
 const home=createSlice({
     name:"home",
@@ -18,7 +18,8 @@ const home=createSlice({
         comments:[],
         img:null,
         openStor:[],
-        strImg:null
+        strImg:null,
+        openAddStr:false,
     },
     reducers:{
         handelChange:(state,action)=>{
@@ -45,13 +46,16 @@ const home=createSlice({
         setCloseStr:(state,action)=>{
             state.openstr=false
         },
+        setOpenAddStr:(state,action)=>{
+            state.openAddStr=action.payload
+        },
     },
     extraReducers:(builder)=>{
         builder.addCase(get.pending,(state,action)  =>{
             state.loading = true
         }),
         builder.addCase(get.fulfilled,(state,action)  =>{
-            state.loading = false
+            
             console.log(action.payload)
             state.data=action.payload
         }),
@@ -63,7 +67,7 @@ const home=createSlice({
             state.loading = true
         }),
         builder.addCase(users.fulfilled,(state,action)  =>{
-            state.loading = false
+            
             state.user=action.payload
         }),
         builder.addCase(users.rejected,(state,action)  =>{
@@ -74,13 +78,16 @@ const home=createSlice({
             state.loading = true
         }),
         builder.addCase(story.fulfilled,(state,action)  =>{
-            state.loading = false
+            
             state.stories=action.payload
         }),
         builder.addCase(story.rejected,(state,action)  =>{
             state.loading = true
+        }),
+        builder.addCase(addStories.fulfilled,(state,action)  =>{
+            state.openAddStr=false
         })
     }
 })
 export default home.reducer
-export const {handelChange,setOpen,setOpenCom,setCloseCom,setCloseStr,setOpenStor}=home.actions
+export const {handelChange,setOpen,setOpenCom,setCloseCom,setCloseStr,setOpenStor,setOpenAddStr}=home.actions

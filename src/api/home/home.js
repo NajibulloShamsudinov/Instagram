@@ -6,7 +6,7 @@ export const get =createAsyncThunk(
     "home/get",
     async function() {
         try {
-            const {data}=await axiosRequest.get("Post/get-posts")
+            const {data}=await axiosRequest.get("Post/get-posts?PageSize=50")
             return data.data
         } catch (error) { 
             console.log(error)
@@ -69,6 +69,22 @@ export const delCom=createAsyncThunk(
             dispatch(get())
         } catch (error) { 
             console.log(error)
+        }
+    }
+)
+
+export const addStories= createAsyncThunk(
+    'home/addStories',
+    async function (form, { dispatch }) {
+        try {
+            const { data } = await axiosRequest.post('Story/AddStories', form, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                },
+            })
+            dispatch(story())
+        } catch (error) {
+            console.error(error);
         }
     }
 )
