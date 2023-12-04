@@ -6,18 +6,6 @@ import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
 import Switcher from "../switcher/Switcher";
 import Settings from "../../icons/Layout/settings";
 const MoreModal = (props) => {
-  useEffect(() => {
-    window.onclick = () => {
-      props.modal1 = false;
-    };
-  });
-
-  // useEffect(() => {
-  //   window.onclick = () => {
-  //     props.modal1 = false;
-  //   };
-  // });
-
   return (
     <div
       className={`${
