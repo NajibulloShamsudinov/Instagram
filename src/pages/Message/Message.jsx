@@ -60,7 +60,7 @@ const Message = () => {
   const chatIdAdd = useSelector((store) => store.message.chatIdAdd);
   const chatsId = useSelector((store) => store.message.chatsId);
   const chatsUserId = useSelector((store) => store.message.chatsUserId);
-
+  const [idx, setIdx] = useState(null);
   const defaultLogoMessage = useSelector(
     (store) => store.message.defaultLogoMessage
   );
@@ -85,9 +85,13 @@ const Message = () => {
   useEffect(() => {
     dispatch(getChats());
     dispatch(getUsersSearch());
-    dispatch(getChatById());
   }, [dispatch, search]);
 
+  useEffect(() => {
+    if (idx) {
+      dispatch(getChatById(idx));
+    }
+  }, [idx]);
   return (
     <main className="h-[100vh]">
       <div className="wrapper-message flex justify-between items-start">
@@ -116,7 +120,7 @@ const Message = () => {
                       dispatch(setChatsUserPhoto(e.receiveUser.userPhoto));
                       dispatch(setHidePanel(true));
                       dispatch(getChatById(e.chatId));
-                      dispatch(setChatsId(e.chatId));
+                      setIdx(e.chatId);
                       dispatch(setChatsUserId(e.receiveUser.userId));
                       dispatch(setDefaultLogoMessage(false));
                     }}
@@ -182,8 +186,11 @@ const Message = () => {
                         event.preventDefault();
                         dispatch(
                           sendMessage({
-                            chatId: chatIdAdd,
-                            messageText: messageText,
+                            reqData: {
+                              chatId: idx,
+                              messageText: messageText,
+                            },
+                            idx: idx,
                           })
                         );
                         dispatch(setMessageText(""));

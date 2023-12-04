@@ -49,6 +49,7 @@ const message = createSlice({
       state.messageText = action.payload;
     },
     setChatIdAdd: (state, action) => {
+      console.log(action.payload);
       state.chatIdAdd = action.payload;
     },
     setDefaultLogoMessage: (state, action) => {
@@ -111,6 +112,7 @@ const message = createSlice({
     builder.addCase(getChatById.fulfilled, (state, action) => {
       state.loading = false;
       state.dataChatById = action.payload;
+      
     });
     builder.addCase(getChatById.rejected, (state, action) => {
       state.loading = false;
