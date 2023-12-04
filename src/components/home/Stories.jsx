@@ -2,28 +2,22 @@ import * as React from 'react';
 import Button from '@mui/material/Button';
 import Stories from 'react-insta-stories';
 import { styled } from '@mui/material/styles';
-import Dialog from '@mui/material/Dialog';
-
-import DialogContent from '@mui/material/DialogContent';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { useDispatch, useSelector } from "react-redux";
 import { setCloseStr } from '../../reducers/Home/Home';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Pagination } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/pagination';
 import { useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import { users } from '../../api/home/home';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 
 
 export default function StoryModal({open,children,story,user}) {
    
   const dispatch=useDispatch()
-
+  console.log(story);
   const storyStyle={
     // width: "100%",
     maxwidth:"80%",
@@ -42,29 +36,41 @@ export default function StoryModal({open,children,story,user}) {
     paddingTop:6,
   };
 
-  // const storyline=story && story.map((e)=> `${import.meta.env.VITE_APP_FILES_URL}${e.fileName}`)
+  // const storyline=story && story.map((e)=>{
+  //   return ( 
+  //     <img src={`${import.meta.env.VITE_APP_FILES_URL}${e.fileName}`} alt="" />
+  //   )
+  // })
   //       user.map((el)=>{
   //         return e.userId==el.id?():null
   //       })  
   // })
   const storyline=[
     {
-      content: ({ action, isPaused }) => {
+      content: () => {
         return (
-          <div >
-           {
-            // user.map((el)=>{
-                // story.map((e)=>{
-              // return e.userId==el.id?
-              // <img src={`${import.meta.env.VITE_APP_FILES_URL}${e.fileName}`} alt="" />
-              // :null
-              // })
-            // }) 
-           }
-           <img src={
-            story.map((e)=> `${import.meta.env.VITE_APP_FILES_URL}${e.fileName}`)
-           } alt="" />
-            <button className='absolute text-white'>like</button>
+          <div>
+          
+                <div>
+                  {
+                   user.map((el)=>{
+                   return story.map((e)=>{
+                      return e.userId==el.id?
+                      <img src={`${import.meta.env.VITE_APP_FILES_URL}${e.fileName}`} alt="" />
+                      :null
+                      })
+                   })
+                  }
+                </div>
+           
+           {/* <img src="https://w7.pngwing.com/pngs/178/595/png-transparent-user-profile-computer-icons-login-user-avatars-thumbnail.png" 
+          className='m-[20px]' alt="error"/> */}
+            <div className='absolute top-[94%] left-[2%] flex justify-between w-[94%]'>
+              <input type="text" className='bg-transparent w-[300px] ' placeholder='комент' />
+              <button ><FavoriteBorderIcon sx={{color:"white",":hover":{
+                color:"red"
+              }}}/></button>
+            </div>
           </div>
         );
       }
@@ -98,8 +104,7 @@ export default function StoryModal({open,children,story,user}) {
         </IconButton>
     </button>
      </div>
-{/*   
-        <Box 
+{/*   <Box 
         sx={{width:"100%"}}>
           {children}
           
@@ -122,8 +127,6 @@ export default function StoryModal({open,children,story,user}) {
         </IconButton>
     </button>
      </div> */}
-   
-    
       </Modal>
    </div>
   );

@@ -99,8 +99,6 @@ const openMenu = Boolean(anchorEl);
          <Swiper
             spaceBetween={15}
             slidesPerView={9}
-            // onSlideChange={() => console.log('slide change')}
-            // onSwiper={(swiper) => console.log(swiper)}
             >
               <SwiperSlide>
               <div className="w-[60px] h-[60px] bg-gradient-to-r from-fuchsia-500 via-red-600 to-orange-400 rounded-[30px] p-[2px]">
@@ -295,7 +293,8 @@ const openMenu = Boolean(anchorEl);
               )}</div>
             </div>
             <button onClick={()=>dispatch(setOpen(true))}>
-            <MoreHorizIcon/></button>
+            <MoreHorizIcon/>
+            </button>
             </div>
             <div>
              
@@ -392,7 +391,6 @@ const openMenu = Boolean(anchorEl);
       </Modal>
 
       {/* story Modal */}
-
     <StoryModal open={openstr} story={stories} user={user}>
     <div className="mt-[20px]"> 
       {/* <Swiper>
