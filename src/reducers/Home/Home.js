@@ -18,7 +18,8 @@ const home=createSlice({
         comments:[],
         img:null,
         openStor:[],
-        strImg:null
+        strImg:null,
+        openAddStr:false,
     },
     reducers:{
         handelChange:(state,action)=>{
@@ -44,6 +45,9 @@ const home=createSlice({
         },
         setCloseStr:(state,action)=>{
             state.openstr=false
+        },
+        setOpenAddStr:(state,action)=>{
+            state.openAddStr=action.payload
         },
     },
     extraReducers:(builder)=>{
@@ -83,4 +87,4 @@ const home=createSlice({
     }
 })
 export default home.reducer
-export const {handelChange,setOpen,setOpenCom,setCloseCom,setCloseStr,setOpenStor}=home.actions
+export const {handelChange,setOpen,setOpenCom,setCloseCom,setCloseStr,setOpenStor,setOpenAddStr}=home.actions
