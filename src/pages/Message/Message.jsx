@@ -535,17 +535,17 @@ const Message = () => {
             >
               Заблокировать
             </p>
-            <p
-              onClick={() => {
-                dispatch(deleteChat(idx));
-                dispatch(setDefaultLogoMessage(true));
-                setInfo(false);
-                dispatch(setHidePanel(false));
-              }}
-              className="delete-active text-[16px] cursor-pointer text-[#ed4956] tracking-[0.5px]"
-            >
-              Удалить чат
-            </p>
+            <Link to="/basic/message">
+              <p
+                onClick={() => {
+                  dispatch(deleteChat(idx));
+                  setInfo(false);
+                }}
+                className="delete-active text-[16px] cursor-pointer text-[#ed4956] tracking-[0.5px]"
+              >
+                Удалить чат
+              </p>
+            </Link>
           </div>
         </div>
       </div>
