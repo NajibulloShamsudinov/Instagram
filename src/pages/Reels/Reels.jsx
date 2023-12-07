@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 //emoj
 import { getToken } from "../../utils/token";
 
-
+import { users } from "../../api/home/home";
 import CircularProgress from "@mui/material/CircularProgress";
 import CloseIcon from "@mui/icons-material/Close";
 //modal-dialog
@@ -56,8 +56,10 @@ import {
   getData1,
   deleteComment,
   addFollowing,
+  unFollowing,
 } from "../../api/reels/Reels";
 import { blue } from "@mui/material/colors";
+import { getSubsciptions } from "../../api/profile/profile";
 // import { handlModal } from "../../reducers/reels/Reelse";
 // import { handlModal1 } from "../../reducers/reels/Reelse";
 
@@ -73,6 +75,10 @@ const Reels = () => {
   const userId = getToken().sid;
   console.log(userId);
 
+  //
+  const user = useSelector(({ home }) => home.user)
+  const unfollow = useSelector(({ profile }) => profile.subsciptions);
+  console.log(unfollow);
 
   const [open1, setOpen1] = React.useState(false);
   const handleOpen1 = () => setOpen1(true);
@@ -97,7 +103,7 @@ const Reels = () => {
     setScroll(scrollType);
   };
 
-  const [nabi,setNabi] = useState(false)
+  const [nabi, setNabi] = useState(false);
 
   const handleClose = () => {
     setOpen(false);
@@ -109,6 +115,7 @@ const Reels = () => {
   const handlModal1 = () => {
     setModal2(false);
   };
+  let userById = null;
 
   const descriptionElementRef = React.useRef(null);
   React.useEffect(() => {
@@ -131,7 +138,7 @@ const Reels = () => {
   }, [open2]);
 
   const posts = useSelector((store) => store.reels.posts);
-  const users = useSelector((store) => store.reels.users);
+  const users1 = useSelector((store) => store.reels.users);
   let load = useSelector((store) => store.reels.loading);
   // console.log(posts);
   // const modal2 = useSelector((store) => store.reels.modal2);
@@ -139,7 +146,6 @@ const Reels = () => {
   const [modal2, setModal2] = useState(null);
   const [idSave, setIdSave] = useState(null);
   const modalUs = (id) => {
-  
     setIdSave(id);
     setModal2(true);
     setOpen(false);
@@ -148,14 +154,14 @@ const Reels = () => {
 
   const dispatch = useDispatch();
 
-  // const PostImagesApi = "http://65.108.148.136:8085/";
-
   // const [counter, setCounter] = useState(0)
-  console.log(users.length);
+  console.log(users1.length);
   useEffect(() => {
     dispatch(getData());
     dispatch(getData1());
-  }, [dispatch]);
+    dispatch(users());
+    dispatch(getSubsciptions(userId));
+  }, [dispatch, unfollow,unFollowing,addFollowing]);
   return (
     <div className="mt-0 flex flex-col gap-14  px-[30%]">
       <div className="flex items-end gap-4">
@@ -238,28 +244,63 @@ const Reels = () => {
                 controls
                 muted
               ></video>
-              <div></div>
-              <div className="absolute ml-[19%] mb-[5%]">
-                {/* {nabi && elem.postFavorite ? (
-                  <button
-                    className="text-[white] p-1 w-[80px] rounded-lg border-[1px] border-[white]"
-                    onClick={() => {
-                      setNabi(!nabi);
-                      dispatch(addFollowing(elem.postId));
-                    }}
-                  >
-                    Folow
-                  </button>
-                ) : (
-                  <button onClick={() => setNabi(!nabi)}>Unfollow</button>
-                )} */}
-
-                <p>{elem.postView}</p>
+              <div className=" absolute text-[white] mb-[5.5%] pl-[1%] ">
+             
+                {user.map((element) => {
+                  return elem.userId == element.id ? (
+                    <div className="flex items-center ">
+                      <img
+                       className="w-[40px] h-[40px] rounded-[50%] mr-4"
+                        src={`${import.meta.env.VITE_APP_FILES_URL}${
+                          element.avatar
+                        }`}
+                        alt=""
+                      />
+                      <h1 className="font-bold"> {element.userName} </h1>
+                      <div className="ml-[290px]  absolute">
+                        {element.subscriptions ? (
+                          <button
+                            
+                            className="text-[white]  p-1 w-[80px] rounded-lg  border-[1px] border-[white]"
+                            onClick={() => {
+                          
+                              // console.log();
+                              dispatch(
+                                unFollowing(
+                                  unfollow.filter((e) =>
+                                    e.userShortInfo.userId == elem.userId
+                                      ? e.id
+                                      : null
+                                  )[0].id
+                                )
+                              );
+                            }}
+                          >
+                            UnFollow
+                          </button>
+                        ) : (
+                          <button
+                            className="text-[white]  p-1 w-[80px] rounded-lg  border-[1px] border-[white]"
+                            onClick={() => {
+                            
+                              dispatch(addFollowing(element.id));
+                            }}
+                          >
+                            Folow
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  ) : null;
+                })}
               </div>
 
-              {console.log(nabi)}
+              <div className="absolute ml-[19%] mb-[5%]">
+                <p>{elem.subscribersCount}</p>
+              </div>
+
               <div className="flex flex-col ml-8 items-center gap-3">
-                <div className="flex flex-col cursor-pointer items-center">
+                <div className="flex flex-col cursor-pointer items-center ">
                   {elem.postLike ? (
                     <FavoriteIcon
                       color="error"
@@ -275,8 +316,9 @@ const Reels = () => {
                   <p>{elem.postLikeCount}</p>
                 </div>
                 <div className="flex flex-col items-center">
-                  <span className="pb-2">
+                  <span >
                     <Button
+                      // style={{dark:"red"}}
                       sx={{ color: "black" }}
                       onClick={() =>
                         handleClickOpen(
@@ -306,6 +348,7 @@ const Reels = () => {
                       </svg>
                     </Button>
                   </span>
+
                   <div>
                     <p>{elem.commentCount}</p>
                   </div>
@@ -419,7 +462,7 @@ const Reels = () => {
                   checkedIcon={<BookmarkIcon />}
                 />
 
-                <span>
+                <span className=" cursor-pointer">
                   <svg
                     onClick={() => dispatch(handleOpen1())}
                     aria-label="Дополнительно"
@@ -439,9 +482,7 @@ const Reels = () => {
               </div>
               <div>
                 <div className="flex  justify-end ">
-                  <div>
-                    <React.Fragment></React.Fragment>
-                  </div>
+                  <div></div>
                 </div>
               </div>
             </div>
@@ -501,7 +542,7 @@ const Reels = () => {
                       comments.map((ele) => (
                         <p className="text-black">
                           <div>
-                            {users.map((elem) => {
+                            {users1.map((elem) => {
                               return (
                                 <div>
                                   {ele.userId == elem.id ? (
