@@ -11,6 +11,12 @@ import {
   setUserChat,
   setMessageText,
   setChatIdAdd,
+  setDefaultLogoMessage,
+  setChatsFullname,
+  setChatsUserPhoto,
+  setHidePanel,
+  setChatsId,
+  setChatsUserId,
 } from "../../reducers/Message/Message";
 import ModalUsers from "../../components/Message/ModalUsers";
 import NewMessage from "../../icons/Message/NewMessage";
@@ -52,10 +58,21 @@ const Message = () => {
   const dataChatById = useSelector((store) => store.message.dataChatById);
   const messageText = useSelector((store) => store.message.messageText);
   const chatIdAdd = useSelector((store) => store.message.chatIdAdd);
+  const chatsId = useSelector((store) => store.message.chatsId);
+  const chatsUserId = useSelector((store) => store.message.chatsUserId);
+
+  const defaultLogoMessage = useSelector(
+    (store) => store.message.defaultLogoMessage
+  );
+  const hidePanel = useSelector((store) => store.message.hidePanel);
+  const chatsFullname = useSelector((store) => store.message.chatsFullname);
+  const chatsUserPhoto = useSelector((store) => store.message.chatsUserPhoto);
 
   const [info, setInfo] = useState(false);
 
-  const myUd = getToken().sid;
+  const myToken = getToken().sid;
+
+  console.log(myToken);
 
   const handleInfo = () => {
     setInfo(!info);
@@ -63,11 +80,12 @@ const Message = () => {
 
   let location = useLocation();
 
+  const [panelMessage, setPanelMessage] = useState(false);
+
   useEffect(() => {
     dispatch(getChats());
     dispatch(getUsersSearch());
     dispatch(getChatById());
-    dispatch(sendMessage());
   }, [dispatch, search]);
 
   return (
@@ -94,7 +112,13 @@ const Message = () => {
                 <NavLink to="newMessage">
                   <div
                     onClick={() => {
+                      dispatch(setChatsFullname(e.receiveUser.fullname));
+                      dispatch(setChatsUserPhoto(e.receiveUser.userPhoto));
+                      dispatch(setHidePanel(true));
                       dispatch(getChatById(e.chatId));
+                      dispatch(setChatsId(e.chatId));
+                      dispatch(setChatsUserId(e.receiveUser.userId));
+                      dispatch(setDefaultLogoMessage(false));
                     }}
                     key={e.id}
                     className="
@@ -105,7 +129,6 @@ const Message = () => {
                         src={e.receiveUser.userPhoto}
                         sx={{ width: "56px", height: "56px" }}
                       />
-
                       <div className="wrapper-text">
                         <p className="text-[14px]">{e.receiveUser.userName}</p>
                         <div className="wrapper-text flex items-end gap-[10px]">
@@ -128,11 +151,15 @@ const Message = () => {
               path="newMessage"
               element={
                 <>
-                  <div className="panel-control flex justify-between items-center p-[20px] border-b-[1px]">
+                  <div
+                    className={`${
+                      hidePanel ? "flex" : "hidden"
+                    } panel-control flex justify-between items-center p-[20px] border-b-[1px]`}
+                  >
                     <div className="user flex items-center gap-[15px] cursor-pointer w-[30%]">
-                      <Avatar src={userMessage} />
+                      <Avatar src={chatsUserPhoto} />
                       <div className="wrapper-text">
-                        <p className="text-[14px]">Najibullo Shamsudinov</p>
+                        <p className="text-[14px]">{chatsFullname}</p>
                         <p className="text-[12px] text-[#737373]">В сети</p>
                       </div>
                     </div>
@@ -149,17 +176,18 @@ const Message = () => {
                       </button>
                     </div>
                   </div>
-                  <div className="wrapper-input fixed w-[66%] bottom-0">
+                  <div className="wrapper-input fixed w-[66%] z-50 bottom-0">
                     <form
                       onSubmit={(event) => {
                         event.preventDefault();
-                        console.log(chatIdAdd);
                         dispatch(
                           sendMessage({
                             chatId: chatIdAdd,
                             messageText: messageText,
                           })
                         );
+                        dispatch(setMessageText(""));
+                        console.log(chatIdAdd);
                       }}
                       className={`${
                         info ? "w-[77%]" : "w-full"
@@ -198,10 +226,25 @@ const Message = () => {
           </Routes>
           <div
             className={`${
-              location.pathname === "/basic/message/newMessage"
+              defaultLogoMessage ? "flex" : "hidden"
+            } wrapper-loading flex-col gap-[10px] justify-center items-center pt-[150px]`}
+          >
+            <LoadingMessage style={{ width: "96px", height: "96px" }} />
+            <p className="text-[20px]">Ваши сообщения</p>
+            <p className="text-[14px] text-[#737373]">
+              Отправляйте личные фото и сообщения другу или группе
+            </p>
+            <button className="bg-[#0095f6] text-[#fff] text-[14px] font-[600] px-[16px] py-[6px] rounded-[8px] hover:bg-[#0065e0d4] transition-all duration-100">
+              Отправить сообщение
+            </button>
+          </div>
+          <div
+            className={`${
+              location.pathname === "/basic/message/newMessage" ||
+              defaultLogoMessage
                 ? "hidden"
                 : "flex"
-            } wrapper-loading flex-col gap-[10px] justify-center items-center h-[100vh]`}
+            } wrapper-loading flex-col gap-[10px] justify-center items-center py-[170px]`}
           >
             <LoadingMessage style={{ width: "96px", height: "96px" }} />
             <p className="text-[20px]">Ваши сообщения</p>
@@ -221,17 +264,54 @@ const Message = () => {
                 : "h-[auto]"
             } wrapper-chat overflow-auto p-[20px]`}
           >
-            <div className="wrapper-message flex flex-col-reverse gap-[20px]">
+            <div
+              className={`${
+                location.pathname === "/basic/message" ? "hidden" : "flex"
+              } wrapper-message flex-col-reverse gap-[20px]`}
+            >
               {dataChatById.map((e) => {
                 dispatch(setChatIdAdd(e.chatId));
 
                 return (
-                  <div className="message flex items-center gap-[10px]">
-                    <Avatar />
-                    <p className="bg-[#00000010] inline rounded-[20px] p-[5px] px-[10px]">
-                      {e.messageText}
-                    </p>
-                  </div>
+                  <>
+                    <div
+                      className={`message-user flex w-full items-center gap-[10px] ${
+                        chatsUserId === e.userId
+                          ? "justify-start"
+                          : "justify-end"
+                      }`}
+                    >
+                      <div
+                        key={e.messageId}
+                        onClick={() => setPanelMessage(true)}
+                        className="panel-message"
+                      >
+                        <p>...</p>
+                      </div>
+                      <Avatar
+                        src={chatsUserPhoto}
+                        sx={{
+                          display: myToken !== e.userId ? "flex" : "none",
+                        }}
+                      />
+                      <p
+                        className={`${
+                          myToken !== e.userId
+                            ? "bg-[#00000010]"
+                            : "bg-[#3797f0] text-[#fff]"
+                        } bg-[#00000010] inline rounded-[20px] p-[5px] px-[10px]`}
+                      >
+                        {e.messageText}
+                      </p>
+                      <div
+                        className={`${
+                          panelMessage ? "block" : "hidden"
+                        } modal-panel-message bg-[#000]`}
+                      >
+                        <p>Копировать</p>
+                      </div>
+                    </div>
+                  </>
                 );
               })}
             </div>
@@ -255,16 +335,20 @@ const Message = () => {
                 return ( */}
             <div className="user flex items-center gap-[10px] py-[10px] px-[20px] hover:bg-[#00000005] cursor-pointer transition-all duration-100">
               <Avatar
-                // src={e.receiveUser.userPhoto}
+                src={chatsUserPhoto}
                 sx={{ width: "56px", height: "56px" }}
               />
-              <p className="text-[14px] font-[600]">Sharipov Amir</p>
+              <p className="text-[14px] font-[600]">{chatsFullname}</p>
             </div>
             {/* );
               }
             })} */}
           </div>
-          <div className="panel-control flex flex-col gap-[20px] p-[20px] border-t-[1px]">
+          <div
+            className={`${
+              hidePanel ? "flex" : "hidden"
+            } panel-control flex flex-col gap-[20px] p-[20px] border-t-[1px]`}
+          >
             <p className="text-[16px] cursor-pointer text-[#ed4956] tracking-[0.5px]">
               Пожаловать
             </p>
@@ -273,7 +357,8 @@ const Message = () => {
             </p>
             <p
               onClick={() => {
-                dispatch(deleteChat(chatId));
+                dispatch(deleteChat(chatsId));
+                dispatch(setDefaultLogoMessage(true));
                 console.log();
               }}
               className="delete-active text-[16px] cursor-pointer text-[#ed4956] tracking-[0.5px]"

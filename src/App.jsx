@@ -4,7 +4,7 @@ import Home from "./pages/Home/Home";
 import Explore from "./pages/Explore/Explore"; 
 import Reels from "./pages/Reels/Reels"; 
 import Message from "./pages/Message/Message"; 
-import Notifications from "./pages/Notifications/Notifications"; 
+// import Natification from "./pages/natification/Natification";
 import Profile from "./pages/Profile/Profile"; 
 import Settings from "./pages/Settings/Settings";
 import { createBrowserRouter, RouterProvider } from "react-router-dom"; 
@@ -13,6 +13,7 @@ import Registration from "./pages/Registration/Registration";
 import UserProfile from "./pages/User/userProfile";
  
 export const App = () => { 
+
   const router = createBrowserRouter([ 
     { 
       path: "/", 
@@ -38,10 +39,10 @@ export const App = () => {
           path: "message/*", 
           element: <Message />, 
         }, 
-        { 
-          path: "notifications", 
-          element: <Notifications />, 
-        }, 
+        // { 
+        //   path: "notifications", 
+        //   element: <Notifications />, 
+        // }, 
         { 
           path: "profile", 
           element: <Profile />, 
@@ -62,7 +63,7 @@ export const App = () => {
       path: "/registration", 
       element: <Registration />, 
     }, 
-  ]); 
+   ]); 
  
   return <RouterProvider router={router} />; 
 };
