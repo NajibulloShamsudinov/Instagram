@@ -149,7 +149,7 @@ const openMenu = Boolean(anchorEl);
         {/*  */}
      
      {/* POSTS */}
-    <div className="my-[10vh]">
+    <div className="my-[3vh]">
       {
      data.map((e)=>{
       return (
