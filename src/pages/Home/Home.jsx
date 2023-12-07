@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { get, users,likes, story, addCom, delCom } from "../../api/home/home";
-import { handelChange, setCloseCom, setOpen, setOpenCom,setCloseStr,setOpenStor } from "../../reducers/Home/Home";
+import { handelChange, setCloseCom, setOpen, setOpenCom,setCloseStr,setOpenStor,setOpenAddStr } from "../../reducers/Home/Home";
 import Checkbox from '@mui/material/Checkbox';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -23,8 +23,12 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import StoryModal from "../../components/home/Stories";
 import AddIcon from '@mui/icons-material/Add';
+import {AddStr} from "../../components/home/AddStr";
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { Pagination } from 'swiper/modules';
 import 'swiper/css';
+import 'swiper/css/pagination';
+
 
 const style = {
   position: 'absolute',
@@ -58,13 +62,13 @@ function Home () {
   const openCom=useSelector(({home})=>home.openCom)
   const com=useSelector(({home})=>home.com)
   const comEl=useSelector(({home})=>home.comEl)
-  const name=useSelector(({home})=>home.name)
   const img=useSelector(({home})=>home.img)
   const strImg=useSelector(({home})=>home.strImg)
   const comments=useSelector(({home})=>home.comments)
   const openstr=useSelector(({home})=>home.openstr)
   const openStor=useSelector(({home})=>home.openStor)
-  console.log(openStor);
+  const openAddStr=useSelector(({home})=>home.openAddStr)
+ 
 
   const dispatch=useDispatch()
 
@@ -86,19 +90,20 @@ const openMenu = Boolean(anchorEl);
   return (
     <div className="p-[20px] pb-[10vh]  mx-auto w-[1280px]">
       <div className="flex justify-between ">
-        <div className="w-[65%]">
 
+        {/* Left side */}
+
+        <div className="w-[65%]">
           {/* stories */}
          <div className="mx-[80px]">
          <Swiper
             spaceBetween={15}
             slidesPerView={9}
-            // onSlideChange={() => console.log('slide change')}
-            // onSwiper={(swiper) => console.log(swiper)}
             >
               <SwiperSlide>
-              <div className="w-[60px] h-[60px] bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-[30px] p-[2px]">
-              <button className="rounded-[30px] w-[55px] h-[55px] border-[2px] border-[white] bg-[white]" >
+              <div className="w-[60px] h-[60px] bg-gradient-to-r from-fuchsia-500 via-red-600 to-orange-400 rounded-[30px] p-[2px]">
+              <button onClick={()=>dispatch(setOpenAddStr(true))}
+              className="rounded-[30px] w-[55px] h-[55px] border-[2px] border-[white] bg-[white]" >
                 <AddIcon className="text-black"/>
               </button>
               
@@ -111,9 +116,17 @@ const openMenu = Boolean(anchorEl);
               <SwiperSlide>
                <button onClick={()=>dispatch(setOpenStor(e))}>
                <div  className="text-center">
-              <div className="w-[60px] bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-[30px] p-[2px]">
-              <img src="https://cdn2.iconfinder.com/data/icons/instagram-ui/48/jee-75-512.png"
-              className="rounded-[30px] border-[2px] border-[white] bg-[white]"  alt="" />
+              <div className="w-[60px] bg-gradient-to-r from-fuchsia-500 via-red-600 to-orange-400 rounded-[30px] p-[2px]">
+              <img src=
+                {e.userAvatar == "" ||
+                e.userAvatar == null ? (
+                    "https://w7.pngwing.com/pngs/178/595/png-transparent-user-profile-computer-icons-login-user-avatars-thumbnail.png"
+                  ) : (
+                    `${
+                      import.meta.env.VITE_APP_FILES_URL
+                    }${e?.userAvatar}`
+                  )}
+              className="rounded-[30px] h-[55px] border-[2px] border-[white] bg-[white]"  alt="" />
               </div>
               <span className="text-[12px]">
               {user.map(element => {
@@ -130,20 +143,30 @@ const openMenu = Boolean(anchorEl);
         </Swiper>
          </div>
         {/*  */}
-
-    <div className="my-[10vh] ">
+     
+     {/* POSTS */}
+    <div className="my-[10vh]">
       {
      data.map((e)=>{
       return (
         <div key={e.postId} className="w-[500px] h-auto m-auto my-[40px]">
            <div className="flex justify-between">
              <div  className="flex items-center gap-[4px]">
-             <div className="w-[40px] bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-[30px] p-[2px]">
-              <img src="https://cdn2.iconfinder.com/data/icons/instagram-ui/48/jee-75-512.png"
+             <div className="w-[44px] bg-gradient-to-r from-fuchsia-500 via-red-600 to-orange-400 rounded-[30px] p-[2px]">
+              <Avatar  src={user.map((elem)=>{
+                 return elem.avatar == "" ||
+                elem.avatar == null ? (
+                "https://w7.pngwing.com/pngs/178/595/png-transparent-user-profile-computer-icons-login-user-avatars-thumbnail.png"
+                ) : (
+                   `${
+                      import.meta.env.VITE_APP_FILES_URL
+                    }${elem?.avatar}`  
+                 )
+              })}
               className="rounded-[30px] border-[2px] border-[white] bg-[white]"  alt="" />
               </div>
              <span className="text-[14px] font-semibold">
-              {user.map(element => {
+              {user?.map(element => {
                 return e.userId == element.id ? <div> {element.userName} </div>: null
               })}
              </span>
@@ -156,8 +179,10 @@ const openMenu = Boolean(anchorEl);
         <Swiper
          spaceBetween={15}
          slidesPerView={1}
-         onSlideChange={() => console.log('slide change')}
-         onSwiper={(swiper) => console.log(swiper)}
+         pagination={{
+          dynamicBullets: true,
+        }}
+        modules={[Pagination]}
         >
           
           {e.images.map((el)=>{
@@ -171,7 +196,7 @@ const openMenu = Boolean(anchorEl);
         </Swiper>
         </div>
         <div className="p-[2px]">
-        <div className="flex justify-between">
+        <div className="flex justify-between items-center">
          <div className="flex gap-[2px] items-center">
         <div className="text-center">
           {
@@ -179,13 +204,15 @@ const openMenu = Boolean(anchorEl);
        (<FavoriteBorderIcon sx={{":hover":{color:"red"}}} onClick={()=>dispatch(likes(e.postId))} /> )
           }
         </div>
-        <Button onClick={() => dispatch(setOpenCom(e))}
-        ><ModeCommentOutlinedIcon/></Button>
+        <button className="dark:text-[white] ml-[10px]" onClick={() => dispatch(setOpenCom(e))}
+        ><ModeCommentOutlinedIcon/></button>
          </div>
+          <button className="dark:text-[white]">
           <Checkbox
-         icon={<BookmarkBorderIcon />}
-           checkedIcon={<BookmarkIcon />}
-         />
+          icon={<BookmarkBorderIcon className="dark:text-[white]" />}
+            checkedIcon={<BookmarkIcon />}
+          />
+          </button>
         </div>
         <p className="font-semibold">{e.postLikeCount>0?e.postLikeCount+" "+"отметок Нравится":null}</p>
          <div className="flex gap-[5px]"> 
@@ -198,14 +225,19 @@ const openMenu = Boolean(anchorEl);
         <h1 className="text-[grey] mt-[2px]" onClick={()=>dispatch(setOpenCom(e))}>
           Посмотреть все комментарии ({e.commentCount})</h1>
         <div className="my-[5px]">
-          <input type="text" className="py-[5px] bg-transparent w-[300px] outline-none" placeholder="Добавьте комментарий..." />
+          {/* dispatch(addCom({comment:com,postId:comEl.postId}) */}
+          <input type="text" 
+         className="py-[5px] bg-transparent w-[300px] outline-none" placeholder="Добавьте комментарий..." />
+        
         </div>
         </div>
       )
      })
      }</div>
+     {/*  */}
         </div>
-        {/* modals */}
+        
+        {/* modals seting */}
         <ModalSetings children open={open}>
         <button onClick={() => dispatch(setOpen(false))}>Отмена</button>
         </ModalSetings>
@@ -220,31 +252,37 @@ const openMenu = Boolean(anchorEl);
             <List sx={{display:"flex"}}> 
             
            <div className="w-[60%] text-center">
+           {/* <Swiper  spaceBetween={1}
+         slidesPerView={1}
+         pagination={{
+          dynamicBullets: true,
+        }}
+        modules={[Pagination]}>
+           <SwiperSlide> */}
            {
             !`${import.meta.env.VITE_APP_FILES_URL}${img}`.includes(".mp4")?
             <img src={`${import.meta.env.VITE_APP_FILES_URL}${img}`} 
             alt="" className="w-[auto] h-[600px] m-auto" />
             : <video controls className="w-[100%] h-[600px]" 
             src={`${import.meta.env.VITE_APP_FILES_URL}${img}`}></video>
-           } 
+           }
+           {/* </SwiperSlide>
+           </Swiper>  */}
            </div>
 
             <div className="w-[60%] pl-[3%]">
              <div className="flex justify-between items-center border-b-2 pb-4 w-[100%] px-[10px]">
              <div className="flex items-center gap-[5px]">
-              <div className="w-[45px] bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-[30px] p-[2px]">
-              <Avatar alt="Remy Sharp" src={user.map((elem)=>{
+              <div className="w-[45px] bg-gradient-to-r from-fuchsia-500 via-red-600 to-orange-400 rounded-[30px] p-[2px]">
+              <Avatar  src={user.map((elem)=>{
                 { return elem.avatar == "" ||
                 elem.avatar == null ? (
-                  <img
-                    src="https://w7.pngwing.com/pngs/178/595/png-transparent-user-profile-computer-icons-login-user-avatars-thumbnail.png"
-                    alt=""
-                  />) : (<img
-                    src={`${
+                "https://w7.pngwing.com/pngs/178/595/png-transparent-user-profile-computer-icons-login-user-avatars-thumbnail.png"
+                ) : (
+                   `${
                       import.meta.env.VITE_APP_FILES_URL
-                    }${elem?.avatar}`} 
-                    alt=""
-                  />)}
+                    }${elem?.avatar}`  
+                 )}
               })}
               className="rounded-[30px] border-[2px] border-[white] bg-[white]" />
               </div>
@@ -255,7 +293,8 @@ const openMenu = Boolean(anchorEl);
               )}</div>
             </div>
             <button onClick={()=>dispatch(setOpen(true))}>
-            <MoreHorizIcon/></button>
+            <MoreHorizIcon/>
+            </button>
             </div>
             <div>
              
@@ -270,44 +309,54 @@ const openMenu = Boolean(anchorEl);
                         <p>Начните переписку </p>
                       </div>
                     ) : (
-                      comments.map((ele) => (
-                        <p className="text-black">
-                          <div className="flex items-center">
-                            {user.map((elem) => {
-                              return (
-                                <div>
-                                  {ele.userId == elem.id ? (
-                                    <div className="flex gap-2 my-[10px]">
-                                      {elem.avatar == "" ||
-                                      elem.avatar == null ? (
-                                        <img
-                                          className="w-[8%] rounded-[20px]"
-                                          src="https://w7.pngwing.com/pngs/178/595/png-transparent-user-profile-computer-icons-login-user-avatars-thumbnail.png"
-                                          alt=""
-                                        />) : (<img
-                                          src={`${
-                                            import.meta.env.VITE_APP_FILES_URL
-                                          }${elem?.avatar}`} className="w-[10%] rounded-[30px]"
-                                          alt=""
-                                        />)}
-                                      <p>{elem.userName}</p>
-                                       {ele.comment}
+                      <div className="w-[100%]">
+                        {
+                          comments.map((ele) => (
+                              <div className="flex justify-between items-center">
+                                <div className="flex items-center my-[10px]">
+                                {user.map((elem) => {
+                                  return (
+                                    <div>
+                                      {ele.userId == elem.id ? (
+                                          <div className="flex gap-2 items-center">
+                                          <Avatar  src={
+                                     elem.avatar == "" ||
+                                   elem.avatar == null ? (
+                             "https://w7.pngwing.com/pngs/178/595/png-transparent-user-profile-computer-icons-login-user-avatars-thumbnail.png"
+                        ) : (
+                        `${
+                          import.meta.env.VITE_APP_FILES_URL
+                        }${elem?.avatar}`
+                      )
+                  }
+                  className="rounded-[30px] border-[2px] border-[white]" />
+                                          <p>{elem.userName}</p>
+                                           <p>{ele.comment}</p>
+                                          </div>
+                                        
+                                      ) : null}
                                     </div>
-                                  ) : null}
-                                </div>
-                              );
-                            })}
-                             {/* <button style={{"hover":{
-                              color:"black"
-                             },color:"white"}} aria-controls={openMenu ? 'basic-menu' : undefined}
-                         aria-haspopup="true"
-                         aria-expanded={openMenu ? 'true' : undefined}
-                         onClick={handleClick}><MoreHorizIcon/></button> */}
-                         <FavoriteBorderIcon />
+                                  );
+                                })}
+                                 {/* <button style={{"hover":{
+                                  color:"black"
+                                 },color:"white"}} aria-controls={openMenu ? 'basic-menu' : undefined}
+                             aria-haspopup="true"
+                             aria-expanded={openMenu ? 'true' : undefined}
+                             onClick={handleClick}><MoreHorizIcon/></button> */}
+                            
+                              </div>
+                              <div >
+                          <FavoriteBorderIcon sx={{":hover":{
+                            color:"red"
+                          }}} />
                           </div>
-                        </p>
-                      ))
-                    )}
+                              </div>
+                              
+                          ))
+                        }
+                      </div>
+                      )}
                          </div>
 
              {/* for delet */}
@@ -342,10 +391,9 @@ const openMenu = Boolean(anchorEl);
       </Modal>
 
       {/* story Modal */}
-
-    <StoryModal open={openstr}>
+    <StoryModal open={openstr} story={stories} user={user}>
     <div className="mt-[20px]"> 
-      <Swiper>
+      {/* <Swiper>
          {
           user.map((e)=>{
            return e.id==openStor.userId? (
@@ -362,14 +410,17 @@ const openMenu = Boolean(anchorEl);
             :null
           })
          }
-         </Swiper>
+         </Swiper> */}
          {/* <div className="my-[10%]">
             <input type="text" placeholder="add hello" />
            </div> */}
            </div> 
           
-    
     </StoryModal>
+
+    <AddStr 
+        open={openAddStr}>
+    </AddStr>
         
         {/* right side */}
        

@@ -91,3 +91,18 @@ export const sendMessage = createAsyncThunk(
     }
   }
 );
+
+// Async DELETE-MESSAGE
+export const deleteMessage = createAsyncThunk(
+  "message/deleteMessage",
+  async function (messageId, { dispatch, rejectWithValue }) {
+    try {
+      const { data } = await axiosRequest.delete(
+        `Chat/delete-message?massageId=${messageId}`
+      );
+      dispatch(getChatById());
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
