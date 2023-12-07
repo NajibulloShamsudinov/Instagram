@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useState, useEffect } from "react";
 import "../App.css";
 import { useSelector, useDispatch } from "react-redux";
@@ -14,7 +14,7 @@ import img from "/src/assets/images/polzovatel.jpg"
 
 import MoreModal from "../components/Layout/MoreModal";
 import CreateModal from "../components/Layout/CreateModal";
-import { Link, Outlet, NavLink, useLocation } from "react-router-dom";
+import { Link, Outlet, NavLink, useLocation, useNavigate } from "react-router-dom";
 import logo from "../assets/icons/instagram-wordmark.svg";
 import navHome from "../assets/icons/nav-home.svg";
 import navReels from "../assets/icons/nav-reels.svg";
@@ -57,6 +57,17 @@ export const Layout = () => {
   const modalCreate = useSelector((store) => store.layout.modalCreate);
   const searchinp = useSelector((store) => store.searchred.searchinp)
   const search = useSelector((store) => store.searchred.search)
+
+  const Navigate=useNavigate()
+
+  const hide =useRef(null)
+
+  function handletarget(event){
+    console.log(event.target);
+    console.log(hide);
+    if(event.target!=hide.current)
+    dispatch(setModalSearch(false));
+  }
 
   const toggleModalSearch = () => {
     dispatch(setModalSearch(!modalSearch));
@@ -246,8 +257,10 @@ export const Layout = () => {
                   <div key={el.id} className="flex items-center pr-[1%] justify-between">
                    
                     <div  className="flex hover:cursor-pointer  items-center gap-2">
-                      <img className="rounded-full w-[50px]" src={el.avatar ? el.avatar :img } alt="" />
-                      <div onClick={()=>dispatch(postuser(el.id))} className="">
+                      <img className="rounded-full w-[50px]" src={el.avatar !=null ? `${
+                                            import.meta.env.VITE_APP_FILES_URL
+                                          }${el.avatar}` :img } alt="" />
+                      <div onClick={()=>{dispatch(postuser(el.id)),Navigate(`user/${el.id}`)}} className="">
                         <h1 className="font-semibold text-[14px]">{el.users.userName}</h1>
                         <p className="text-[grey] text-[14px] font-semibold">{}</p>
                       </div>             
@@ -268,7 +281,7 @@ export const Layout = () => {
                    
                     <div  className="flex hover:cursor-pointer  items-center gap-2">
                       <img className="rounded-full w-[50px]" src={el.avatar ? el.avatar :img } alt="" />
-                      <div onClick={()=>dispatch(postuser(el.id))} className="">
+                      <div onClick={()=>{dispatch(postuser(el.id)),Navigate(`user/${el.id}`)}} className="">
                         <h1 className="font-semibold text-[14px]">{el.userName}</h1>
                         <p className="text-[grey] text-[14px] font-semibold">{}</p>
                       </div>             
@@ -285,7 +298,7 @@ export const Layout = () => {
       </div>
 
       {/* Контентная часть */}
-      <aside className="right w-[100%]">
+      <aside onClick={handletarget} ref={hide}  className="right w-[100%]">
         <Outlet />
         {/* Футер */}
 

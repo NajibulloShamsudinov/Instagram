@@ -10,6 +10,18 @@ import img1 from "/src/assets/images/polzovatel.jpg"
 import { handleChange } from "../../reducers/post/post";
 import {getToken} from "../../utils/token"
 
+import CloseIcon from '@mui/icons-material/Close';
+
+
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+import 'swiper/css';
+import 'swiper/css/navigation';
+
+
+import { Navigation } from 'swiper/modules';
+import { setModalCreate } from "../../reducers/Layout/Layout";
+
 
 const CreateModal = (props) => {
   let dispatch = useDispatch();
@@ -20,32 +32,59 @@ const CreateModal = (props) => {
 
 
 
+
   const [next,setNext]=useState(false)
-  let [img, setImg] = useState("");
+  let [img, setImg] = useState(null);
   let [inpcontent, setInpcontent] = useState("");
   let [inptitle, setInptitle] = useState("");
-  let [inpimg,setInpimg]=useState("")
+  let [inpimg,setInpimg]=useState(null)
 
   const userId = getToken()?.sid
   
+  let arrimg=[]
   let handlImg = async (event) => {
-  let file= await fileToBase64(event.target.files[0])
-
-    setImg(event.target.files[0]);
-    setInpimg(file)
+    for(let i=0;i<event.target.files.length;i++){
+      arrimg.push(event.target.files[i])
+      
+    }
+    // console.log(arrimg.map((el)=>el.name));
+    setImg(arrimg);
+    // setInpimg(arrimg.map((el)=>el.name))
   };
+
+  const handlepost =async (files)=>{
+     let arr1=[]
+    for (let i = 0; i < files.length; i++) {
+      let file= await fileToBase64(files[i])
+      arr1.push({
+        id:Date.now(),
+        img:file
+      })
+       
+    
+    }
+    setInpimg(arr1)
+   console.log(inpimg);
+  
+  }
+
 
   const handlesubmit =()=>{
     let form =new FormData()
-    form.append("images",img)
+    // form.append("images",img)
     form.append("title",inptitle)
     form.append("content",inpcontent)
-
+    for(let i=0;i<img.length;i++){
+      form.append(`images`,img[i])
+    }
     dispatch(addNewPost(form))
   }
   useEffect(()=>{
     dispatch(getpost())
   },[dispatch])
+
+
+  
 
   return (
     <div>
@@ -53,9 +92,13 @@ const CreateModal = (props) => {
         className={`${
           props.modal ? "block" : "hidden"
         } modal-container bg-[#00000089] fixed z-30 w-full h-full top-0 left-0`}
+        
+        
       >
+        <div onClick={()=>dispatch(setModalCreate(false))} className="flex justify-end fixed h-[100vh] w-[100%]   ">
+        </div>
         <div className="flex justify-center items-center h-[100vh]">
-          <div style={{width:next?"50%":"36%"}} className="modal overflow-hidden bg-[#fff] rounded-[10px] w-[36%] h-[80%]">
+          <div style={{width:img==null?"36%":"50%"}} className="modal z-50 overflow-hidden dark:bg-[#262626] dark:text-white bg-[#fff] rounded-[10px] w-[36%] h-[80%]">
             <div>
               <p
                 style={{ display: img == null ? "block" : "none" }}
@@ -87,7 +130,7 @@ const CreateModal = (props) => {
                   >
                     Next
                   </p>
-                  <button style={{display:next?"block":"none"}} onClick={()=>{handlesubmit()}}  className={` text-[#4876fe] font-bold`}>Поделиться</button>
+                  <button style={{display:next?"block":"none"}} onClick={()=>{handlesubmit(),dispatch(setModalCreate(false),setImg(null),setInpcontent(""),setInptitle(""))}}  className={` text-[#4876fe] font-bold`}>Поделиться</button>
                 </div>
               </div>                                                                                 
              <div className="modal-content      ">   
@@ -107,12 +150,12 @@ const CreateModal = (props) => {
                       <label class="input-file">
                         <input
                           type="file"
-                          onChange={handlImg}
+                          onChange={(e)=>{handlImg(e),handlepost(e.target.files)}}
                           name="file"
                           multiple={true}
-                          accept=""
                         />
                         {/* <div className="flex justify-between"> */}
+                       
 
                         <img
                           style={{ display: img == null ? "none" : "block" }}
@@ -140,23 +183,41 @@ const CreateModal = (props) => {
                   </div>
                 </div>
                 <div>
-                  <div className="flex overflow-hidden ">
+                  <div className="flex w-[80%] mx-auto  items-center overflow-hidden ">
+                  <Swiper  className="mySwiper">
+                  {
+                       inpimg?.map((el)=>{
+                        console.log(el);
+                        return(
 
-                  <img
-                    style={{ display: img == null ? "none" : "block",width:next?"60%":"100%" }}
-                    className=" w-[100%] h-[100%]  p-[1%]                 "
-                    src={inpimg}
-                    alt=""
-                  />
+                         <SwiperSlide >
+                          <img
+                            style={{ display: img == null ? "none" : "block",width:next?"100%":"100%" }}
+                            // src={inpimg}
+                            src={el.img}
+                            alt=""
+                          />
+                          
+                         </SwiperSlide>
+       
+                        )
+
+                      })
+
+                    }
+                        </Swiper>
+
                   
-                    <div style={{display:next?"flex":"none"}} className="comment  flex-col gap-5 h-[75vh] p-[1%] w-[40%]   ">
+                    <div style={{display:next?"flex":"none"}} className="comment  flex-col gap-5 h-[75vh] p-[1%] w-[50%]   ">
                       {
                         
                         postData.map((el)=>{
                           
                          return (
                           el.id == userId?(   <div className="flex items-center gap-3">
-                          <img className="w-[30px] rounded-full" src={el.avatar ? el.avatar :img1 } alt="" />
+                          <img className="w-[30px] rounded-full" src={el.avatar ? `${
+                                            import.meta.env.VITE_APP_FILES_URL
+                                          }${el?.avatar}` :img1 } alt="" />
                           <h1 className=" font-semibold">{el.userName}</h1>
                         </div>)  :null
                    
@@ -165,8 +226,8 @@ const CreateModal = (props) => {
                       })
                     }
                       <div className="flex  flex-col gap-5">
-                        <input value={inptitle} onChange={(e)=>setInptitle(e.target.value)} className=" border-2 w-[80%] h-[50px] rounded-[2px]" type="text" />
-                        <input value={inpcontent} onChange={(e)=>setInpcontent(e.target.value)} className=" border-2 w-[80%] h-[50px] rounded-[2px]" type="text" />
+                        <input value={inptitle} onChange={(e)=>setInptitle(e.target.value)} className=" border-2 w-[100%] h-[50px] rounded-[2px]" type="text" />
+                        <input value={inpcontent} onChange={(e)=>setInpcontent(e.target.value)} className=" border-2 w-[100%] h-[50px] rounded-[2px]" type="text" />
                       </div>
 
                     </div>
