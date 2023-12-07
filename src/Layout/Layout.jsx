@@ -477,7 +477,7 @@ export const Layout = () => {
                             {element.userName}
                           </h1>
 
-                          <h1 className="bg-[] text-[12px]">liked you post</h1>
+                          <h1 className="bg-[] text-[17px] text-[12px]">liked you post</h1>
                         </div>
 
                         <button
