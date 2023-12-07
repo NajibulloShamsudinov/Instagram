@@ -5,7 +5,7 @@ import {
   createChat,
   getChatById,
   deleteChat,
-  sendMessage,
+  deleteMessage,
 } from "../../api/Message/messageApi";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
@@ -22,6 +22,12 @@ const message = createSlice({
     userChat: null,
     messageText: "",
     chatIdAdd: null,
+    defaultLogoMessage: true,
+    chatsFullname: [],
+    chatsUserPhoto: [],
+    hidePanel: false,
+    chatsId: null,
+    chatsUserId: null,
   },
   reducers: {
     setModalUsers: (state, action) => {
@@ -44,6 +50,24 @@ const message = createSlice({
     },
     setChatIdAdd: (state, action) => {
       state.chatIdAdd = action.payload;
+    },
+    setDefaultLogoMessage: (state, action) => {
+      state.defaultLogoMessage = action.payload;
+    },
+    setChatsFullname: (state, action) => {
+      state.chatsFullname = action.payload;
+    },
+    setChatsUserPhoto: (state, action) => {
+      state.chatsUserPhoto = action.payload;
+    },
+    setHidePanel: (state, action) => {
+      state.hidePanel = action.payload;
+    },
+    setChatsId: (state, action) => {
+      state.chatsId = action.payload;
+    },
+    setChatsUserId: (state, action) => {
+      state.chatsUserId = action.payload;
     },
   },
   // getChats
@@ -91,6 +115,26 @@ const message = createSlice({
     builder.addCase(getChatById.rejected, (state, action) => {
       state.loading = false;
     });
+    // deleteChat
+    builder.addCase(deleteChat.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(deleteChat.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+    builder.addCase(deleteChat.rejected, (state, action) => {
+      state.loading = false;
+    });
+    // deleteMessage
+    builder.addCase(deleteMessage.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(deleteMessage.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+    builder.addCase(deleteMessage.rejected, (state, action) => {
+      state.loading = false;
+    });
   },
 });
 
@@ -102,4 +146,10 @@ export const {
   setUserChat,
   setMessageText,
   setChatIdAdd,
+  setDefaultLogoMessage,
+  setChatsFullname,
+  setChatsUserPhoto,
+  setHidePanel,
+  setChatsId,
+  setChatsUserId,
 } = message.actions;

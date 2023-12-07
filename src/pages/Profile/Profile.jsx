@@ -83,6 +83,7 @@ const Profile = () => {
   const subsciptions = useSelector((store) => store.profile.subsciptions)
   const users = useSelector((store) => store.profile.users)
   const profileById = useSelector((store) => store.profile.profileById)
+  console.log(profileById);
 
 
 
@@ -149,15 +150,7 @@ const Profile = () => {
                 </div>
 
                 <div className="mt-[20px]">
-                  {
-                    profileById.map((e)=>{
-                      return(
-                        <div className="">
-                          <h1>{e.about}</h1>
-                        </div>
-                      )
-                    })
-                  }
+                  {profileById.about}
                 </div>
 
               </div>
@@ -359,7 +352,7 @@ const Profile = () => {
                       return (
                         <div className="flex mb-[10px] items-center">
                           {
-                            e.userShortInfo.userPhoto == "" || e.userShortInfo.userPhoto == null ? <img className="w-[15%]" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXlbMgzYw0M94bT-Sp1UGBBHLj60mz3wVtWQ&usqp=CAU" alt="" srcset="" /> : <img src={`${import.meta.env.VITE_APP_FILES_URL}${elem.images[0]}`} alt="" />
+                            e.userShortInfo.userPhoto == "" || e.userShortInfo.userPhoto == null ? <img className="w-[15%]" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXlbMgzYw0M94bT-Sp1UGBBHLj60mz3wVtWQ&usqp=CAU" alt="" srcset="" /> : <img src={`${import.meta.env.VITE_APP_FILES_URL}${e.userShortInfo.userPhoto}`} alt="" />
                           }
                           <div className="">
                             <h1>{e.userShortInfo.userName}</h1>

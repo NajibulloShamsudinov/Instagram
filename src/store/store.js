@@ -7,7 +7,7 @@ import searchred from "../reducers/search/searchred";
 import home from "../reducers/home/home";
 import message from "../reducers/Message/Message";
 import post from "../reducers/post/post";
-
+import Natification from "../reducers/natification/Natification";
 export const store = configureStore({
   reducer: {
     layout,
@@ -18,6 +18,7 @@ export const store = configureStore({
     home,
     message,
     post,
+    Natification,
   },
 });
 
