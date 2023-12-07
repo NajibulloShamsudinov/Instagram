@@ -10,6 +10,7 @@ import Settings from "./pages/Settings/Settings";
 import { createBrowserRouter, RouterProvider } from "react-router-dom"; 
 import { Layout } from "./Layout/Layout"; 
 import Registration from "./pages/Registration/Registration"; 
+import UserProfile from "./pages/User/userProfile";
  
 export const App = () => { 
   const router = createBrowserRouter([ 
@@ -45,6 +46,12 @@ export const App = () => {
           path: "profile", 
           element: <Profile />, 
         }, 
+
+        {
+          path:"user/:id",
+          element:<UserProfile/>
+        },
+
         { 
           path: "profile/account/settings",  
           element: <Settings />, 
