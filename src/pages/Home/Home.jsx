@@ -88,7 +88,7 @@ const openMenu = Boolean(anchorEl);
   };
 
   return (
-    <div className="p-[20px] pb-[10vh]  mx-auto w-[1280px]">
+    <div className="p-[20px] pb-[10vh]">
       <div className="flex justify-between ">
 
         {/* Left side */}
@@ -97,8 +97,9 @@ const openMenu = Boolean(anchorEl);
           {/* stories */}
          <div className="mx-[80px]">
          <Swiper
-            spaceBetween={15}
+            spaceBetween={25}
             slidesPerView={9}
+            style={{overflow: 'hidden'}}
             >
               <SwiperSlide>
               <div className="w-[60px] h-[60px] bg-gradient-to-r from-fuchsia-500 via-red-600 to-orange-400 rounded-[30px] p-[2px]">
@@ -110,27 +111,30 @@ const openMenu = Boolean(anchorEl);
               </div>
               </SwiperSlide>
         {
-          stories.map((e)=>{
-            // e.viewerDto?.userName? 
+          stories
+          // .filter((e)=>{
+          //   return e.fileName!=null && e.viewerDto!=null
+          // })
+          .map((e)=>{
             return (
               <SwiperSlide>
                <button onClick={()=>dispatch(setOpenStor(e))}>
                <div  className="text-center">
               <div className="w-[60px] bg-gradient-to-r from-fuchsia-500 via-red-600 to-orange-400 rounded-[30px] p-[2px]">
               <img src=
-                {e.userAvatar == "" ||
-                e.userAvatar == null ? (
+                {e.userPhoto == "" ||
+                e.userPhoto == null ? (
                     "https://w7.pngwing.com/pngs/178/595/png-transparent-user-profile-computer-icons-login-user-avatars-thumbnail.png"
                   ) : (
                     `${
                       import.meta.env.VITE_APP_FILES_URL
-                    }${e?.userAvatar}`
+                    }${e?.userPhoto}`
                   )}
               className="rounded-[30px] h-[55px] border-[2px] border-[white] bg-[white]"  alt="" />
               </div>
               <span className="text-[12px]">
               {user.map(element => {
-                return e.userId == element.id ? <div> {element.userName} </div>: null
+                return e.userId == element.id ? <div> {element.userName==null?"user":element.userName} </div>: null
               })}
               </span>
              </div>
@@ -153,17 +157,20 @@ const openMenu = Boolean(anchorEl);
            <div className="flex justify-between">
              <div  className="flex items-center gap-[4px]">
              <div className="w-[44px] bg-gradient-to-r from-fuchsia-500 via-red-600 to-orange-400 rounded-[30px] p-[2px]">
-              <Avatar  src={user.map((elem)=>{
-                 return elem.avatar == "" ||
-                elem.avatar == null ? (
-                "https://w7.pngwing.com/pngs/178/595/png-transparent-user-profile-computer-icons-login-user-avatars-thumbnail.png"
-                ) : (
-                   `${
-                      import.meta.env.VITE_APP_FILES_URL
-                    }${elem?.avatar}`  
-                 )
-              })}
-              className="rounded-[30px] border-[2px] border-[white] bg-[white]"  alt="" />
+              
+           {
+              user.map((elem)=>{
+               return  elem.id==e.userId?<Avatar src={
+                  elem.avatar == "" ||
+                  elem.avatar == null ? (
+            "https://w7.pngwing.com/pngs/178/595/png-transparent-user-profile-computer-icons-login-user-avatars-thumbnail.png"
+       ) : (
+       `${import.meta.env.VITE_APP_FILES_URL}${elem?.avatar}`
+     )
+  } className="rounded-[30px] border-[2px] border-[white] bg-[white]"  alt="" />:null
+  })
+           }
+
               </div>
              <span className="text-[14px] font-semibold">
               {user?.map(element => {
@@ -391,31 +398,7 @@ const openMenu = Boolean(anchorEl);
       </Modal>
 
       {/* story Modal */}
-    <StoryModal open={openstr} story={stories} user={user}>
-    <div className="mt-[20px]"> 
-      {/* <Swiper>
-         {
-          user.map((e)=>{
-           return e.id==openStor.userId? (
-              <SwiperSlide>
-              {
-                !`${import.meta.env.VITE_APP_FILES_URL}${strImg}`.includes(".mp4")?
-                <img src={`${import.meta.env.VITE_APP_FILES_URL}${strImg}`} 
-                alt="" className="w-[100%]" />
-                : <video controls className="" 
-                src={`${import.meta.env.VITE_APP_FILES_URL}${strImg}`}></video>
-              }
-              </SwiperSlide>
-            )
-            :null
-          })
-         }
-         </Swiper> */}
-         {/* <div className="my-[10%]">
-            <input type="text" placeholder="add hello" />
-           </div> */}
-           </div> 
-          
+    <StoryModal open={openstr} story={stories} user={user}>      
     </StoryModal>
 
     <AddStr 

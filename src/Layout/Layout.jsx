@@ -285,7 +285,7 @@ export const Layout = () => {
       </div>
 
       {/* Контентная часть */}
-      <aside className="right w-[100%]">
+      <aside className={`right  ${location.pathname === "/basic/message" || location.pathname === "/basic/message/newMessage" ? "w-[100%]" : "w-[88%]"}`}>
         <Outlet />
         {/* Футер */}
 
