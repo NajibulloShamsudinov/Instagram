@@ -254,6 +254,7 @@ export const Layout = () => {
               storg.map((el) => {
                 
                 return (
+
                   <div key={el.id} className="flex items-center pr-[1%] justify-between">
                    
                     <div  className="flex hover:cursor-pointer  items-center gap-2">
@@ -263,7 +264,51 @@ export const Layout = () => {
                       <div onClick={()=>{dispatch(postuser(el.id)),Navigate(`user/${el.id}`)}} className="">
                         <h1 className="font-semibold text-[14px]">{el.users.userName}</h1>
                         <p className="text-[grey] text-[14px] font-semibold">{}</p>
-                      </div>             
+                      </div>                               <div className=" ">
+                    <div className=" flex items-center gap-[5%]">
+                      <img
+                        className=" rounded-[50%] object-cover w-[50px] h-[50px]"
+                        src={`${import.meta.env.VITE_APP_FILES_URL}${
+                          element.userPhoto
+                        }`}
+                        alt=""
+                      />
+                      <div className="flex  w-[100%]  justify-between">
+                        <div>
+                          <h1 className="bg-[] font-serif">
+                            {element.userName}
+                          </h1>
+
+                          <h1 className="  text-[12px]">liked you post</h1>
+                        </div>
+
+                        <button
+                          onClick={() => {
+                            element.subscriptions
+                              ? dispatch(
+                                  unFollowing(
+                                    dataSub.filter((item) => {
+                                      return item.userShortInfo.userId ==
+                                        element.userId
+                                        ? item.id
+                                        : null;
+                                    })[0].id
+                                  )
+                                )
+                              : dispatch(filllowing(element.userId));
+                          }}
+                          style={{
+                            background: element.subscriptions
+                              ? "#e3e2e2"
+                              : "#4780dc",
+                            color: element.subscriptions ? "black" : "white",
+                          }}
+                          className=" p-[2%] text-[16px] w-[100px] rounded-[10px]"
+                        >
+                          {element.subscriptions ? "following" : "follow"}
+                        </button>
+                      </div>
+
                     </div>
                      
                       
