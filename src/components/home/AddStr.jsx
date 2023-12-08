@@ -31,7 +31,7 @@ export const AddStr = () => {
         setImg(e.target.files[0])
     }
 
-    const handelSubmit=()=>{
+   const handelSubmit=()=>{
         let form=new FormData()
 
         form.append("photo",img)
