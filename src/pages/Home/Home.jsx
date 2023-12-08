@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { get, users,likes, story, addCom, delCom } from "../../api/home/home";
 import { handelChange, setCloseCom, setOpen, setOpenCom,setCloseStr,setOpenStor,setOpenAddStr } from "../../reducers/Home/Home";
@@ -71,6 +71,7 @@ function Home () {
  
 
   const dispatch=useDispatch()
+  const Navigate = useNavigate()
 
 useEffect(()=>{
   dispatch(get())
@@ -130,7 +131,7 @@ const openMenu = Boolean(anchorEl);
               </div>
               <span className="text-[12px]">
               {user.map(element => {
-                return e.userId == element.id ? <div> {element.userName} </div>: null
+                return e.userId == element.id ? <div className="cursor-pointer"> {element.userName} </div>: null
               })}
               </span>
              </div>
@@ -166,8 +167,8 @@ const openMenu = Boolean(anchorEl);
               className="rounded-[30px] border-[2px] border-[white] bg-[white]"  alt="" />
               </div>
              <span className="text-[14px] font-semibold">
-              {user?.map(element => {
-                return e.userId == element.id ? <div> {element.userName} </div>: null
+              {user.map(element => {
+                return e.userId == element.id ? <div className="cursor-pointer" onClick={()=>Navigate(`user/${element.id}`)}> {element.userName} </div>: null
               })}
              </span>
              <h1>{e.datePublished.slice(0,10)}</h1>
