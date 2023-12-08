@@ -80,12 +80,12 @@ export const deleteChat = createAsyncThunk(
 // Async POST - send message
 export const sendMessage = createAsyncThunk(
   "message/sendMessage",
-  async function (newObj, { dispatch, rejectWithValue }) {
+  async function ({ newObj, idx }, { dispatch, rejectWithValue }) {
     console.log(newObj);
     try {
       const { data } = await axiosRequest.post("Chat/send-message", newObj);
       console.log(data);
-      dispatch(getChatById());
+      dispatch(getChatById(idx));
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -100,7 +100,7 @@ export const deleteMessage = createAsyncThunk(
       const { data } = await axiosRequest.delete(
         `Chat/delete-message?massageId=${messageId}`
       );
-      dispatch(getChatById());
+      dispatch(getChatById(messageId));
     } catch (error) {
       return rejectWithValue(error);
     }

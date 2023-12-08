@@ -46,3 +46,13 @@
   color: #aaaaaa;
 }
 
+
+.message-user .panel-hidden {
+  display: none;
+}
+
+.message-user:hover .panel-hidden {
+  display: block;
+  cursor: pointer;
+}
+

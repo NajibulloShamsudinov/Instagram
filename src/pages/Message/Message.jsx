@@ -1,9 +1,15 @@
 import "../../App.css";
 import { useSelector, useDispatch } from "react-redux";
 import { setListBg } from "../../reducers/Layout/Layout";
+import * as React from "react";
 import { useState, useEffect } from "react";
 import { Route, Routes, Link, NavLink, useLocation } from "react-router-dom";
 import IOSSwitch from "../../components/Message/IOSSwitch";
+import Stack from "@mui/material/Stack";
+import Button from "@mui/material/Button";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+
 import {
   setModalUsers,
   setSearch,
@@ -37,12 +43,30 @@ import {
   getChatById,
   deleteChat,
   sendMessage,
+  deleteMessage,
 } from "../../api/Message/messageApi";
 import CloseIcon from "@mui/icons-material/Close";
 import { data } from "autoprefixer";
 import { getToken } from "../../utils/token";
 
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 const Message = () => {
+  const [open, setOpen] = React.useState(false);
+
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
   // Stata from Redux
   const dispatch = useDispatch();
   const listBg = useSelector((store) => store.layout.listBg);
@@ -80,13 +104,85 @@ const Message = () => {
 
   let location = useLocation();
 
-  const [panelMessage, setPanelMessage] = useState(false);
+  const [modalSmile, setModalSmile] = useState(false);
+
+  const handleSmile = () => {
+    setModalSmile(!modalSmile);
+  };
+
+  const [panelMessage, setPanelMessage] = useState(null);
+  const handlePanelClick = (messageId) => {
+    setPanelMessage(messageId);
+  };
+
+  const handleSmileClick = () => {
+    const newMessageText = messageText + "😊"; // добавляем смайлик к текущему сообщению
+    dispatch(setMessageText(newMessageText)); // обновляем значение сообщения
+  };
+
+  const [idx, setIdx] = useState(null);
+
+  const smiles = [
+    "😂",
+    "😮",
+    "😍",
+    "😢",
+    "👏",
+    "🔥",
+    "🎉",
+    "💯",
+    "❤️",
+    "🤣",
+    "🥰",
+    "😘",
+    "😭",
+    "😊",
+  ];
+  const smilesSecond = [
+    "😀",
+    "😃",
+    "😄",
+    "😁",
+    "😆",
+    "😅",
+    "🤣",
+    "😂",
+    "🙂",
+    "🙃",
+    "😉",
+    "😊",
+    "😇",
+    "🥰",
+    "😍",
+    "🤩",
+    "😘",
+    "😗",
+    "😚",
+    "😙",
+    "😋",
+    "😛",
+    "😜",
+  ];
+
+  const [smile, setSmile] = useState("");
 
   useEffect(() => {
     dispatch(getChats());
     dispatch(getUsersSearch());
-    dispatch(getChatById());
   }, [dispatch, search]);
+
+  useEffect(() => {
+    if (idx) {
+      dispatch(getChatById(idx));
+    }
+  }, [idx]);
+
+  useEffect(() => {
+    if (idx) {
+      dispatch(getChatById(idx));
+      dispatch(deleteMessage(panelMessage));
+    }
+  }, [panelMessage]);
 
   return (
     <main className="h-[100vh]">
@@ -101,7 +197,10 @@ const Message = () => {
             </div>
             <div className="wrapper-message flex justify-between items-center">
               <p className="font-[700]">Сообщения</p>
-              <p className="query text-[14px] text-[#737373] font-[500] cursor-pointer">
+              <p
+                onClick={handleClick}
+                className="query text-[14px] text-[#737373] font-[500] cursor-pointer"
+              >
                 Запросы
               </p>
             </div>
@@ -116,7 +215,7 @@ const Message = () => {
                       dispatch(setChatsUserPhoto(e.receiveUser.userPhoto));
                       dispatch(setHidePanel(true));
                       dispatch(getChatById(e.chatId));
-                      dispatch(setChatsId(e.chatId));
+                      setIdx(e.chatId);
                       dispatch(setChatsUserId(e.receiveUser.userId));
                       dispatch(setDefaultLogoMessage(false));
                     }}
@@ -164,8 +263,14 @@ const Message = () => {
                       </div>
                     </div>
                     <div className="wrapper-icons flex items-center gap-[18px]">
-                      <ControlPhone style={{ cursor: "pointer" }} />
-                      <ControlVideoChat style={{ cursor: "pointer" }} />
+                      <ControlPhone
+                        onClick={handleClick}
+                        style={{ cursor: "pointer" }}
+                      />
+                      <ControlVideoChat
+                        onClick={handleClick}
+                        style={{ cursor: "pointer" }}
+                      />
                       <button
                         onClick={() => {
                           handleInfo();
@@ -182,8 +287,11 @@ const Message = () => {
                         event.preventDefault();
                         dispatch(
                           sendMessage({
-                            chatId: chatIdAdd,
-                            messageText: messageText,
+                            newObj: {
+                              chatId: idx,
+                              messageText: messageText,
+                            },
+                            idx: idx,
                           })
                         );
                         dispatch(setMessageText(""));
@@ -194,12 +302,15 @@ const Message = () => {
                       } bg-[#fff] p-[20px]`}
                     >
                       <div className="wrapper-input flex justify-between px-[15px] items-center border-[1px] w-full rounded-[50px]">
-                        <SmileInput style={{ cursor: "pointer" }} />
+                        <SmileInput
+                          onClick={() => handleSmile()}
+                          style={{ cursor: "pointer" }}
+                        />
                         <input
                           onChange={(event) =>
                             dispatch(setMessageText(event.target.value))
                           }
-                          value={messageText}
+                          value={messageText + smile}
                           type="text"
                           className=" p-[10px] outline-none w-full"
                           placeholder="Напишите сообщение..."
@@ -213,9 +324,55 @@ const Message = () => {
                           >
                             Отправить
                           </button>
-                          <VoiceInput style={{ cursor: "pointer" }} />
-                          <ImageInput style={{ cursor: "pointer" }} />
-                          <HeartInput style={{ cursor: "pointer" }} />
+                          <VoiceInput
+                            onClick={handleClick}
+                            style={{ cursor: "pointer" }}
+                          />
+                          <ImageInput
+                            onClick={handleClick}
+                            style={{ cursor: "pointer" }}
+                          />
+                          <HeartInput
+                            onClick={handleClick}
+                            style={{ cursor: "pointer" }}
+                          />
+                        </div>
+                      </div>
+                      {/* Modal Smile ============== */}
+                      <div
+                        className={`${
+                          modalSmile ? "block" : "hidden"
+                        } modal bg-[#fff] rounded-[10px] border-[1px] overflow-auto h-[60vh] w-[40%] shadow-lg absolute bottom-[90%] p-[15px]`}
+                      >
+                        <p>Самые популярные</p>
+                        <div className="wrapper-smile flex flex-wrap py-[10px]">
+                          {smiles.map((e) => {
+                            return (
+                              <p
+                                onClick={() =>
+                                  dispatch(setMessageText(messageText + e))
+                                }
+                                className="text-[35px] cursor-pointer"
+                              >
+                                {e}
+                              </p>
+                            );
+                          })}
+                        </div>
+                        <p>Смайлики и люди</p>
+                        <div className="wrapper-smile-people flex flex-wrap">
+                          {smilesSecond.map((e) => {
+                            return (
+                              <p
+                                onClick={() =>
+                                  dispatch(setMessageText(messageText + e))
+                                }
+                                className="text-[35px] cursor-pointer"
+                              >
+                                {e}
+                              </p>
+                            );
+                          })}
                         </div>
                       </div>
                     </form>
@@ -234,7 +391,10 @@ const Message = () => {
             <p className="text-[14px] text-[#737373]">
               Отправляйте личные фото и сообщения другу или группе
             </p>
-            <button className="bg-[#0095f6] text-[#fff] text-[14px] font-[600] px-[16px] py-[6px] rounded-[8px] hover:bg-[#0065e0d4] transition-all duration-100">
+            <button
+              onClick={() => dispatch(setModalUsers(true))}
+              className="bg-[#0095f6] text-[#fff] text-[14px] font-[600] px-[16px] py-[6px] rounded-[8px] hover:bg-[#0065e0d4] transition-all duration-100"
+            >
               Отправить сообщение
             </button>
           </div>
@@ -251,7 +411,10 @@ const Message = () => {
             <p className="text-[14px] text-[#737373]">
               Отправляйте личные фото и сообщения другу или группе
             </p>
-            <button className="bg-[#0095f6] text-[#fff] text-[14px] font-[600] px-[16px] py-[6px] rounded-[8px] hover:bg-[#0065e0d4] transition-all duration-100">
+            <button
+              onClick={() => dispatch(setModalUsers(true))}
+              className="bg-[#0095f6] text-[#fff] text-[14px] font-[600] px-[16px] py-[6px] rounded-[8px] hover:bg-[#0065e0d4] transition-all duration-100"
+            >
               Отправить сообщение
             </button>
           </div>
@@ -271,10 +434,12 @@ const Message = () => {
             >
               {dataChatById.map((e) => {
                 dispatch(setChatIdAdd(e.chatId));
+                console.log(e.userId);
 
                 return (
                   <>
                     <div
+                      key={e.messageId}
                       className={`message-user flex w-full items-center gap-[10px] ${
                         chatsUserId === e.userId
                           ? "justify-start"
@@ -282,9 +447,27 @@ const Message = () => {
                       }`}
                     >
                       <div
-                        key={e.messageId}
-                        onClick={() => setPanelMessage(true)}
-                        className="panel-message"
+                        className={`${
+                          panelMessage === e.messageId ? "flex" : "hidden"
+                        } modal-panel-message bg-[#000] gap-[20px]   text-[#fff] p-[5px] px-[10px] rounded-[5px]`}
+                      >
+                        <p className="cursor-pointer">Переслать</p>
+                        <p className="cursor-pointer">Копировать</p>
+                        <p
+                          className="cursor-pointer"
+                          onClick={() => {
+                            dispatch(deleteMessage(panelMessage));
+                            handlePanelClick(false);
+                          }}
+                        >
+                          Отменить отправку
+                        </p>
+                      </div>
+                      <div
+                        onClick={() => handlePanelClick(e.messageId)}
+                        className={`${
+                          myToken !== e.userId ? "hidden" : "block panel-hidden"
+                        } panel-message relative`}
                       >
                         <p>...</p>
                       </div>
@@ -303,13 +486,6 @@ const Message = () => {
                       >
                         {e.messageText}
                       </p>
-                      <div
-                        className={`${
-                          panelMessage ? "block" : "hidden"
-                        } modal-panel-message bg-[#000]`}
-                      >
-                        <p>Копировать</p>
-                      </div>
                     </div>
                   </>
                 );
@@ -330,9 +506,7 @@ const Message = () => {
           </div>
           <div className="wrapper-user h-[30vh]">
             <p className="p-[20px] text-[16px] font-[600]">Участники</p>
-            {/* {dataChats.map((e) => {
-              if (e.chatId === userChatId && showMessageChats === true) {
-                return ( */}
+
             <div className="user flex items-center gap-[10px] py-[10px] px-[20px] hover:bg-[#00000005] cursor-pointer transition-all duration-100">
               <Avatar
                 src={chatsUserPhoto}
@@ -349,22 +523,29 @@ const Message = () => {
               hidePanel ? "flex" : "hidden"
             } panel-control flex flex-col gap-[20px] p-[20px] border-t-[1px]`}
           >
-            <p className="text-[16px] cursor-pointer text-[#ed4956] tracking-[0.5px]">
+            <p
+              onClick={handleClick}
+              className="text-[16px] cursor-pointer text-[#ed4956] tracking-[0.5px]"
+            >
               Пожаловать
             </p>
-            <p className="text-[16px] cursor-pointer text-[#ed4956] tracking-[0.5px]">
+            <p
+              onClick={handleClick}
+              className="text-[16px] cursor-pointer text-[#ed4956] tracking-[0.5px]"
+            >
               Заблокировать
             </p>
-            <p
-              onClick={() => {
-                dispatch(deleteChat(chatsId));
-                dispatch(setDefaultLogoMessage(true));
-                console.log();
-              }}
-              className="delete-active text-[16px] cursor-pointer text-[#ed4956] tracking-[0.5px]"
-            >
-              Удалить чат
-            </p>
+            <Link to="/basic/message">
+              <p
+                onClick={() => {
+                  dispatch(deleteChat(idx));
+                  setInfo(false);
+                }}
+                className="delete-active text-[16px] cursor-pointer text-[#ed4956] tracking-[0.5px]"
+              >
+                Удалить чат
+              </p>
+            </Link>
           </div>
         </div>
       </div>
@@ -451,6 +632,12 @@ const Message = () => {
           </button>
         </form>
       </ModalUsers>
+      {/* Alert - на стадии разработки */}
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
+          На стадии разработки
+        </Alert>
+      </Snackbar>
     </main>
   );
 };
