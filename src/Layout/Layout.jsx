@@ -1,28 +1,22 @@
-import React, { useRef } from "react";
+import React from "react";
 import { useState, useEffect } from "react";
 import "../App.css";
-import { ModalTrueNatificationState } from "../reducers/natification/Natification";
 import { useSelector, useDispatch } from "react-redux";
 import {
   setModalMore,
   setModalSearch,
   setModalCreate,
 } from "../reducers/Layout/Layout";
-
+import { ModalTrueNatificationState } from "../reducers/natification/Natification";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import img from "/src/assets/images/polzovatel.jpg";
-import { get, unFollowing } from "../api/natificationApi/natification";
-import { filllowing } from "../api/natificationApi/natification";
+import { getSubscr, unFollowing } from "../api/natificationApi/natification";
 import MoreModal from "../components/Layout/MoreModal";
 import CreateModal from "../components/Layout/CreateModal";
-import {
-  Link,
-  Outlet,
-  NavLink,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+import { Link, Outlet, NavLink, useLocation } from "react-router-dom";
 import logo from "../assets/icons/instagram-wordmark.svg";
+import { get } from "../api/natificationApi/natification";
+import { filllowing } from "../api/natificationApi/natification";
 import navHome from "../assets/icons/nav-home.svg";
 import navReels from "../assets/icons/nav-reels.svg";
 import moreSettings from "../assets/icons/more-settings.png";
@@ -58,31 +52,25 @@ import { handleChange } from "../reducers/search/searchred";
 import HomeIcon from "../icons/Layout/HomeIcon";
 import ReelsIcon from "../icons/Layout/ReelsIcon";
 import MessageIcon from "../icons/Layout/MessageIcon";
+import { getToken } from "../utils/token";
 
 export const Layout = () => {
   // Функция для модального окна "Еще"
 
   const location = useLocation();
+  let data2 = useSelector((store) => store.Natification.data);
+  let dataSub = useSelector((store) => store.Natification.dataSub);
+  console.log(dataSub);
   const dispatch = useDispatch();
+  let [followingState, setFollowingState] = useState(false);
   const modalMore = useSelector((store) => store.layout.modalMore);
   const modalSearch = useSelector((store) => store.layout.modalSearch);
   const modalCreate = useSelector((store) => store.layout.modalCreate);
   const searchinp = useSelector((store) => store.searchred.searchinp);
-  const search = useSelector((store) => store.searchred.search);
   let modalnatification = useSelector(
     (store) => store.Natification.ModalNatificationState
   );
-  let data2 = useSelector((store) => store.Natification.data);
-  console.log(data2);
-  const Navigate = useNavigate();
-
-  const hide = useRef(null);
-
-  function handletarget(event) {
-    console.log(event.target);
-    console.log(hide);
-    if (event.target != hide.current) dispatch(setModalSearch(false));
-  }
+  const search = useSelector((store) => store.searchred.search);
 
   const toggleModalSearch = () => {
     dispatch(setModalSearch(!modalSearch));
@@ -94,6 +82,8 @@ export const Layout = () => {
   const data = useSelector((store) => store.searchred.data);
   const storg = useSelector((store) => store.searchred.storg);
 
+  const myId = getToken().sid;
+
   useEffect(() => {
     AOS.init();
   }, []);
@@ -101,6 +91,7 @@ export const Layout = () => {
     dispatch(getdata());
     dispatch(storget());
     dispatch(get());
+    dispatch(getSubscr(myId));
   }, [dispatch, searchinp]);
   return (
     // Главный контейнер
@@ -256,28 +247,25 @@ export const Layout = () => {
                 </p>
               </li>
             </NavLink>
-            <NavLink onClick={() => dispatch(setModalSearch(false))}>
-              <li
-                onClick={() => dispatch(ModalTrueNatificationState())}
-                className="flex items-center gap-[15px] hover:bg-[#00000010] rounded-[7px] p-[10px] transition-all duration-300"
+            <li
+              onClick={() => dispatch(ModalTrueNatificationState())}
+              className="flex cursor-pointer items-center gap-[15px] hover:bg-[#00000010] rounded-[7px] p-[10px] transition-all duration-300"
+            >
+              <FontAwesomeIcon icon={faHeart} className="text-[25px]" />
+              <p
+                className={`${
+                  location.pathname === "/basic/message" ||
+                  location.pathname === "/basic/message/newMessage"
+                    ? "hidden"
+                    : "block"
+                }`}
               >
-                <FontAwesomeIcon icon={faHeart} className="text-[25px]" />
-                <p
-                  className={`${
-                    location.pathname === "/basic/message" ||
-                    location.pathname === "/basic/message/newMessage"
-                      ? "hidden"
-                      : "block"
-                  }`}
-                >
-                  Уведомления
-                </p>
-              </li>
-            </NavLink>
+                Уведомления
+              </p>
+            </li>
             <li
               onClick={() => {
                 dispatch(setModalSearch(false));
-
                 dispatch(setModalCreate(true));
               }}
               className="flex items-center cursor-pointer gap-[15px] hover:bg-[#00000010] rounded-[7px] p-[10px] transition-all duration-300"
@@ -410,20 +398,11 @@ export const Layout = () => {
                             <div className="flex hover:cursor-pointer  items-center gap-2">
                               <img
                                 className="rounded-full w-[50px]"
-                                src={
-                                  el.avatar != null
-                                    ? `${import.meta.env.VITE_APP_FILES_URL}${
-                                        el.avatar
-                                      }`
-                                    : img
-                                }
+                                src={el.avatar ? el.avatar : img}
                                 alt=""
                               />
                               <div
-                                onClick={() => {
-                                  dispatch(postuser(el.id)),
-                                    Navigate(`user/${el.id}`);
-                                }}
+                                onClick={() => dispatch(postuser(el.id))}
                                 className=""
                               >
                                 <h1 className="font-semibold text-[14px]">
@@ -454,10 +433,7 @@ export const Layout = () => {
                                 alt=""
                               />
                               <div
-                                onClick={() => {
-                                  dispatch(postuser(el.id)),
-                                    Navigate(`user/${el.id}`);
-                                }}
+                                onClick={() => dispatch(postuser(el.id))}
                                 className=""
                               >
                                 <h1 className="font-semibold text-[14px]">
@@ -477,7 +453,6 @@ export const Layout = () => {
           </div>
         </div>
       </div>
-      {/* // natification */}
       <div>
         {modalnatification ? (
           <div className=" fixed bg-[white]  z-20  top-0 left-[3.6%] overflow-y-auto overflow-x-auto    p-[2%]  w-[28%] h-[100%]  shadow-xl">
@@ -539,8 +514,9 @@ export const Layout = () => {
           </div>
         ) : null}
       </div>
+
       {/* Контентная часть */}
-      <aside onClick={handletarget} ref={hide} className="right w-[100%]">
+      <aside className="right w-[100%]">
         <Outlet />
         {/* Футер */}
 
