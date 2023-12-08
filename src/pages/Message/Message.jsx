@@ -84,7 +84,6 @@ const Message = () => {
   const chatIdAdd = useSelector((store) => store.message.chatIdAdd);
   const chatsId = useSelector((store) => store.message.chatsId);
   const chatsUserId = useSelector((store) => store.message.chatsUserId);
-
   const defaultLogoMessage = useSelector(
     (store) => store.message.defaultLogoMessage
   );
@@ -177,12 +176,14 @@ const Message = () => {
     }
   }, [idx]);
 
+
   useEffect(() => {
     if (idx) {
       dispatch(getChatById(idx));
       dispatch(deleteMessage(panelMessage));
     }
   }, [panelMessage]);
+
 
   return (
     <main className="h-[100vh]">
@@ -287,7 +288,9 @@ const Message = () => {
                         event.preventDefault();
                         dispatch(
                           sendMessage({
+
                             newObj: {
+
                               chatId: idx,
                               messageText: messageText,
                             },

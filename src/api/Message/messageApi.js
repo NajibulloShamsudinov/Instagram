@@ -80,8 +80,10 @@ export const deleteChat = createAsyncThunk(
 // Async POST - send message
 export const sendMessage = createAsyncThunk(
   "message/sendMessage",
+
   async function ({ newObj, idx }, { dispatch, rejectWithValue }) {
     console.log(newObj);
+
     try {
       const { data } = await axiosRequest.post("Chat/send-message", newObj);
       console.log(data);
