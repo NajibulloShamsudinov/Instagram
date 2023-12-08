@@ -46,6 +46,7 @@
   color: #aaaaaa;
 }
 
+
 .message-user .panel-hidden {
   display: none;
 }
@@ -54,3 +55,4 @@
   display: block;
   cursor: pointer;
 }
+

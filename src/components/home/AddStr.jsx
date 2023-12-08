@@ -34,10 +34,7 @@ export const AddStr = () => {
 
     const handelSubmit=()=>{
         let form=new FormData()
-
-        form.append("photo",img)
-        // form.append("id",openStor.postId)
-
+        form.append("image",img)
         dispatch(addStories(form))
     }
 

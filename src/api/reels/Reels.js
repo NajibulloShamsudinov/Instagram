@@ -1,33 +1,26 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-// import axios from "axios";
 import { axiosRequest } from "../../utils/axiosRequest";
 import axios from "axios";
+import { get } from "../home/home";
 
 export const getData = createAsyncThunk("reels/getData", async () => {
   try {
-    const { data } = await axiosRequest.get("Post/get-reels");
-    
+    const { data } = await axiosRequest.get("Post/get-reels?PageSize=100");
     return data.data;
   } catch (error) {
     console.error(error);
   }
-
 });
 
+export const getData1 = createAsyncThunk("reels/getData1", async () => {
+  try {
+    const { data } = await axiosRequest.get("User/get-users");
 
-
-
-  export const getData1 = createAsyncThunk("reels/getData1", async () => {
-    try {
-      const { data } = await axiosRequest.get("User/get-users");
-      
-      return data.data;
-    } catch (error) {
-      console.error(error);
-    }
-  });
-
-
+    return data.data;
+  } catch (error) {
+    console.error(error);
+  }
+});
 
 export const postLike = createAsyncThunk(
   "reels/postLike",
@@ -41,7 +34,6 @@ export const postLike = createAsyncThunk(
   }
 );
 
-
 export const postComment = createAsyncThunk(
   "reels/postComment",
   async function (e, { dispatch }) {
@@ -50,7 +42,6 @@ export const postComment = createAsyncThunk(
         comment: e.comment,
         postId: e.postId,
       });
-      console.log(data);
       dispatch(getData());
     } catch (error) {
       console.error(error);
@@ -65,16 +56,14 @@ export const deleteComment = createAsyncThunk(
       const { data } = await axiosRequest.delete(
         `Post/delete-comment?commentId=${id}`
       );
-      
-      
+
       dispatch(getData());
-      
+  
     } catch (error) {
       console.error(error);
     }
   }
 );
-
 
 export const addFollowing = createAsyncThunk(
   "reels/addFollowing",
@@ -84,6 +73,20 @@ export const addFollowing = createAsyncThunk(
         `FollowingRelationShip/add-following-relation-ship?followingUserId=${userId}`
       );
       console.log(data);
+      dispatch(getData());
+    } catch (error) {
+      console.error(error);
+    }
+  }
+);
+
+export const unFollowing = createAsyncThunk(
+  "reels/unFollowing",
+  async function (id, { dispatch }) {
+    try {
+      const { data } = await axiosRequest.delete(
+        `FollowingRelationShip/delete-following-relation-ship?id=${id}`
+      );
       dispatch(getData());
     } catch (error) {
       console.error(error);

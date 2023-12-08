@@ -18,7 +18,7 @@ const home=createSlice({
         comments:[],
         img:null,
         openStor:[],
-        strImg:null,
+        strImg:[],
         openAddStr:false,
     },
     reducers:{
@@ -36,9 +36,12 @@ const home=createSlice({
             state.comments=action.payload.comments
         },
         setOpenStor:(state,action)=>{
+            console.log(action.payload.stories
+                );
             state.openstr=true
-            state.openStor=action.payload
-            state.strImg=action.payload.fileName
+            state.openStor=action.payload.stories
+
+            // state.strImg=action.payload
         },
         setCloseCom:(state,action)=>{
             state.openCom=false

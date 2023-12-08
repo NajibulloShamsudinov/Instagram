@@ -132,27 +132,55 @@ export const deletPhoto = createAsyncThunk(
 
 export const editUser = createAsyncThunk(
     'profile/editUser',
-    async function editUser(_, { dispatch , getState}) {
+    async function editUser(_, { dispatch, getState }) {
         let text = getState().profile.text
         let gender = getState().profile.gender
         try {
 
             const { data } = await axiosRequest.put('UserProfile/update-user-profile', {
                 about: text,
-                fullName:"user",
-                dob:"2023/12/03",
-                gender:gender,
-                phoneNumber:"987652345",
-                email:"a@example.com"
+                fullName: "user",
+                dob: "2023/12/03",
+                gender: gender,
+                phoneNumber: "987652345",
+                email: "a@example.com"
             })
 
             dispatch(getUser())
-            
+
         } catch (error) {
             console.log(error);
         }
     }
 )
+
+
+export const addFollowing = createAsyncThunk(
+    "profile/addFollowing",
+    async function (userId, { dispatch }) {
+        try {
+            const { data } = await axiosRequest.post(`FollowingRelationShip/add-following-relation-ship?followingUserId=${userId}`);
+            console.log(data);
+         
+        } catch (error) {
+            console.error(error);
+        }
+    }
+);
+
+
+
+export const unFollowing = createAsyncThunk(
+    "profile/unFollowing",
+    async function (id, { dispatch }) {
+      try {
+        const { data } = await axiosRequest.delete(`FollowingRelationShip/delete-following-relation-ship?id=${id}`);
+        dispatch(getProfile())
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  );
 
 
 
