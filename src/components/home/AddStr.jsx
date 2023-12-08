@@ -19,25 +19,26 @@ const style = {
   p: 4,
 };
 export const AddStr = () => {
-  const openStor = useSelector(({ home }) => home.openStor);
-  const openAddStr = useSelector(({ home }) => home.openAddStr);
-  const dispatch = useDispatch();
 
-  const [img, setImg] = useState(null);
+    const openStor=useSelector(({home})=>home.openStor)
+    const openAddStr=useSelector(({home})=>home.openAddStr)
+    const dispatch=useDispatch()
 
-  const handelChange = async (e) => {
-    console.log(e.target.files[0]);
-    setImg(e.target.files[0]);
-  };
+    const [img,setImg]=useState(null)
+    
 
-  const handelSubmit = () => {
-    let form = new FormData();
+   const handelChange=async(e)=>{
+        setImg(e.target.files[0])
+    }
 
-    form.append("image", img);
-    // form.append("id",openStor.postId)
+    const handelSubmit=()=>{
+        let form=new FormData()
 
-    dispatch(addStories(form));
-  };
+        form.append("photo",img)
+        // form.append("id",openStor.postId)
+
+        dispatch(addStories(form))
+    }
 
   return (
     <div>

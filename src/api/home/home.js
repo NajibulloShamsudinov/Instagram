@@ -6,7 +6,7 @@ export const get =createAsyncThunk(
     "home/get",
     async function() {
         try {
-            const {data}=await axiosRequest.get("Post/get-posts?PageSize=50")
+            const {data}=await axiosRequest.get("Post/get-posts?PageSize=30")
             return data.data
         } catch (error) { 
             console.log(error)

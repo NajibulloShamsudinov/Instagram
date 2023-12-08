@@ -4,7 +4,7 @@ import {
   postLike,
   getData1,
   deleteComment,
-  addFollowing,
+ 
 } from "../../api/reels/Reels.js";
 
 const reels = createSlice({
@@ -63,17 +63,14 @@ const reels = createSlice({
     });
     // Подписчики
 
-    builder.addCase(addFollowing.pending, (state, action) => {
-      state.loading = true;
-    });
-    builder.addCase(addFollowing.fulfilled, (state, action) => {
-      state.subsciption = action.payload;
-    });
-    builder.addCase(addFollowing.rejected, (state, action) => {
-      state.loading = false;
-    });
+
+    
+ 
   },
 });
 
 export const { handlModal, handlModal1 } = reels.actions;
 export default reels.reducer;
+
+
+ 

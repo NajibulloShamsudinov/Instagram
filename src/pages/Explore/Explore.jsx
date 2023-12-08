@@ -2,6 +2,8 @@ import {
   ModalPostTrue,
   CloseModals,
   setComment,
+  stateNone,
+  setOpenCom2,
 } from "../../reducers/explore/Explore";
 import { get, users, likes, story, addCom } from "../../api/home/home";
 import { addCom2 } from "../../api/ExploreApi/ExploreApi";
@@ -9,7 +11,8 @@ import { useDispatch, useSelector } from "react-redux";
 import ClearIcon from "@mui/icons-material/Clear";
 import { postLike } from "../../api/ExploreApi/ExploreApi";
 import { getPosts } from "../../api/ExploreApi/ExploreApi";
-import FavoriteIcon from "@mui/icons-material/FavoriteBorderSharp";
+
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorderSharp";
 import MapsUgcSharpIcon from "@mui/icons-material/MapsUgcSharp";
 import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt";
@@ -17,13 +20,16 @@ import TelegramIcon from "@mui/icons-material/Telegram";
 import { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 const Explore = () => {
+
+
+  
   let dispatch = useDispatch();
   let open = useSelector((store) => store.explore.ModalPost);
   let data = useSelector((store) => store.explore.data);
   let newimg = useSelector((store) => store.explore.newimg);
   const posts = useSelector((store) => store.reels.posts);
   const user = useSelector(({ home }) => home.user);
-  const comEl = useSelector(({ home }) => home.comEl);
+  const comEl = useSelector((store) => store.explore.comEl2);
   const com = useSelector(({ home }) => home.com);
 
   let showUserId = useSelector((store) => store.explore.showUserId);
@@ -33,12 +39,11 @@ const Explore = () => {
   let [content, setContent] = useState([]);
   let [name, setName] = useState(null);
   let [getComment, getGetComment] = useState([]);
-
   // console.log(showcomments);
   // let [content, setContent] = useState(null);
   useEffect(() => {
     dispatch(getPosts());
-    dispatch(users());
+    dispatch(users  ());
   }, [dispatch]);
   return (
     <div className="w-[82%] ml-[14%] m-auto">
@@ -57,7 +62,8 @@ const Explore = () => {
                   setContent({ e }),
                   setTitle({ e }),
                   setName({ e }),
-                  getGetComment({ e })
+                  getGetComment({ e }),
+                  dispatch(setOpenCom2(e))
                 )}
                 className="w-[100%] flex flex-col items-center justify-center text-[#00000000] hover:text-[white]  h-[100%] hover:bg-[#0000006d] absolute "
               >
@@ -180,21 +186,20 @@ const Explore = () => {
                   <div>
                     {modalElement.e.postLike ? (
                       <div
-                        onClick={() => (
-                          dispatch(postLike(modalElement.e.postId)),
-                          dispatch(CloseModals())
-                        )}
+                        onClick={() =>
+                          dispatch(postLike(modalElement.e.postId))
+                        }
                       >
                         <FavoriteIcon
                           sx={{ color: "red" }}
-                          onClick={() => (
-                            dispatch(postLike(modalElement.e.postId)),
-                            dispatch(CloseModals())
-                          )}
+                          onClick={() =>
+                            dispatch(postLike(modalElement.e.postId))
+                          }
                         />
                       </div>
                     ) : (
                       <FavoriteBorderIcon
+                        sx={{ ":hover": { color: "red" }, color: "black " }}
                         onClick={() =>
                           dispatch(postLike(modalElement.e.postId))
                         }
@@ -221,7 +226,10 @@ const Explore = () => {
                   />
                   <h1
                     onClick={() =>
-                      dispatch(addCom({ comment: Comments, postId: comEl.postId }))
+                      dispatch(
+                        addCom2({ comment: Comments, postId: comEl.postId }),
+                        dispatch(stateNone())
+                      )
                     }
                     style={{ display: Comments.length > 0 ? "block" : "none" }}
                     className=" cursor-pointer pl-[2%] pr-[3%] text-[blue]"
