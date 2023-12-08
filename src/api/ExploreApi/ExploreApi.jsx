@@ -7,7 +7,7 @@ export let getPosts = createAsyncThunk(
       let { data } = await axiosRequest.get("/Post/get-posts?PageSize=100");
       return data.data;
     } catch (error) {
-      console.error(error);
+      console.error(error); 
     }
   }
 );

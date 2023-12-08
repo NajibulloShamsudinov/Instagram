@@ -48,6 +48,11 @@ const message = createSlice({
     setMessageText: (state, action) => {
       state.messageText = action.payload;
     },
+    prepare: (messageText, smile) => {
+      return {
+        payload: messageText + smile, // добавляем смайлик к текущему сообщению
+      };
+    },
     setChatIdAdd: (state, action) => {
       state.chatIdAdd = action.payload;
     },
@@ -121,6 +126,7 @@ const message = createSlice({
     });
     builder.addCase(deleteChat.fulfilled, (state, action) => {
       state.loading = false;
+      state.info = false;
     });
     builder.addCase(deleteChat.rejected, (state, action) => {
       state.loading = false;

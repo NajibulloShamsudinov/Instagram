@@ -1,5 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosRequest } from "../../utils/axiosRequest";
+import { getPostById, getProfile, getProfileById } from "../profile/profile";
+import { get } from "../home/home";
 
 export let addNewPost = createAsyncThunk(
   "post/addNewPost",
@@ -11,7 +13,8 @@ export let addNewPost = createAsyncThunk(
         } 
 
       });
-      dispatch(getpost())
+
+        dispatch(get())
   } catch (error) {
     console.error(error);
   }

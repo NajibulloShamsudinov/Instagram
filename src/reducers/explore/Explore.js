@@ -9,6 +9,7 @@ let explore = createSlice({
     showUserId: "",
     Comments: "",
     Comments2: [],
+    comEl2:[]
   },
   reducers: {
     CloseModals: (state) => {
@@ -24,6 +25,12 @@ let explore = createSlice({
     showComments: (state, action) => {
       state.Comments2 = action.payload;
     },
+    stateNone: (state, action) => {
+      state.Comments = "";
+    },
+    setOpenCom2: (state, action) => {
+      state.comEl2 = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getPosts.pending, (state, action) => {});
@@ -33,6 +40,6 @@ let explore = createSlice({
     builder.addCase(getPosts.rejected, (state, action) => {});
   },
 });
-export let { ModalPostTrue, CloseModals, setComment, showComments } =
+export let { ModalPostTrue, CloseModals, setComment, showComments,setOpenCom2, stateNone } =
   explore.actions;
 export default explore.reducer;
