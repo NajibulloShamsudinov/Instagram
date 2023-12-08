@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import Post from "../../components/Profile/Post"
 import Save from '../../components/Profile/Save'
 import Tagged from '../../components/Profile/Tagged'
@@ -40,6 +40,8 @@ const style2 = {
 
 const Profile = () => {
 
+  const { id } = useParams()
+
 
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -76,6 +78,8 @@ const Profile = () => {
 
 
 
+
+
   const data = useSelector((store) => store.profile.data)
 
   const postdata = useSelector((store) => store.profile.postData)
@@ -83,7 +87,7 @@ const Profile = () => {
   const subsciptions = useSelector((store) => store.profile.subsciptions)
   const users = useSelector((store) => store.profile.users)
   const profileById = useSelector((store) => store.profile.profileById)
-  console.log(profileById);
+
 
 
 
@@ -99,7 +103,7 @@ const Profile = () => {
     dispatch(getPostById(userId))
     dispatch(getSubsciption(userId))
     dispatch(getSubsciptions(userId))
-    dispatch(getProfileById(userId)) 
+    dispatch(getProfileById(userId))
     dispatch(getUser())
 
   }, [dispatch])
@@ -117,6 +121,7 @@ const Profile = () => {
 
               <div className="mt-[20px]">
                 <img className="rounded-[100%] object-cover w-[150px] h-[150px]" src={`${import.meta.env.VITE_APP_FILES_URL}${el.avatar}`} alt="img" />
+                <path d="M19.998 3.094 14.638 0l-2.972 5.15H5.432v6.354L0 14.64 3.094 20 0 25.359l5.432 3.137v5.905h5.975L14.638 40l5.36-3.094L25.358 40l3.232-5.6h6.162v-6.01L40 25.359 36.905 20 40 14.641l-5.248-3.03v-6.46h-6.419L25.358 0l-5.36 3.094Zm7.415 11.225 2.254 2.287-11.43 11.5-6.835-6.93 2.244-2.258 4.587 4.581 9.18-9.18Z" fill-rule="evenodd"></path>
               </div>
 
               <div className="mt-[30px] ml-[100px]">
@@ -133,7 +138,7 @@ const Profile = () => {
 
                 <div className="flex gap-[38px] mt-[20px]">
                   <div className="flex gap-[7px]">
-                    <h1 className="font-bold">0</h1>
+                    <h1 className="">{profileById.postCount}</h1>
                     <h1 onClick={() => setPost()} className=""> публикаций</h1>
                   </div>
                   <div className="flex gap-[7px]">
@@ -227,7 +232,7 @@ const Profile = () => {
       <div className="w-[80%] m-auto">
         {visit === "post" && (
           <div className="">
-            <Post post={postdata} />
+            <Post id={userId} post={postdata} />
           </div>
         )}
         {visit === "save" && (
@@ -298,7 +303,8 @@ const Profile = () => {
                   {
                     subsciption.map((e) => {
                       return (
-                        <div className="flex mb-[10px] gap-[8px] items-center">
+                        <div className="flex justify-between items-center">
+                           <div className=" mb-[10px] gap-[10px] flex items-center">
                           {
                             e.userShortInfo.userPhoto == "" || e.userShortInfo.userPhoto == null ? <img className="w-[45px] h-[45px] object-cover rounded-[100%]" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXlbMgzYw0M94bT-Sp1UGBBHLj60mz3wVtWQ&usqp=CAU" alt="" srcset="" /> : <img className="w-[40px] h-[40px] rounded-[100%]" src={`${import.meta.env.VITE_APP_FILES_URL}${e.userShortInfo.userPhoto}`} alt="" />
                           }
@@ -307,6 +313,9 @@ const Profile = () => {
                             <p className="pt-[-10px]">{e.userShortInfo.fullname}</p>
                           </div>
                         </div>
+                        </div>
+
+            
                       )
                     })
                   }
@@ -350,14 +359,17 @@ const Profile = () => {
                     subsciptions.map((e) => {
                       console.log(e);
                       return (
-                        <div className="flex mb-[10px] items-center">
-                          {
-                            e.userShortInfo.userPhoto == "" || e.userShortInfo.userPhoto == null ? <img className="w-[15%]" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXlbMgzYw0M94bT-Sp1UGBBHLj60mz3wVtWQ&usqp=CAU" alt="" srcset="" /> : <img src={`${import.meta.env.VITE_APP_FILES_URL}${e.userShortInfo.userPhoto}`} alt="" />
-                          }
-                          <div className="">
-                            <h1>{e.userShortInfo.userName}</h1>
-                            <p className="pt-[-10px]">{e.userShortInfo.fullname}</p>
+                        <div className="flex justify-between items-center">
+                          <div className=" mb-[10px] gap-[10px] flex items-center">
+                            {
+                              e.userShortInfo.userPhoto == "" || e.userShortInfo.userPhoto == null ? <img className="w-[40px] h-[40px] rounded-[100%]" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXlbMgzYw0M94bT-Sp1UGBBHLj60mz3wVtWQ&usqp=CAU" alt="" srcset="" /> : <img className="w-[40px] h-[40px] rounded-[100%]" src={`${import.meta.env.VITE_APP_FILES_URL}${e.userShortInfo.userPhoto}`} alt="" />
+                            }
+                            <div className="">
+                              <h1>{e.userShortInfo.userName}</h1>
+                              <p className="pt-[-10px]">{e.userShortInfo.fullname}</p>
+                            </div>
                           </div>
+                          <button className=" bg-[#EFEFEF] font-[500] text-[14px] px-[16px] h-[32px] hover:bg-[#e3e1e1] ml-[8px] rounded-[8px]">Подписки</button>
                         </div>
                       )
                     })
@@ -383,19 +395,19 @@ const Profile = () => {
               <div className="py-[10px] cursor-pointer">
                 <h1 >Приложения и сайты</h1>
               </div>
-             <hr />
+              <hr />
               <h1 className="py-[15px] cursor-pointer">QR-код</h1>
-             <hr />
+              <hr />
               <h1 className="py-[15px] cursor-pointer">Уведомления</h1>
               <hr />
               <h1 className="py-[15px] cursor-pointer">Настройки и конфиденциальность</h1>
-             <hr />
+              <hr />
               <h1 className="py-[15px] cursor-pointer">Meta Verified</h1>
-             <hr />
+              <hr />
               <h1 className="py-[15px] cursor-pointer">Родительский контроль</h1>
               <hr />
               <h1 className="py-[15px] cursor-pointer">Выйти</h1>
-                  <hr />
+              <hr />
               <h1 onClick={handleClose4} className="py-[15px] cursor-pointer">Отмена</h1>
             </div>
           </Box>
