@@ -2,7 +2,10 @@ import React, { useRef } from "react";
 import { useState, useEffect } from "react";
 import { getSubscr } from "../api/natificationApi/natification";
 import "../App.css";
-import { ModalTrueNatificationState,ModalNatificationStatefalse } from "../reducers/natification/Natification";
+import {
+  ModalTrueNatificationState,
+  ModalNatificationStatefalse,
+} from "../reducers/natification/Natification";
 import { useSelector, useDispatch } from "react-redux";
 import {
   setModalMore,
@@ -85,7 +88,6 @@ export const Layout = () => {
     console.log(hide);
     if (event.target != hide.current) dispatch(setModalSearch(false));
     if (event.target != hide.current) dispatch(ModalNatificationStatefalse());
-
   }
 
   const toggleModalSearch = () => {
@@ -97,6 +99,7 @@ export const Layout = () => {
 
   const data = useSelector((store) => store.searchred.data);
   const storg = useSelector((store) => store.searchred.storg);
+  console.log(storg);
   const myId = getToken().sid;
   useEffect(() => {
     AOS.init();
@@ -153,7 +156,6 @@ export const Layout = () => {
                     location.pathname === "/basic/message/newMessage"
                       ? "hidden"
                       : "block"
-                      
                   }`}
                 />
               </li>
@@ -187,29 +189,29 @@ export const Layout = () => {
             </NavLink>
 
             {/* <search/> */}
-            <div onClick={()=>dispatch(ModalNatificationStatefalse())}>
-            <li
-              onClick={() => {
-                toggleModalSearch()
-              }}
-              className="flex items-center gap-[15px] hover:bg-[#00000010] rounded-[7px] p-[10px] transition-all duration-300 cursor-pointer"
-            >
-              <FontAwesomeIcon
-                icon={faMagnifyingGlass}
-                className="text-[22px]"
-              />
-
-              <p
-                className={`${
-                  location.pathname === "/basic/message" ||
-                  location.pathname === "/basic/message/newMessage"
-                    ? "hidden"
-                    : "block"
-                }`}
+            <div onClick={() => dispatch(ModalNatificationStatefalse())}>
+              <li
+                onClick={() => {
+                  toggleModalSearch();
+                }}
+                className="flex items-center gap-[15px] hover:bg-[#00000010] rounded-[7px] p-[10px] transition-all duration-300 cursor-pointer"
               >
-                Поисковой запрос
-              </p>
-            </li>
+                <FontAwesomeIcon
+                  icon={faMagnifyingGlass}
+                  className="text-[22px]"
+                />
+
+                <p
+                  className={`${
+                    location.pathname === "/basic/message" ||
+                    location.pathname === "/basic/message/newMessage"
+                      ? "hidden"
+                      : "block"
+                  }`}
+                >
+                  Поисковой запрос
+                </p>
+              </li>
             </div>
 
             <NavLink
@@ -267,7 +269,6 @@ export const Layout = () => {
             </NavLink>
 
             <Link onClick={() => dispatch(setModalSearch(false))}>
-
               <li
                 onClick={() => dispatch(ModalTrueNatificationState())}
                 className="flex items-center gap-[15px] hover:bg-[#00000010] rounded-[7px] p-[10px] transition-all duration-300"
@@ -421,16 +422,16 @@ export const Layout = () => {
                             <div className="flex hover:cursor-pointer  items-center gap-2">
                               <img
                                 className="rounded-full w-[50px]"
-                                src={
-                                  
-                                     img
-                                }
+                                src={img}
                                 alt=""
                               />
                               <div
                                 onClick={() => {
+                                  console.log(el.id);
                                   dispatch(postuser(el.id)),
-                                    Navigate(`user/${el.id}`);
+                                    // Ай бачои ки users.id рои кни, el.id рои кади, барои хами кор намекад функция getProfileById
+                                    Navigate(`user/${el.users.id}`);
+                                  console.log(el.users.id);
                                 }}
                                 className=""
                               >
