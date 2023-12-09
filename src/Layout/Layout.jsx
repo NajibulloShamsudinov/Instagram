@@ -165,7 +165,7 @@ export const Layout = () => {
               to="/basic"
               onClick={() => dispatch(setModalSearch(false))}
             >
-              <li className="flex items-center gap-[15px] hover:bg-[#00000010] rounded-[7px] p-[10px] transition-all duration-300">
+              <li className="flex items-center gap-[16px] hover:bg-[#00000010] rounded-[7px] p-[10px] transition-all duration-300">
                 {/* <img src={navHome} alt="" /> */}
                 <HomeIcon />
                 {/* <FontAwesomeIcon icon={faHouse} className="text-[25px]" /> */}
