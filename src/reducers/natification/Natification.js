@@ -11,6 +11,9 @@ let natification = createSlice({
     ModalTrueNatificationState: (state, action) => {
       state.ModalNatificationState = !state.ModalNatificationState;
     },
+    ModalNatificationStatefalse:(state,action)=>{
+      state.ModalNatificationState=false
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(get.pending, (state, action) => {});
@@ -28,5 +31,5 @@ let natification = createSlice({
     builder.addCase(getSubscr.rejected, (state, action) => {});
   },
 });
-export let { ModalTrueNatificationState } = natification.actions;
+export let { ModalTrueNatificationState, ModalNatificationStatefalse } = natification.actions;
 export default natification.reducer;
