@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import { useState, useEffect } from "react";
+import { getSubscr } from "../api/natificationApi/natification";
 import "../App.css";
 import { ModalTrueNatificationState } from "../reducers/natification/Natification";
 import { useSelector, useDispatch } from "react-redux";
@@ -8,7 +9,7 @@ import {
   setModalSearch,
   setModalCreate,
 } from "../reducers/Layout/Layout";
-
+import { getToken } from "../utils/token";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import img from "/src/assets/images/polzovatel.jpg";
 import { get, unFollowing } from "../api/natificationApi/natification";
@@ -40,7 +41,6 @@ import navMessages from "../assets/icons/nav-messages.svg";
 import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
 import { Avatar, TextField } from "@mui/material";
 import navProfile from "../assets/images/nav-profile.jpg";
-
 import ClearIcon from "@mui/icons-material/Clear";
 
 // import search from "../pages/search/search";
@@ -74,6 +74,8 @@ export const Layout = () => {
   );
   let data2 = useSelector((store) => store.Natification.data);
   console.log(data2);
+  let dataSub = useSelector((store) => store.Natification.dataSub);
+  console.log(dataSub);
   const Navigate = useNavigate();
 
   const hide = useRef(null);
@@ -93,7 +95,7 @@ export const Layout = () => {
 
   const data = useSelector((store) => store.searchred.data);
   const storg = useSelector((store) => store.searchred.storg);
-
+  const myId = getToken().sid;
   useEffect(() => {
     AOS.init();
   }, []);
@@ -101,6 +103,7 @@ export const Layout = () => {
     dispatch(getdata());
     dispatch(storget());
     dispatch(get());
+    dispatch(getSubscr(myId));
   }, [dispatch, searchinp]);
   return (
     // Главный контейнер
@@ -162,7 +165,7 @@ export const Layout = () => {
               to="/basic"
               onClick={() => dispatch(setModalSearch(false))}
             >
-              <li className="flex items-center gap-[15px] hover:bg-[#00000010] rounded-[7px] p-[10px] transition-all duration-300">
+              <li className="flex items-center gap-[16px] hover:bg-[#00000010] rounded-[7px] p-[10px] transition-all duration-300">
                 {/* <img src={navHome} alt="" /> */}
                 <HomeIcon />
                 {/* <FontAwesomeIcon icon={faHouse} className="text-[25px]" /> */}
@@ -256,7 +259,7 @@ export const Layout = () => {
                 </p>
               </li>
             </NavLink>
-            <NavLink onClick={() => dispatch(setModalSearch(false))}>
+            <Link onClick={() => dispatch(setModalSearch(false))}>
               <li
                 onClick={() => dispatch(ModalTrueNatificationState())}
                 className="flex items-center gap-[15px] hover:bg-[#00000010] rounded-[7px] p-[10px] transition-all duration-300"
@@ -273,7 +276,7 @@ export const Layout = () => {
                   Уведомления
                 </p>
               </li>
-            </NavLink>
+            </Link>
             <li
               onClick={() => {
                 dispatch(setModalSearch(false));
