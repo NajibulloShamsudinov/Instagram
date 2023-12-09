@@ -145,7 +145,7 @@ export const Layout = () => {
                 <img
                   src={logo}
                   alt=""
-                  className={`w-[54%] ${
+                  className={`w-[55%] ${
                     location.pathname === "/basic/message" ||
                     location.pathname === "/basic/message/newMessage"
                       ? "hidden"
