@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import { useState, useEffect } from "react";
 import { getSubscr } from "../api/natificationApi/natification";
 import "../App.css";
-import { ModalTrueNatificationState } from "../reducers/natification/Natification";
+import { ModalTrueNatificationState,ModalNatificationStatefalse } from "../reducers/natification/Natification";
 import { useSelector, useDispatch } from "react-redux";
 import {
   setModalMore,
@@ -84,6 +84,8 @@ export const Layout = () => {
     console.log(event.target);
     console.log(hide);
     if (event.target != hide.current) dispatch(setModalSearch(false));
+    if (event.target != hide.current) dispatch(ModalNatificationStatefalse());
+
   }
 
   const toggleModalSearch = () => {
@@ -145,11 +147,13 @@ export const Layout = () => {
                 <img
                   src={logo}
                   alt=""
+                  // style={{ display: modalSearch ? "none" : "block" }}
                   className={`w-[55%] ${
                     location.pathname === "/basic/message" ||
                     location.pathname === "/basic/message/newMessage"
                       ? "hidden"
                       : "block"
+                      
                   }`}
                 />
               </li>
@@ -183,9 +187,10 @@ export const Layout = () => {
             </NavLink>
 
             {/* <search/> */}
+            <div onClick={()=>dispatch(ModalNatificationStatefalse())}>
             <li
               onClick={() => {
-                toggleModalSearch();
+                toggleModalSearch()
               }}
               className="flex items-center gap-[15px] hover:bg-[#00000010] rounded-[7px] p-[10px] transition-all duration-300 cursor-pointer"
             >
@@ -205,6 +210,7 @@ export const Layout = () => {
                 Поисковой запрос
               </p>
             </li>
+            </div>
 
             <NavLink
               to="explore"
@@ -259,7 +265,9 @@ export const Layout = () => {
                 </p>
               </li>
             </NavLink>
+
             <Link onClick={() => dispatch(setModalSearch(false))}>
+
               <li
                 onClick={() => dispatch(ModalTrueNatificationState())}
                 className="flex items-center gap-[15px] hover:bg-[#00000010] rounded-[7px] p-[10px] transition-all duration-300"
@@ -361,7 +369,7 @@ export const Layout = () => {
       <div
         data-aos="fade-right"
         style={{ display: modalSearch ? "block" : "none" }}
-        className="searchModal border-r-[1px]   z-10   fixed left-[6%] px-[1%] py-[2%]  bg-white dark:bg-black w-[29%] h-[100%] rounded-r-3xl"
+        className="searchModal border-r-[1px]   z-10   fixed left-[4%] px-[1%] py-[2%]  bg-white dark:bg-black w-[29%] h-[100%] rounded-r-3xl"
       >
         <div className="flex  flex-col ">
           <h1 className="text-[25px] font-semibold">Поисковой запрос</h1>
@@ -414,11 +422,8 @@ export const Layout = () => {
                               <img
                                 className="rounded-full w-[50px]"
                                 src={
-                                  el.avatar != null
-                                    ? `${import.meta.env.VITE_APP_FILES_URL}${
-                                        el.avatar
-                                      }`
-                                    : img
+                                  
+                                     img
                                 }
                                 alt=""
                               />
@@ -453,7 +458,7 @@ export const Layout = () => {
                             <div className="flex hover:cursor-pointer  items-center gap-2">
                               <img
                                 className="rounded-full w-[50px]"
-                                src={el.avatar ? el.avatar : img}
+                                src={img}
                                 alt=""
                               />
                               <div
