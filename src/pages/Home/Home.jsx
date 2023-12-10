@@ -94,7 +94,7 @@ const openMenu = Boolean(anchorEl);
 
         {/* Left side */}
 
-        <div className="w-[65%]">
+        <div className="w-[100%]">
           {/* stories */}
          <div className="mx-[80px]">
          <Swiper
