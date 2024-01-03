@@ -212,7 +212,7 @@ const Reels = () => {
           </div>
         </div>
 
-        <div className="w-[26px] gap-6 flex flex-col ">
+        <div className="w-[25px] gap-6 flex flex-col ">
           <div className="flex flex-col items-center">
             {" "}
             {/* <Checkbox
